@@ -478,14 +478,95 @@
                 ]);
                 indicatorsData = indicators;
                 barriosData = barrios;
-                console.log("Datos cargados desde Google Sheets:", indicatorsData, barriosData);
-                
+
+                // Los datos descargados desde Google Sheets pueden incluir filas
+                // vacías o de cabecera, así como variaciones en el nombre del
+                // área/dependencia. Para asegurar un filtrado correcto en
+                // cada sección, normalizamos el campo AREA/DEPENDENCIA usando
+                // un diccionario de mapeo.
+                const areaMapping = {
+                    // Educación Ambiental
+                    'direccion general de educación ambiental': 'Dir. Gral. de Educación Ambiental',
+                    'dirección general de educación ambiental': 'Dir. Gral. de Educación Ambiental',
+                    'direccion gral de educación ambiental': 'Dir. Gral. de Educación Ambiental',
+                    'dirección gral de educación ambiental': 'Dir. Gral. de Educación Ambiental',
+                    'dir. general de educación ambiental': 'Dir. Gral. de Educación Ambiental',
+                    'dir. gral de educación ambiental': 'Dir. Gral. de Educación Ambiental',
+                    // Desarrollo Sostenible (Dirección General)
+                    'direccion general de desarrollo sostenible': 'Dir. Gral. de Desarrollo Sostenible',
+                    'dirección general de desarrollo sostenible': 'Dir. Gral. de Desarrollo Sostenible',
+                    'direccion gral de desarrollo sostenible': 'Dir. Gral. de Desarrollo Sostenible',
+                    'dirección gral de desarrollo sostenible': 'Dir. Gral. de Desarrollo Sostenible',
+                    'dir. general de desarrollo sostenible': 'Dir. Gral. de Desarrollo Sostenible',
+                    'dir. gral de desarrollo sostenible': 'Dir. Gral. de Desarrollo Sostenible',
+                    // Economía Circular
+                    'direccion general de economía circular': 'Dir. Gral. de Economía Circular',
+                    'dirección general de economía circular': 'Dir. Gral. de Economía Circular',
+                    'dir. general de economía circular': 'Dir. Gral. de Economía Circular',
+                    'dir. gral de economía circular': 'Dir. Gral. de Economía Circular',
+                    // Cambio Climático
+                    'direccion general de cambio climático': 'Dir. Gral. de Cambio Climático',
+                    'dirección general de cambio climático': 'Dir. Gral. de Cambio Climático',
+                    'dir. general de cambio climático': 'Dir. Gral. de Cambio Climático',
+                    'dir. gral de cambio climático': 'Dir. Gral. de Cambio Climático',
+                    // Desarrollo Sostenible (Dirección sin “General”)
+                    'direccion de desarrollo sostenible': 'Dirección de Desarrollo Sostenible',
+                    'dirección de desarrollo sostenible': 'Dirección de Desarrollo Sostenible',
+                    // Inspecciones
+                    'direccion de inspecciones': 'Dirección de Inspecciones',
+                    'dirección de inspecciones': 'Dirección de Inspecciones',
+                    'direccion de inspecciones/direccion de inspecciones comerciales': 'Dirección de Inspecciones',
+                    'dirección de inspecciones/dirección de inspecciones comerciales': 'Dirección de Inspecciones',
+                    // Impacto Ambiental
+                    'direccion de impacto ambiental': 'Dirección de Impacto Ambiental',
+                    'dirección de impacto ambiental': 'Dirección de Impacto Ambiental',
+                    // Patrulla Ambiental
+                    'direccion de patrulla ambiental': 'Direccion de Patrulla Ambiental',
+                    'dirección de patrulla ambiental': 'Direccion de Patrulla Ambiental',
+                    'dir de patrulla ambiental': 'Direccion de Patrulla Ambiental',
+                    // Coordinación de proyectos
+                    'coordinación de proyectos ambientales': 'Coordinación de Proyectos Ambientales',
+                    // Subsecretaría
+                    'subsecretaría de gestión ambiental': 'Subsecretaría (Articulación)',
+                    'subsecretaria de gestión ambiental': 'Subsecretaría (Articulación)',
+                    'subsecretaria de gestion ambiental': 'Subsecretaría (Articulación)'
+                };
+
+                // Normaliza un texto eliminando tildes, puntos y espacios extra
+                function normalizeArea(text) {
+                    return text
+                        .toLowerCase()
+                        .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+                        .replace(/\./g, '')
+                        .replace(/\s+/g, ' ')  // colapsa espacios múltiples
+                        .trim();
+                }
+
+                // Elimina filas sin indicador y aplica mapeo de área
+                indicatorsData = indicatorsData
+                    .filter(item => item.INDICADOR) // descarta filas vacías
+                    .map(item => {
+                        const rawArea = item['AREA/DEPENDENCIA'];
+                        if (typeof rawArea === 'string') {
+                            // tomar primer segmento antes de '/' o '-' para evitar áreas compuestas
+                            let primary = rawArea.split('/')[0].split('-')[0];
+                            const key = normalizeArea(primary);
+                            if (areaMapping[key]) {
+                                item['AREA/DEPENDENCIA'] = areaMapping[key];
+                            }
+                        }
+                        return item;
+                    });
+
+                // Comprobar datos de geolocalización para barrios
                 // IMPORTANTE: Tus datos de barrios necesitan columnas 'lat' y 'lng'
                 // Si no las tienen, usamos datos mock para el mapa.
                 if (!barriosData.length || !barriosData[0].lat) {
                     console.warn("Datos de barrios sin 'lat'/'lng'. Usando mock data para el mapa.");
                     barriosData = mockBarrios; // Reemplaza con mock si falta geo
                 }
+
+                console.log("Datos cargados y normalizados desde Google Sheets:", indicatorsData, barriosData);
 
             } catch (error) {
                 console.error("Error al cargar datos desde Google Sheets. Usando datos de ejemplo (mock).", error);
@@ -604,11 +685,11 @@
                 <div class="row g-4 mb-4">
                     <!-- KPI Talleres -->
                     <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Niños en Talleres', talleres['ACUMULADO TOTAL'], 'fa-solid fa-school', 'kpi-icon-green', 'kpi-talleres')}
+                        ${createKpiCard('Niños en Talleres', talleres['ACUMULADO TOTAL'], 'fa-solid fa-school', 'kpi-icon-green')}
                     </div>
                     <!-- KPI Promesa -->
                     <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Alumnos en "Promesa al Ambiente"', promesa['ACUMULADO TOTAL'], 'fa-solid fa-children', 'kpi-icon-blue', 'kpi-promesa')}
+                        ${createKpiCard('Alumnos en "Promesa al Ambiente"', promesa['ACUMULADO TOTAL'], 'fa-solid fa-children', 'kpi-icon-blue')}
                     </div>
                 </div>
                 
@@ -660,13 +741,13 @@
             container.innerHTML += `
                 <div class="row g-4 mb-4">
                     <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Neumáticos (Tn)', neumaticos['ACUMULADO TOTAL'], 'fa-solid fa-truck-monster', 'kpi-icon-orange', 'kpi-neumaticos')}
+                        ${createKpiCard('Neumáticos (Tn)', neumaticos['ACUMULADO TOTAL'], 'fa-solid fa-truck-monster', 'kpi-icon-orange')}
                     </div>
                     <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('RAEE (Tn)', raee['ACUMULADO TOTAL'], 'fa-solid fa-laptop-medical', 'kpi-icon-purple', 'kpi-raee')}
+                        ${createKpiCard('RAEE (Tn)', raee['ACUMULADO TOTAL'], 'fa-solid fa-laptop-medical', 'kpi-icon-purple')}
                     </div>
                     <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Puntos Limpios Instalados', puntosLimpios['ACUMULADO TOTAL'], 'fa-solid fa-map-pin', 'kpi-icon-green', 'kpi-puntos-limpios')}
+                        ${createKpiCard('Puntos Limpios Instalados', puntosLimpios['ACUMULADO TOTAL'], 'fa-solid fa-map-pin', 'kpi-icon-green')}
                     </div>
                 </div>
                 
@@ -710,10 +791,10 @@
             container.innerHTML += `
                 <div class="row g-4 mb-4">
                     <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Mediciones Calidad de Aire', medicionesAire['ACUMULADO TOTAL'], 'fa-solid fa-wind', 'kpi-icon-blue', 'kpi-mediciones-calidad')}
+                        ${createKpiCard('Mediciones Calidad de Aire', medicionesAire['ACUMULADO TOTAL'], 'fa-solid fa-wind', 'kpi-icon-blue')}
                     </div>
                     <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Barrios con Descacharrado', barriosIntervenidos.length, 'fa-solid fa-house-chimney-medical', 'kpi-icon-red', 'kpi-barrios-con')}
+                        ${createKpiCard('Barrios con Descacharrado', barriosIntervenidos.length, 'fa-solid fa-house-chimney-medical', 'kpi-icon-red')}
                     </div>
                 </div>
                 
@@ -752,7 +833,7 @@
             container.innerHTML += `
                 <div class="row g-4 mb-4">
                     <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Huertas Comunitarias', huertas['ACUMULADO TOTAL'], 'fa-solid fa-carrot', 'kpi-icon-orange', 'kpi-huertas-comunitarias')}
+                        ${createKpiCard('Huertas Comunitarias', huertas['ACUMULADO TOTAL'], 'fa-solid fa-carrot', 'kpi-icon-orange')}
                     </div>
                 </div>
                 <div class="row g-4">
@@ -797,10 +878,10 @@
             container.innerHTML += `
                 <div class="row g-4 mb-4">
                     <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Convenios Firmados', convenios['ACUMULADO TOTAL'], 'fa-solid fa-handshake', 'kpi-icon-purple', 'kpi-convenios-firmados')}
+                        ${createKpiCard('Convenios Firmados', convenios['ACUMULADO TOTAL'], 'fa-solid fa-handshake', 'kpi-icon-purple')}
                     </div>
                     <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Campañas de Comunicación', campanas['ACUMULADO TOTAL'], 'fa-solid fa-microphone-lines', 'kpi-icon-blue', 'kpi-campanas-de')}
+                        ${createKpiCard('Campañas de Comunicación', campanas['ACUMULADO TOTAL'], 'fa-solid fa-microphone-lines', 'kpi-icon-blue')}
                     </div>
                 </div>
             `;
@@ -871,24 +952,10 @@
          * @param {string} iconClass - Clase de FontAwesome (ej. 'fa-solid fa-users').
          * @param {string} colorClass - Clase de color (ej. 'kpi-icon-green').
          */
-        /**
-         * Construye el HTML para una tarjeta KPI.
-         * Además de los parámetros originales, admite un identificador opcional
-         * para el contador. Esto permite sincronizar el id utilizado en la
-         * animación con el id que se genera en el DOM. Si no se proporciona
-         * `customId`, el id se genera a partir de la etiqueta como en la versión
-         * original.
-         * @param {string} label       Texto descriptivo del KPI.
-         * @param {number} value       Valor numérico a mostrar.
-         * @param {string} iconClass   Clase CSS para el icono FontAwesome.
-         * @param {string} colorClass  Clase CSS para el color del icono.
-         * @param {string} [customId]  Id personalizado para el valor del KPI.
-         */
-        function createKpiCard(label, value, iconClass, colorClass, customId) {
+        function createKpiCard(label, value, iconClass, colorClass) {
             const safeValue = value || 0;
-            // Si se pasa un id personalizado, úsalo. De lo contrario, genera uno
-            // automáticamente a partir del texto de la etiqueta.
-            const kpiId = customId || `kpi-${label.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+            const kpiId = `kpi-${label.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+            
             return `
                 <div class="kpi-card">
                     <div class="card-body">
