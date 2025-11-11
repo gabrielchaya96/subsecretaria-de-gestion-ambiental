@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión Ambiental - Municipalidad de Salta</title>
+    <title>Subsecretaría de Gestión Ambiental - Salta</title>
 
     <!-- 1. Bootstrap 5 (CSS) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
@@ -23,1012 +22,566 @@
         }
 
         :root {
-            --color-primario: #004a99;
-            --color-secundario: #02b3e4;
-            --color-gestion: #009a44;
-            --color-texto: #333;
+            --color-primario: #004d40; /* Verde oscuro (Base) */
+            --color-secundario: #4caf50; /* Verde claro (Acento) */
+            --color-info: #17a2b8; /* Turquesa/Celeste */
+            --color-advertencia: #ffc107; /* Amarillo */
         }
 
-        .header-navbar {
-            background-color: #ffffff;
-            border-bottom: 4px solid var(--color-gestion);
-            padding: 1rem 2rem;
+        .header {
+            background-color: var(--color-primario);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .header-navbar .navbar-brand {
-            display: flex;
-            align-items: center;
-            color: var(--color-texto);
-            font-weight: 700;
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
         }
-        .header-navbar .navbar-brand i {
-            font-size: 2.5rem;
-            color: var(--color-gestion);
-            margin-right: 15px;
-        }
-        .header-navbar .navbar-brand .header-title-span {
-            font-size: 1.35rem;
-            line-height: 1.2;
-        }
-        .header-navbar .navbar-brand span small {
+        .header .lead {
             font-size: 1rem;
-            color: #6c757d;
-            display: block;
+            opacity: 0.9;
         }
 
         .sidebar {
             background-color: #ffffff;
-            border-right: 1px solid #dee2e6;
-            height: calc(100vh - 90px);
-            position: sticky;
-            top: 90px;
-            padding-top: 1.5rem;
-            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            padding: 0;
         }
-        .nav-pills .nav-link {
-            display: flex;
-            align-items: center;
-            color: #495057;
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 0.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: all 0.2s ease-in-out;
+        .nav-link {
+            padding: 1rem 1.5rem;
+            color: var(--color-primario);
+            font-weight: 600;
+            transition: all 0.2s;
         }
-        .nav-pills .nav-link i {
-            margin-right: 12px;
-            font-size: 1.1rem;
-            width: 20px;
-            text-align: center;
-            color: #adb5bd;
+        .nav-link.active {
+            background-color: var(--color-secundario);
+            color: white;
+            border-radius: 8px 8px 0 0;
         }
-        .nav-pills .nav-link:hover {
-            background-color: #f1f3f5;
+        .nav-link:hover:not(.active) {
+            background-color: #e9ecef;
             color: var(--color-primario);
         }
-        .nav-pills .nav-link.active {
-            background-color: var(--color-gestion);
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(0, 154, 68, 0.2);
-        }
-        .nav-pills .nav-link.active i {
-            color: #ffffff;
-        }
-        
-        .main-content {
-            padding: 2rem;
-            height: calc(100vh - 90px);
-            overflow-y: auto;
-        }
-        
-        .section-title {
-            color: var(--color-primario);
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #e9ecef;
-            padding-bottom: 0.5rem;
-        }
-
-        .kpi-card {
-            border: none;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        .content {
             background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+        }
+        .indicator-card {
+            border-radius: 8px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            border: 1px solid #e9ecef;
         }
-        .kpi-card .card-body {
-            display: flex;
-            align-items: center;
-            padding: 1.5rem;
+        .indicator-card:hover {
+            transform: translateY(-2px);
         }
-        .kpi-card-icon {
-            font-size: 2.5rem;
-            padding: 1.25rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1.25rem;
-        }
-        .kpi-icon-green { background-color: #e6f6e6; color: #009a44; }
-        .kpi-icon-blue { background-color: #e0f3ff; color: #02b3e4; }
-        .kpi-icon-orange { background-color: #fff4e6; color: #ff8c00; }
-        .kpi-icon-purple { background-color: #f3e8ff; color: #7b2cbf; }
-        .kpi-icon-red { background-color: #ffeeee; color: #d90429; }
-        
-        .kpi-card-content .kpi-value {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--color-texto);
-            line-height: 1;
-            margin-bottom: 0.25rem;
-        }
-        .kpi-card-content .kpi-label {
+        .card-title {
             font-size: 0.9rem;
             color: #6c757d;
-            margin-bottom: 0;
-            white-space: normal;
         }
-
-        .chart-container {
-            background-color: #ffffff;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        .card-number {
+            font-size: 2.0rem;
+            font-weight: 700;
+            color: var(--color-primario);
         }
-        .chart-container h5 {
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 1rem;
+        .chart-container, .map-container-wrapper {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background-color: #fff;
         }
-
-        #map {
-            height: 450px;
-            width: 100%;
-            border-radius: 0.5rem;
-            z-index: 1;
+        .map-container {
+            height: 400px;
+            border-radius: 8px;
         }
-
-        .section-description {
-            background-color: #eef7ff;
-            border-left: 5px solid var(--color-secundario);
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-            color: #333;
+        .chart-wrapper {
+            position: relative;
+            height: 350px; /* Tamaño fijo para gráficos */
         }
-        .section-description p {
-            margin-bottom: 0.5rem;
+        .no-data-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: #6c757d;
+            font-style: italic;
+            border: 1px dashed #ced4da;
+            border-radius: 8px;
         }
-        .section-description p:last-child {
-            margin-bottom: 0;
-        }
-
-        .download-section {
-            background-color: #e9ecef;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 1.5rem;
-            background-color: #343a40;
-            color: #f8f9fa;
-            font-size: 0.9rem;
-        }
-        .footer p {
-            margin-bottom: 0;
-        }
-
-        #loader {
+        .loader-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.8);
             display: flex;
-            align-items: center;
             justify-content: center;
-            z-index: 9999;
-            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
         }
-        #loader p {
-            margin-top: 1rem;
-            font-weight: 500;
-            color: var(--color-primario);
-        }
-
-        .alert-warning {
-            background-color: #fff3cd;
-            border-left: 5px solid #ffc107;
-        }
-
-        @media print {
-            body {
-                background-color: #ffffff;
-            }
-            .sidebar, .header-navbar, .download-section, .footer {
-                display: none;
-            }
-            .main-content {
-                width: 100%;
-                height: auto;
-                overflow-y: visible;
-                padding: 0;
-            }
-            .col-lg-9 {
-                width: 100% !important;
-                flex: 0 0 100%;
-                max-width: 100%;
-            }
-            .kpi-card, .chart-container {
-                box-shadow: none;
-                border: 1px solid #dee2e6;
-                page-break-inside: avoid;
-            }
-            #map {
-                display: none;
-            }
-            .chart-container canvas {
-                max-width: 100% !important;
-            }
+        .section-description {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f1f8e9; /* Verde muy claro */
+            border-left: 5px solid var(--color-secundario);
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <div class="spinner-border text-success" role="status" style="width: 3rem; height: 3rem;">
+    <!-- Loader -->
+    <div id="loader" class="loader-overlay">
+        <div class="spinner-border text-success" role="status">
             <span class="visually-hidden">Cargando...</span>
         </div>
-        <p>Cargando datos de gestión...</p>
     </div>
 
-    <nav class="navbar header-navbar">
-        <a class="navbar-brand" href="#">
-            <i class="fa-solid fa-seedling"></i>
-            <span class="header-title-span">
-                Subsecretaría de Gestión Ambiental
-                <small>Ing. Maria Emilse Arias</small>
-            </span>
-        </a>
-    </nav>
-
-    <div class="container-fluid">
-        <div class="row">
-
-            <nav id="sidebarMenu" class="col-lg-3 d-none d-lg-block sidebar">
-                <div class="position-sticky">
-                    <ul class="nav nav-pills flex-column" id="main-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#" data-section="Dir. Gral. de Educación Ambiental">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                                Dir. Gral. Educación Ambiental
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Dir. Gral. de Desarrollo Sostenible">
-                                <i class="fa-solid fa-recycle"></i>
-                                Dir. Gral. Desarrollo Sostenible
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Dir. Gral. de Cambio Climático">
-                                <i class="fa-solid fa-cloud-sun-rain"></i>
-                                Dir. Gral. Cambio Climático
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Dirección de Desarrollo Sostenible">
-                                <i class="fa-solid fa-leaf"></i>
-                                Dir. Desarrollo Sostenible
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Dirección de Inspecciones">
-                                <i class="fa-solid fa-clipboard-check"></i>
-                                Dir. Inspecciones
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Dirección de Impacto Ambiental">
-                                <i class="fa-solid fa-mountain-sun"></i>
-                                Dir. Impacto Ambiental
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Direccion de Patrulla Ambiental">
-                                <i class="fa-solid fa-shield-halved"></i>
-                                Dir. Patrulla Ambiental
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Coordinación de Proyectos Ambientales">
-                                <i class="fa-solid fa-tree-city"></i>
-                                Coord. Proyectos Ambientales
-                            </a>
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Subsecretaría (Articulación)">
-                                <i class="fa-solid fa-bullhorn"></i>
-                                Subsecretaría (Articulación)
-                            </a>
-                        </li>
-                    </ul>
-
-                    <div class="download-section mt-4 mx-3">
-                        <h6 class="fw-bold">Reportes</h6>
-                        <p class="small text-muted">Descargue los datos completos o genere un PDF.</p>
-                        <button class="btn btn-sm btn-success w-100 mb-2" id="download-csv">
-                            <i class="fa-solid fa-file-csv me-1"></i> Descargar .CSV
-                        </button>
-                        <button class="btn btn-sm btn-danger w-100" id="download-pdf">
-                            <i class="fa-solid fa-file-pdf me-1"></i> Generar .PDF
-                        </button>
-                    </div>
-
+    <header class="header">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-tree me-3 fa-2x"></i>
+                <div>
+                    <h1>Subsecretaría de Gestión Ambiental</h1>
+                    <p class="lead mb-0">Ing. Maria Emilse Arias - Seguimiento de Indicadores</p>
                 </div>
-            </nav>
-
-            <main class="col-lg-9 ms-sm-auto main-content">
-                <div id="main-content-area">
-                </div>
-
-                <footer class="footer mt-5">
-                    <p>&copy; 2025 Municipalidad de Salta - Subsecretaría de Gestión Ambiental. Todos los derechos reservados.</p>
-                </footer>
-            </main>
+            </div>
         </div>
-    </div>
+    </header>
 
+    <main class="container">
+        <div class="row">
+            <!-- Menú Lateral -->
+            <div class="col-lg-3 mb-4">
+                <div class="sidebar">
+                    <div class="list-group list-group-flush" id="area-menu" role="tablist">
+                        <!-- Las áreas deben coincidir EXCATAMENTE con el nombre en Google Sheet -->
+                        <a href="#educacion" class="list-group-item list-group-item-action active" data-area="Dir. Gral. de Educación Ambiental" aria-controls="educacion" role="tab" data-bs-toggle="pill">Dir. Gral. de Educación Ambiental</a>
+                        <a href="#desarrollo" class="list-group-item list-group-item-action" data-area="Dir. Gral. de Desarrollo Sostenible" aria-controls="desarrollo" role="tab" data-bs-toggle="pill">Dir. Gral. de Desarrollo Sostenible</a>
+                        <a href="#cambioclimatico" class="list-group-item list-group-item-action" data-area="Dir. General de Cambio Climático" aria-controls="cambioclimatico" role="tab" data-bs-toggle="pill">Dir. General de Cambio Climático</a>
+                        <a href="#desarrollo-sostenible" class="list-group-item list-group-item-action" data-area="Dir. de Desarrollo Sostenible" aria-controls="desarrollo-sostenible" role="tab" data-bs-toggle="pill">Dir. de Desarrollo Sostenible</a>
+                        <a href="#inspecciones" class="list-group-item list-group-item-action" data-area="Dir. de Inspecciones" aria-controls="inspecciones" role="tab" data-bs-toggle="pill">Dir. de Inspecciones</a>
+                        <a href="#impacto" class="list-group-item list-group-item-action" data-area="Dir. de Impacto Ambiental" aria-controls="impacto" role="tab" data-bs-toggle="pill">Dir. de Impacto Ambiental</a>
+                        <a href="#patrulla" class="list-group-item list-group-item-action" data-area="Dir. de Patrulla Ambiental" aria-controls="patrulla" role="tab" data-bs-toggle="pill">Dir. de Patrulla Ambiental</a>
+                        <a href="#proyectos" class="list-group-item list-group-item-action" data-area="Coordinación de Proyectos Ambientales" aria-controls="proyectos" role="tab" data-bs-toggle="pill">Coord. de Proyectos Ambientales</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido Principal -->
+            <div class="col-lg-9">
+                <div class="content">
+                    <div class="tab-content" id="area-content-tab">
+                        <div class="tab-pane fade show active" id="area-content" role="tabpanel">
+                            <!-- Todo el contenido dinámico se inyecta aquí -->
+                            <h2 id="area-title" class="mb-4 text-primary">Cargando...</h2>
+                            
+                            <div id="section-description-container">
+                                <!-- Descripción inyectada aquí -->
+                            </div>
+                            
+                            <!-- 1. INDICADORES CLAVE (Cards) -->
+                            <div id="indicators-row" class="row g-4 mb-5">
+                                <!-- Cards se inyectarán aquí -->
+                            </div>
+
+                            <!-- 2. Gráficos de Seguimiento -->
+                            <div id="charts-container">
+                                <!-- Gráfico 1: Comparativa Anual -->
+                                <div class="chart-container">
+                                    <h5 id="chart-talleres-title">Comparativa Anual</h5>
+                                    <div class="chart-wrapper" style="position: relative; height: 350px;">
+                                        <canvas id="chart-talleres"></canvas>
+                                        <div id="chart-talleres-no-data" class="no-data-message d-none">No hay datos para gráfico anual.</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Gráfico 2: Mapa de Barrios (o 2do Indicador) -->
+                                <div class="map-container-wrapper">
+                                    <h5 id="map-huertas-title">Barrios Intervenidos</h5>
+                                    <div id="map-huertas" class="map-container"></div>
+                                    <div id="map-huertas-no-data" class="no-data-message d-none" style="height: 400px;">No hay datos de barrios/puntos para esta área.</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 4. Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- 5. Chart.js (Gráficos) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <!-- 6. Leaflet (Mapas) JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20n6a9K13/f5Go9+mixt5FSYf/A/tA/vD3G4/J47Q5Y=" crossorigin=""></script>
 
     <script type="module">
+        // ---------------------------------------------------------------------
+        // CONFIGURACIÓN (EL USUARIO DEBE MODIFICAR ESTO)
+        // ---------------------------------------------------------------------
         const CONFIG = {
-            GOOGLE_SHEET_ID: '1pV10qTgEWIRtmpVpZEJMFa_G9dluMACSoKFw6JNvFQ4',
+            // ID CORRECTO de la hoja de cálculo de tu URL de edición
+            // Reemplaza con tu ID real para cargar datos
+            GOOGLE_SHEET_ID: 'REEMPLAZA_CON_TU_GOOGLE_SHEET_ID', 
+            
+            // Nombres exactos de las hojas (pestañas) de tu Google Sheet
             SHEET_INDICADORES: 'INDICADORES',
-            SHEET_BARRIOS: 'BARRIOS INTERVENIDOS',
+            SHEET_BARRIOS: 'BARRIOS INTERVENIDOS', // Contiene barrios y puntos
+            
+            // COLUMNAS CRUCIALES (deben coincidir EXACTAMENTE con los encabezados de tu hoja)
+            COL_AREA: 'AREA/DEPENDENCIA',
+            COL_INDICADOR: 'INDICADOR',
+            COL_ACUMULADO_TOTAL: 'ACUMULADO TOTAL',
+            COL_TAREA: 'TAREA /ACCION',
+            COL_BARRIO_TAREA: 'TAREAS DESARROLLADAS', // Columna de descripción de tarea en BARRIOS
+            COL_BARRIO_NOMBRE: 'NOMBRE DEL BARRIO', // Columna de nombre de barrio
+            COL_LAT: 'LATITUD', 
+            COL_LON: 'LONGITUD', 
         };
 
+        // ---------------------------------------------------------------------
+        // DESCRIPCIONES DE ÁREA (Texto estático para cada sección)
+        // ---------------------------------------------------------------------
+        const AREA_DESCRIPTIONS = {
+            'Dir. Gral. de Educación Ambiental': 'Esta área se encarga de actividades como talleres de educación ambiental, operativos puerta a puerta, la conformación de la mesa intersectorial de Educación Ambiental, eventos de siembra de árboles, capacitación de docentes, y la difusión de contenido ambiental en redes y medios.',
+            'Dir. Gral. de Desarrollo Sostenible': 'Participa en actividades como el Neumatón (recolección de Neumáticos Fuera de Uso), la RAEETÓN (recolección de Residuos Electrónicos y Eléctricos en Desuso), la formulación de proyectos, la instalación de Ecopuntos y Puntos Limpios, y la coordinación de retiros masivos de NFU.',
+            'Dir. General de Cambio Climático': 'Colabora en la RAEETÓN, el Neumatón (a través de la certificación de disposición final), y se enfoca en el mapeo de calidad de aire y ruido ambiental, el relevamiento y toma de muestras de agua en los ríos Arias-Arenales, la implementación de Biobardas, y las actividades de descacharrado y retiro de chatarra.',
+            'Dir. de Desarrollo Sostenible': 'Se menciona en tareas de formulación de proyectos y relevamiento a plantas de tratamiento. (Nota: Esta área podría tener indicadores compartidos con Dir. Gral. de Desarrollo Sostenible).',
+            'Dir. de Inspecciones': 'Realiza inspecciones, inspecciones conjuntas (con la Dirección de Inspecciones Comerciales), labra actas de comprobación y actas de clausura, y ejecuta operativos de fiscalización. (Nota: Los indicadores se basan en el conteo de actas/operativos).',
+            'Dir. de Impacto Ambiental': 'Es responsable de la emisión de las Resoluciones de CAAM (Certificado de Aptitud Ambiental) y de la capacitación o asesoramiento para la obtención del mismo. (Nota: Los indicadores se basan en la cantidad de resoluciones emitidas).',
+            'Dir. de Patrulla Ambiental': 'Sus funciones incluyen operativos de fiscalización y control de microbasurales, colaboraciones especiales con otras áreas municipales, la generación de reportes diarios/denuncias, y la emisión de actas de infracción y cédulas de notificación. (Nota: Los indicadores se basan en el conteo de operativos/reportes).',
+            'Coordinación de Proyectos Ambientales': 'Se encarga de la puesta a punto, el enriquecimiento y el mantenimiento de espacios verdes (plazas, platabandas, rotondas, etc.). (Nota: Los indicadores se basan en el conteo de espacios verdes intervenidos).',
+        };
+
+        // ---------------------------------------------------------------------
+        // VARIABLES GLOBALES Y CACHÉ DE DATOS
+        // ---------------------------------------------------------------------
+        let indicatorsData = []; 
+        let barriosData = [];    
+        let currentChart = null; 
+        let currentMap = null;   
+
+        const loader = document.getElementById('loader');
+        const areaTitle = document.getElementById('area-title');
+        const indicatorsRow = document.getElementById('indicators-row');
+        const descriptionContainer = document.getElementById('section-description-container');
+        const mapContainerId = 'map-huertas';
+        
+        // Nombres de columna de meses para gráficos
+        const MONTH_COLUMNS = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+
+
+        // ---------------------------------------------------------------------
+        // MOCK DATA (Datos de ejemplo para pruebas o fallos de conexión)
+        // ---------------------------------------------------------------------
         const mockIndicadores = [
-            {"INDICADOR": "TALLERES DE EDUCACIÓN AMBIENTAL", "AREA/DEPENDENCIA": "Dir. Gral. de Educación Ambiental", "ACUMULADO TOTAL": 3600, "ACUMULADO 2024": 3600, "ACUMULADO 2025": 2500, "ACUMULADO 2026": 0},
-            {"INDICADOR": "PROMESA DE LEALTAD AL AMBIENTE", "AREA/DEPENDENCIA": "Dir. Gral. de Educación Ambiental", "ACUMULADO TOTAL": 5800, "ACUMULADO 2024": 5800, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
-            {"INDICADOR": "NEUMATÓN", "AREA/DEPENDENCIA": "Dir. Gral. de Economía Circular", "ACUMULADO TOTAL": 2072, "ACUMULADO 2024": 2072, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
-            {"INDICADOR": "RAEETÓN", "AREA/DEPENDENCIA": "Dir. Gral. de Economía Circular", "ACUMULADO TOTAL": 95.98, "ACUMULADO 2024": 95.98, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
-            {"INDICADOR": "PUNTOS LIMPIOS INSTALADOS", "AREA/DEPENDENCIA": "Dir. Gral. de Economía Circular", "ACUMULADO TOTAL": 2, "ACUMULADO 2024": 2, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
-            {"INDICADOR": "MEDICIONES DE CALIDAD DEL AIRE", "AREA/DEPENDENCIA": "Dir. Gral. de Cambio Climático", "ACUMULADO TOTAL": 54, "ACUMULADO 2024": 54, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
-            {"INDICADOR": "ACCIONES DE DESCACHARRADO", "AREA/DEPENDENCIA": "Dir. Gral. de Cambio Climático", "ACUMULADO TOTAL": 45, "ACUMULADO 2024": 45, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
-            {"INDICADOR": "CONVENIOS FIRMADOS", "AREA/DEPENDENCIA": "Subsecretaría de Gestión Ambiental", "ACUMULADO TOTAL": 18, "ACUMULADO 2024": 13, "ACUMULADO 2025": 5, "ACUMULADO 2026": 0},
-            {"INDICADOR": "CAMPAÑAS DE COMUNICACIÓN", "AREA/DEPENDENCIA": "Subsecretaría de Gestión Ambiental", "ACUMULADO TOTAL": 12, "ACUMULADO 2024": 12, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
-            {"INDICADOR": "HUERTAS COMUNITARIAS", "AREA/DEPENDENCIA": "Dir. Gral. de Desarrollo Sostenible", "ACUMULADO TOTAL": 5, "ACUMULADO 2024": 5, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
+            { 'AREA/DEPENDENCIA': 'Dir. Gral. de Educación Ambiental', 'INDICADOR': 'Talleres de Educación Ambiental', 'ACUMULADO TOTAL': 150, 'TAREA /ACCION': 'Talleres realizados', 'ENERO': 10, 'FEBRERO': 20, 'MARZO': 30 },
+            { 'AREA/DEPENDENCIA': 'Dir. Gral. de Educación Ambiental', 'INDICADOR': 'Eventos de Siembra de Árboles', 'ACUMULADO TOTAL': 12, 'TAREA /ACCION': 'Eventos concluidos', 'ENERO': 1, 'FEBRERO': 2, 'MARZO': 3 },
+            { 'AREA/DEPENDENCIA': 'Dir. Gral. de Desarrollo Sostenible', 'INDICADOR': 'Recolección (Tn) NFU (Neumatón)', 'ACUMULADO TOTAL': 500, 'TAREA /ACCION': 'Toneladas de neumáticos', 'ENERO': 50, 'FEBRERO': 100, 'MARZO': 150 },
+            { 'AREA/DEPENDENCIA': 'Dir. General de Cambio Climático', 'INDICADOR': 'Biobardas Instaladas', 'ACUMULADO TOTAL': 5, 'TAREA /ACCION': 'Unidades instaladas', 'ENERO': 1, 'FEBRERO': 1, 'MARZO': 1 },
+            { 'AREA/DEPENDENCIA': 'Dir. de Inspecciones', 'INDICADOR': 'Actas de Comprobación Labradas', 'ACUMULADO TOTAL': 250, 'TAREA /ACCION': 'Actas de fiscalización', 'ENERO': 50, 'FEBRERO': 50, 'MARZO': 50 },
         ];
 
         const mockBarrios = [
-            {"NOMBRE DEL BARRIO": "Norte Grande", "TAREAS DESARROLLADAS": "Descacharrado/Educacion Sanitaria Dengue", "lat": -24.819, "lng": -65.422},
-            {"NOMBRE DEL BARRIO": "Villa Floresta Alta", "TAREAS DESARROLLADAS": "Descacharrado/Educacion Sanitaria Dengue", "lat": -24.786, "lng": -65.389},
-            {"NOMBRE DEL BARRIO": "Bº San Calixto", "TAREAS DESARROLLADAS": "Descacharrado/Educacion Sanitaria Dengue", "lat": -24.825, "lng": -65.435},
-            {"NOMBRE DEL BARRIO": "Bº VILLA ESMERALDA", "TAREAS DESARROLLADAS": "OPERATIVO MILAGRO", "lat": -24.820, "lng": -65.441},
-            {"NOMBRE DEL BARRIO": "Bº LIMACHE", "TAREAS DESARROLLADAS": "OPERATIVO MILAGRO", "lat": -24.836, "lng": -65.451},
+            { 'NOMBRE DEL BARRIO': 'Norte Grande', 'DEPENDENCIA A CARGO': 'Dir. Gral. de Educación Ambiental', 'LATITUD': -24.7570, 'LONGITUD': -65.4190, 'TAREAS DESARROLLADAS': 'Operativo Puerta a Puerta' },
+            { 'NOMBRE DEL BARRIO': 'San Francisco Solano', 'DEPENDENCIA A CARGO': 'Dir. Gral. de Educación Ambiental', 'LATITUD': -24.7700, 'LONGITUD': -65.4300, 'TAREAS DESARROLLADAS': 'Taller de compostaje' },
+            { 'NOMBRE DEL BARRIO': 'Centro', 'DEPENDENCIA A CARGO': 'Dir. Gral. de Desarrollo Sostenible', 'LATITUD': -24.7891, 'LONGITUD': -65.4103, 'TAREAS DESARROLLADAS': 'Ecopunto Instalado' },
+            { 'NOMBRE DEL BARRIO': 'Grandes Lagos', 'DEPENDENCIA A CARGO': 'Dir. General de Cambio Climático', 'LATITUD': -24.795, 'LONGITUD': -65.419, 'TAREAS DESARROLLADAS': 'Descacharrado y retiro de chatarra' },
         ];
-
-        const mockPuntosLimpios = [
-            {"NOMBRE": "Punto Limpio Norte", "DIRECCION": "Av. Bolivia 2550", "lat": -24.746, "lng": -65.412},
-            {"NOMBRE": "Punto Limpio Sur", "DIRECCION": "Av. Paraguay 1240", "lat": -24.809, "lng": -65.418},
-        ];
-
-        let indicatorsData = [];
-        let barriosData = [];
-        let chartInstances = {};
-        let mapInstance = null;
-        let dataLoaded = false;
-
-        const SALTA_CENTER = [-24.7859, -65.4117];
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeApp();
-            setupNavigation();
-            setupDownloadButtons();
-        });
-
-        async function initializeApp() {
-            const loader = document.getElementById('loader');
+        
+        // ---------------------------------------------------------------------
+        // FUNCIONES DE UTILIDAD (NO MODIFICAR)
+        // ---------------------------------------------------------------------
+        
+        async function fetchGoogleSheetData(sheetName) {
+            if (CONFIG.GOOGLE_SHEET_ID === 'REEMPLAZA_CON_TU_GOOGLE_SHEET_ID') {
+                console.warn(`ID de Google Sheet no configurado. Usando mock data para ${sheetName}.`);
+                return null;
+            }
+            const baseUrl = `https://docs.google.com/spreadsheets/d/${CONFIG.GOOGLE_SHEET_ID}/gviz/tq?tqx=out:json`;
+            const query = `sheet=${sheetName}`;
+            const url = `${baseUrl}&${query}`;
+            
             try {
-                const [indicators, barrios] = await Promise.all([
-                    fetchGoogleSheetData(CONFIG.GOOGLE_SHEET_ID, CONFIG.SHEET_INDICADORES),
-                    fetchGoogleSheetData(CONFIG.GOOGLE_SHEET_ID, CONFIG.SHEET_BARRIOS)
-                ]);
+                const response = await fetch(url);
+                const text = await response.text();
+                const jsonText = text.replace('/*O_o*/\ngoogle.visualization.Query.setResponse(', '').replace(');', '');
                 
-                if (indicators && indicators.length > 0) {
-                    indicatorsData = indicators;
-                    dataLoaded = true;
-                    console.log("✅ Datos cargados desde Google Sheets");
-                } else {
-                    throw new Error("No se encontraron datos");
-                }
+                const data = JSON.parse(jsonText);
                 
-                if (barrios && barrios.length > 0 && barrios[0].lat) {
-                    barriosData = barrios;
-                } else {
-                    console.warn("⚠️ Usando datos mock para barrios");
-                    barriosData = mockBarrios;
+                if (data.status === 'error') {
+                    console.error(`Error en API de Google Sheet (${sheetName}): ${data.errors.map(e => e.detailed_message).join(', ')}. Usando mock data.`);
+                    return null;
                 }
 
+                return parseGoogleSheetResponse(data.table);
             } catch (error) {
-                console.error("❌ Error al cargar datos. Usando mock data:", error);
-                indicatorsData = mockIndicadores;
-                barriosData = mockBarrios;
-                dataLoaded = false;
-                
-                showWarningBanner();
-            } finally {
-                renderSection('Dir. Gral. de Educación Ambiental');
-                loader.style.display = 'none';
+                console.error(`Error al intentar cargar datos de ${sheetName}:`, error);
+                return null;
             }
-        }
-
-        function showWarningBanner() {
-            const container = document.getElementById('main-content-area');
-            const banner = `
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
-                    <strong>¡Atención!</strong> No se pudieron cargar los datos desde Google Sheets. 
-                    Asegúrate de que la hoja esté compartida públicamente. Mostrando datos de ejemplo.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            `;
-            container.insertAdjacentHTML('afterbegin', banner);
-        }
-
-        function setupNavigation() {
-            const navLinks = document.querySelectorAll('#main-nav .nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    e.currentTarget.classList.add('active');
-                    const sectionName = e.currentTarget.getAttribute('data-section');
-                    renderSection(sectionName);
-                });
-            });
-        }
-
-        function setupDownloadButtons() {
-            document.getElementById('download-csv').addEventListener('click', exportToCSV);
-            document.getElementById('download-pdf').addEventListener('click', () => {
-                window.print();
-            });
-        }
-
-        function renderSection(sectionName) {
-            const container = document.getElementById('main-content-area');
-            container.innerHTML = '';
-            destroyCharts();
-            destroyMap();
-
-            const title = document.createElement('h2');
-            title.className = 'section-title';
-            title.textContent = sectionName;
-            container.appendChild(title);
-
-            switch (sectionName) {
-                case 'Dir. Gral. de Educación Ambiental':
-                    renderEducacion(container);
-                    break;
-                case 'Dir. Gral. de Desarrollo Sostenible':
-                    renderEconomia(container);
-                    break;
-                case 'Dir. Gral. de Cambio Climático':
-                    renderCambioClimatico(container);
-                    break;
-                case 'Dirección de Desarrollo Sostenible':
-                    renderDesarrollo(container);
-                    break;
-                case 'Dirección de Inspecciones':
-                    renderInspecciones(container);
-                    break;
-                case 'Dirección de Impacto Ambiental':
-                    renderImpacto(container);
-                    break;
-                case 'Direccion de Patrulla Ambiental':
-                    renderPatrulla(container);
-                    break;
-                case 'Coordinación de Proyectos Ambientales':
-                    renderProyectos(container);
-                    break;
-                case 'Subsecretaría (Articulación)':
-                    renderComunicacion(container);
-                    break;
-                default:
-                    container.innerHTML = '<p>Sección en construcción.</p>';
-            }
-        }
-
-        function renderEducacion(container) {
-            container.innerHTML += `
-                <div class="section-description">
-                    <p>Esta área se encarga de actividades como talleres de educación ambiental, operativos puerta a puerta, la conformación de la mesa intersectorial de Educación Ambiental, eventos de siembra de árboles, capacitación de docentes, y la difusión de contenido ambiental en redes y medios.</p>
-                </div>
-            `;
-
-            const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Educación Ambiental');
-            const talleres = findIndicator(data, 'TALLERES');
-            const promesa = findIndicator(data, 'PROMESA');
-
-            const hasTalleres = talleres['ACUMULADO TOTAL'] > 0;
-            const hasPromesa = promesa['ACUMULADO TOTAL'] > 0;
-
-            if (!hasTalleres && !hasPromesa) {
-                container.innerHTML += `
-                    <div class="alert alert-info" role="alert">
-                        <i class="fa-solid fa-info-circle me-2"></i>
-                        No hay datos disponibles para esta dirección. Verifica que la hoja de Google Sheets contenga datos para "Dir. Gral. de Educación Ambiental".
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML += `
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Neumáticos (Tn)', neumaticos['ACUMULADO TOTAL'], 'fa-solid fa-truck-monster', 'kpi-icon-orange')}
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('RAEE (Tn)', raee['ACUMULADO TOTAL'], 'fa-solid fa-laptop-medical', 'kpi-icon-purple')}
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Puntos Limpios Instalados', puntosLimpios['ACUMULADO TOTAL'], 'fa-solid fa-map-pin', 'kpi-icon-green')}
-                    </div>
-                </div>
-                
-                <div class="row g-4">
-                    <div class="col-lg-12">
-                        <div class="chart-container">
-                            <h5>Mapa de Puntos Limpios</h5>
-                            <div id="map"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            animateCounter('kpi-neumaticos-tn', neumaticos['ACUMULADO TOTAL']);
-            animateCounter('kpi-raee-tn', raee['ACUMULADO TOTAL']);
-            animateCounter('kpi-puntos-limpios-instalados', puntosLimpios['ACUMULADO TOTAL']);
-
-            initializeMap(mockPuntosLimpios, 'punto-limpio');
-        }
-
-        function renderCambioClimatico(container) {
-            container.innerHTML += `
-                <div class="section-description">
-                    <p>Colabora en la RAEETÓN, el Neumatón (a través de la certificación de disposición final), y se enfoca en el mapeo de calidad de aire y ruido ambiental, el relevamiento y toma de muestras de agua en los ríos Arias-Arenales, la implementación de Biobardas, y las actividades de descacharrado y retiro de chatarra.</p>
-                </div>
-            `;
-
-            const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Cambio Climático');
-            const medicionesAire = findIndicator(data, 'CALIDAD DEL AIRE');
-            const descacharrado = findIndicator(data, 'DESCACHARRADO');
-            
-            const barriosIntervenidos = barriosData.filter(b => 
-                b['TAREAS DESARROLLADAS'] && b['TAREAS DESARROLLADAS'].toLowerCase().includes('descacharrado')
-            );
-
-            container.innerHTML += `
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Mediciones Calidad de Aire', medicionesAire['ACUMULADO TOTAL'], 'fa-solid fa-wind', 'kpi-icon-blue')}
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Barrios con Descacharrado', barriosIntervenidos.length, 'fa-solid fa-house-chimney-medical', 'kpi-icon-red')}
-                    </div>
-                </div>
-                
-                <div class="row g-4">
-                    <div class="col-lg-12">
-                        <div class="chart-container">
-                            <h5>Mapa de Barrios Intervenidos (Descacharrado)</h5>
-                            <div id="map"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            animateCounter('kpi-mediciones-calidad-de-aire', medicionesAire['ACUMULADO TOTAL']);
-            animateCounter('kpi-barrios-con-descacharrado', barriosIntervenidos.length);
-
-            initializeMap(barriosIntervenidos, 'barrio');
-        }
-
-        function renderDesarrollo(container) {
-            container.innerHTML += `
-                <div class="section-description">
-                    <p>Se menciona en tareas de formulación de proyectos y relevamiento a plantas de tratamiento. El indicador de "Huertas" proviene de los datos de "Dir. Gral. de Desarrollo Sostenible".</p>
-                </div>
-            `;
-
-            const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Desarrollo Sostenible');
-            const huertas = findIndicator(data, 'HUERTAS');
-
-            container.innerHTML += `
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Huertas Comunitarias', huertas['ACUMULADO TOTAL'], 'fa-solid fa-carrot', 'kpi-icon-orange')}
-                    </div>
-                </div>
-                <div class="row g-4">
-                    <div class="col-lg-12">
-                        <div class="chart-container">
-                            <h5>Comparativa Huertas Creadas</h5>
-                            <div class="chart-wrapper" style="position: relative; height: 350px;">
-                                <canvas id="chart-huertas"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            animateCounter('kpi-huertas-comunitarias', huertas['ACUMULADO TOTAL']);
-            
-            createBarChart(
-                'chart-huertas',
-                ['2024', '2025', '2026 (Meta)'],
-                'Huertas',
-                [huertas['ACUMULADO 2024'], huertas['ACUMULADO 2025'], huertas['ACUMULADO 2026']],
-                '#ff8c00'
-            );
-        }
-
-        function renderComunicacion(container) {
-            container.innerHTML += `
-                <div class="section-description">
-                    <p>Indicadores de alto nivel gestionados directamente por la Subsecretaría, incluyendo convenios interinstitucionales y campañas de comunicación masiva.</p>
-                </div>
-            `;
-
-            const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Subsecretaría de Gestión Ambiental');
-            const convenios = findIndicator(data, 'CONVENIOS');
-            const campanas = findIndicator(data, 'CAMPAÑAS');
-
-            container.innerHTML += `
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Convenios Firmados', convenios['ACUMULADO TOTAL'], 'fa-solid fa-handshake', 'kpi-icon-purple')}
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Campañas de Comunicación', campanas['ACUMULADO TOTAL'], 'fa-solid fa-microphone-lines', 'kpi-icon-blue')}
-                    </div>
-                </div>
-            `;
-            
-            animateCounter('kpi-convenios-firmados', convenios['ACUMULADO TOTAL']);
-            animateCounter('kpi-campanas-de-comunicacion', campanas['ACUMULADO TOTAL']);
-        }
-
-        function renderInspecciones(container) {
-            container.innerHTML += `
-                <div class="section-description">
-                    <p>Realiza inspecciones, inspecciones conjuntas (con la Dirección de Inspecciones Comerciales), labra actas de comprobación y actas de clausura, y ejecuta operativos de fiscalización.</p>
-                </div>
-                <div class="alert alert-info" role="alert">
-                    <i class="fa-solid fa-info-circle me-2"></i>
-                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
-                </div>
-            `;
-        }
-
-        function renderImpacto(container) {
-            container.innerHTML += `
-                <div class="section-description">
-                    <p>Es responsable de la emisión de las Resoluciones de CAAM (Certificado de Aptitud Ambiental) y de la capacitación o asesoramiento para la obtención del mismo.</p>
-                </div>
-                <div class="alert alert-info" role="alert">
-                    <i class="fa-solid fa-info-circle me-2"></i>
-                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
-                </div>
-            `;
-        }
-
-        function renderPatrulla(container) {
-            container.innerHTML += `
-                <div class="section-description">
-                    <p>Sus funciones incluyen operativos de fiscalización y control de microbasurales, colaboraciones especiales con otras áreas municipales, la generación de reportes diarios/denuncias, y la emisión de actas de infracción y cédulas de notificación.</p>
-                </div>
-                <div class="alert alert-info" role="alert">
-                    <i class="fa-solid fa-info-circle me-2"></i>
-                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
-                </div>
-            `;
-        }
-
-        function renderProyectos(container) {
-            container.innerHTML += `
-                <div class="section-description">
-                    <p>Se encarga de la puesta a punto, el enriquecimiento y el mantenimiento de espacios verdes (plazas, platabandas, rotondas, etc.).</p>
-                </div>
-                <div class="alert alert-info" role="alert">
-                    <i class="fa-solid fa-info-circle me-2"></i>
-                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
-                </div>
-            `;
-        }
-
-        function createKpiCard(label, value, iconClass, colorClass) {
-            const safeValue = value || 0;
-            const kpiId = `kpi-${label.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
-            
-            return `
-                <div class="kpi-card">
-                    <div class="card-body">
-                        <div class="kpi-card-icon ${colorClass}">
-                            <i class="${iconClass}"></i>
-                        </div>
-                        <div class="kpi-card-content">
-                            <div class="kpi-value" id="${kpiId}">0</div>
-                            <p class="kpi-label">${label}</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function createBarChart(canvasId, labels, dataLabel, data, color = '#02b3e4') {
-            const ctx = document.getElementById(canvasId);
-            if (!ctx) return;
-            
-            const chart = new Chart(ctx.getContext('2d'), {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: dataLabel,
-                        data: data,
-                        backgroundColor: color,
-                        borderRadius: 5,
-                        barPercentage: 0.6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                display: true,
-                                color: '#e9ecef'
-                            },
-                            ticks: {
-                                color: '#6c757d'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#6c757d'
-                            }
-                        }
-                    }
-                }
-            });
-            chartInstances[canvasId] = chart;
-        }
-
-        function destroyCharts() {
-            Object.values(chartInstances).forEach(chart => chart.destroy());
-            chartInstances = {};
-        }
-
-        function initializeMap(markersData, type) {
-            if (mapInstance) {
-                mapInstance.remove();
-                mapInstance = null;
-            }
-
-            const mapEl = document.getElementById('map');
-            if (!mapEl) return;
-
-            mapInstance = L.map('map').setView(SALTA_CENTER, 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(mapInstance);
-
-            const barrioIcon = L.icon({
-                iconUrl: 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#D90429" width="32px" height="32px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>'),
-                iconSize: [32, 32],
-                iconAnchor: [16, 32],
-                popupAnchor: [0, -32]
-            });
-            
-            const puntoLimpioIcon = L.icon({
-                iconUrl: 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#009A44" width="32px" height="32px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>'),
-                iconSize: [32, 32],
-                iconAnchor: [16, 32],
-                popupAnchor: [0, -32]
-            });
-
-            markersData.forEach(d => {
-                if (d.lat && d.lng) {
-                    let popupContent = '';
-                    let icon = barrioIcon;
-
-                    if (type === 'barrio') {
-                        popupContent = `<strong>${d['NOMBRE DEL BARRIO']}</strong><br>${d['TAREAS DESARROLLADAS']}`;
-                        icon = barrioIcon;
-                    } else if (type === 'punto-limpio') {
-                        popupContent = `<strong>${d['NOMBRE']}</strong><br>${d['DIRECCION']}`;
-                        icon = puntoLimpioIcon;
-                    }
-                    
-                    L.marker([d.lat, d.lng], { icon: icon })
-                        .addTo(mapInstance)
-                        .bindPopup(popupContent);
-                }
-            });
-            
-            if (markersData.length > 0) {
-                const group = new L.featureGroup(markersData.map(d => L.marker([d.lat, d.lng])));
-                mapInstance.fitBounds(group.getBounds().pad(0.1));
-            }
-        }
-        
-        function destroyMap() {
-            if (mapInstance) {
-                mapInstance.remove();
-                mapInstance = null;
-            }
-        }
-
-        function animateCounter(id, endValue) {
-            const el = document.getElementById(id);
-            if (!el) return;
-
-            let startValue = 0;
-            const duration = 1500;
-            const stepTime = 20;
-            const steps = duration / stepTime;
-            const increment = endValue / steps;
-            
-            const isFloat = endValue % 1 !== 0;
-
-            const timer = setInterval(() => {
-                startValue += increment;
-                if (startValue >= endValue) {
-                    clearInterval(timer);
-                    el.textContent = isFloat ? endValue.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : endValue.toLocaleString('es-AR');
-                } else {
-                    el.textContent = isFloat ? startValue.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : Math.ceil(startValue).toLocaleString('es-AR');
-                }
-            }, stepTime);
-        }
-
-        function findIndicator(data, nameSubstring) {
-            const lowerCaseName = nameSubstring.toLowerCase();
-            return data.find(d => d.INDICADOR && d.INDICADOR.toLowerCase().includes(lowerCaseName)) || 
-                   { "ACUMULADO TOTAL": 0, "ACUMULADO 2024": 0, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0 };
-        }
-        
-        function exportToCSV() {
-            if (!indicatorsData.length) {
-                alert("No hay datos disponibles para exportar.");
-                return;
-            }
-
-            const headers = Object.keys(indicatorsData[0]);
-            let csvContent = "data:text/csv;charset=utf-8,";
-            
-            csvContent += headers.join(";") + "\r\n";
-
-            indicatorsData.forEach(row => {
-                const values = headers.map(header => {
-                    let cell = row[header] === null || row[header] === undefined ? '' : row[header];
-                    cell = String(cell).replace(/"/g, '""');
-                    if (cell.includes(';') || cell.includes(',')) {
-                        cell = `"${cell}"`;
-                    }
-                    return cell;
-                });
-                csvContent += values.join(";") + "\r\n";
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "reporte_gestion_ambiental.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        async function fetchGoogleSheetData(sheetId, sheetName) {
-            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
-            
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Error HTTP: ${response.statusText}`);
-            }
-
-            let text = await response.text();
-            
-            const startIndex = text.indexOf('(') + 1;
-            const endIndex = text.lastIndexOf(')');
-            
-            if (startIndex === 0 || endIndex === -1) {
-                throw new Error("Respuesta inválida de Google Sheets");
-            }
-
-            const jsonText = text.substring(startIndex, endIndex);
-            const data = JSON.parse(jsonText);
-            
-            if (data.status === 'error') {
-                throw new Error(`Error en Google Sheets: ${data.errors.map(e => e.detailed_message).join(', ')}`);
-            }
-
-            return parseGoogleSheetResponse(data.table);
         }
         
         function parseGoogleSheetResponse(table) {
             const headers = table.cols.map(col => col.label || col.id);
             const rows = table.rows.map(row => {
                 const obj = {};
-                row.c.forEach((cell, i) => {
+                const cells = Array.from({ length: headers.length }, (_, i) => row.c[i] || { v: null, f: null });
+
+                cells.forEach((cell, i) => {
                     const header = headers[i];
+                    if (!header) return; 
+
                     let value = null;
                     if (cell) {
-                        value = cell.f || cell.v;
+                        value = (cell.f !== null && cell.f !== undefined) ? cell.f : cell.v;
                     }
-                    if (typeof value === 'string' && !isNaN(parseFloat(value.replace(',', '.')))) {
-                        obj[header] = parseFloat(value.replace(',', '.'));
+                    
+                    if (typeof value === 'string') {
+                        let cleanedValue = value.replace(/\./g, '').replace(',', '.').trim();
+                        if (!isNaN(parseFloat(cleanedValue)) && cleanedValue !== '') {
+                            obj[header] = parseFloat(cleanedValue);
+                        } else {
+                            obj[header] = value;
+                        }
                     } else {
                         obj[header] = value;
                     }
                 });
                 return obj;
-            });
+            }).filter(obj => 
+                // Filtra filas que tienen al menos un indicador clave (para ignorar filas de título o vacías)
+                obj[CONFIG.COL_AREA] !== null && obj[CONFIG.COL_AREA] !== undefined && obj[CONFIG.COL_INDICADOR] !== null && obj[CONFIG.COL_INDICADOR] !== undefined
+            );
             return rows;
         }
 
-    </script>
-</body>
-</html>col-lg-4">
-                        ${createKpiCard('Niños en Talleres', talleres['ACUMULADO TOTAL'], 'fa-solid fa-school', 'kpi-icon-green')}
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        ${createKpiCard('Alumnos en "Promesa al Ambiente"', promesa['ACUMULADO TOTAL'], 'fa-solid fa-children', 'kpi-icon-blue')}
-                    </div>
-                </div>
-                
-                <div class="row g-4">
-                    <div class="col-lg-12">
-                        <div class="chart-container">
-                            <h5>Comparativa Anual de Talleres</h5>
-                            <div class="chart-wrapper" style="position: relative; height: 350px;">
-                                <canvas id="chart-talleres"></canvas>
+        function getIconForIndicator(indicator) {
+            const ind = indicator.toLowerCase();
+            if (ind.includes('taller') || ind.includes('capacitac')) return 'fas fa-chalkboard-teacher';
+            if (ind.includes('siembra') || ind.includes('arboles') || ind.includes('verde')) return 'fas fa-leaf';
+            if (ind.includes('reciclado') || ind.includes('neumaton') || ind.includes('raee')) return 'fas fa-recycle';
+            if (ind.includes('actas') || ind.includes('fiscalizacion') || ind.includes('inspecciones')) return 'fas fa-clipboard-list';
+            if (ind.includes('resoluciones') || ind.includes('caam')) return 'fas fa-file-signature';
+            if (ind.includes('biobarda') || ind.includes('descacharrado')) return 'fas fa-water';
+            return 'fas fa-chart-line';
+        }
+
+        function createCard(title, value, task, icon, colorClass = 'bg-light') {
+            const formattedValue = typeof value === 'number' ? value.toLocaleString('es-AR') : (value || 'N/A');
+            return `
+                <div class="col-lg-3 col-md-6 col-sm-12">
+                    <div class="card indicator-card h-100 border-0 ${colorClass}">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <i class="${icon} fa-2x text-info me-3"></i>
+                                <div>
+                                    <p class="card-title text-uppercase mb-0">${title}</p>
+                                    <h3 class="card-number mb-0">${formattedValue}</h3>
+                                </div>
                             </div>
+                            <small class="text-muted">${task || ''}</small>
                         </div>
                     </div>
                 </div>
             `;
-            
-            if (hasTalleres) animateCounter('kpi-ninos-en-talleres', talleres['ACUMULADO TOTAL']);
-            if (hasPromesa) animateCounter('kpi-alumnos-en-promesa-al-ambiente', promesa['ACUMULADO TOTAL']);
+        }
 
-            if (hasTalleres) {
-                createBarChart(
-                    'chart-talleres',
-                    ['2024', '2025', '2026 (Meta)'],
-                    'Niños capacitados',
-                    [talleres['ACUMULADO 2024'], talleres['ACUMULADO 2025'], talleres['ACUMULADO 2026']],
-                    '#009a44'
-                );
+        function createBarChart(canvasId, title, labels, datasetLabel, dataPoints, color) {
+            const ctx = document.getElementById(canvasId);
+            const noDataEl = document.getElementById(canvasId + '-no-data');
+            const titleEl = document.getElementById(canvasId + '-title');
+
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            if (!ctx || dataPoints.every(p => p === 0)) {
+                if (noDataEl) noDataEl.classList.remove('d-none');
+                ctx.style.display = 'none';
+                titleEl.textContent = title;
+                return;
+            }
+
+            if (noDataEl) noDataEl.classList.add('d-none');
+            ctx.style.display = 'block';
+            titleEl.textContent = `Avance Mensual: ${datasetLabel}`;
+
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: datasetLabel,
+                        data: dataPoints,
+                        backgroundColor: color,
+                        borderColor: color,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function renderMap(areaName, filteredBarrios) {
+            const mapEl = document.getElementById(mapContainerId);
+            const noDataEl = document.getElementById(mapContainerId + '-no-data');
+            const titleEl = document.getElementById(mapContainerId + '-title');
+            
+            if (currentMap) {
+                currentMap.remove();
+            }
+
+            const validBarrios = filteredBarrios.filter(b => 
+                b[CONFIG.COL_LAT] && b[CONFIG.COL_LON] && b[CONFIG.COL_LAT] !== 0 && b[CONFIG.COL_LON] !== 0
+            );
+
+            if (validBarrios.length === 0) {
+                mapEl.style.display = 'none';
+                noDataEl.classList.remove('d-none');
+                titleEl.textContent = 'Sin Puntos/Barrios Intervenidos Mapeados';
+                return;
+            }
+
+            mapEl.style.display = 'block';
+            noDataEl.classList.add('d-none');
+            titleEl.textContent = `Puntos/Barrios Intervenidos por ${areaName}`;
+            
+            const defaultCenter = [-24.782, -65.411]; 
+            currentMap = L.map(mapContainerId).setView(defaultCenter, 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(currentMap);
+
+            let markerLayer = L.featureGroup().addTo(currentMap);
+
+            validBarrios.forEach(barrio => {
+                const lat = parseFloat(barrio[CONFIG.COL_LAT]);
+                const lon = parseFloat(barrio[CONFIG.COL_LON]);
+                const name = barrio[CONFIG.COL_BARRIO_NOMBRE] || 'Punto Desconocido';
+                const task = barrio[CONFIG.COL_BARRIO_TAREA] || 'Sin tarea especificada';
+                
+                L.marker([lat, lon])
+                    .bindPopup(`<b>${name}</b><br>${task}<br><small>(${areaName})</small>`)
+                    .addTo(markerLayer);
+            });
+
+            if (markerLayer.getBounds().isValid()) {
+                currentMap.fitBounds(markerLayer.getBounds());
+            } else {
+                currentMap.setView(defaultCenter, 12);
             }
         }
 
-        function renderEconomia(container) {
-            container.innerHTML += `
-                <div class="section-description">
-                    <p>Participa en actividades como el Neumatón (recolección de Neumáticos Fuera de Uso), la RAEETÓN (recolección de Residuos Electrónicos y Eléctricos en Desuso), la formulación de proyectos, la instalación de Ecopuntos y Puntos Limpios, y la coordinación de retiros masivos de NFU.</p>
-                    <p class="fw-bold small text-muted mb-0">Nota: Los indicadores (Neumatón, RAEETÓN, Puntos Limpios) provienen de los datos de "Dir. Gral. de Economía Circular" y se muestran aquí según la nueva estructura de áreas.</p>
-                </div>
-            `;
+        // ---------------------------------------------------------------------
+        // LÓGICA DE RENDERIZADO DE PESTAÑAS
+        // ---------------------------------------------------------------------
 
-            const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Economía Circular');
-            const neumaticos = findIndicator(data, 'NEUMATÓN');
-            const raee = findIndicator(data, 'RAEETÓN');
-            const puntosLimpios = findIndicator(data, 'PUNTOS LIMPIOS');
+        function renderSection(areaName) {
+            areaTitle.textContent = areaName;
+            
+            // 1. Inyectar Descripción
+            descriptionContainer.innerHTML = `<div class="section-description"><p>${AREA_DESCRIPTIONS[areaName] || 'Descripción no disponible.'}</p></div>`;
 
-            container.innerHTML += `
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6
+            // 2. Filtrar Datos
+            const filteredIndicators = indicatorsData.filter(item => item[CONFIG.COL_AREA] === areaName);
+            const filteredBarrios = barriosData.filter(item => item['DEPENDENCIA A CARGO'] === areaName);
+
+            // 3. Renderizar Cards
+            indicatorsRow.innerHTML = '';
+            if (filteredIndicators.length === 0) {
+                indicatorsRow.innerHTML = '<div class="col-12"><p class="text-center text-muted">No hay indicadores numéricos cargados para esta área.</p></div>';
+            } else {
+                filteredIndicators.slice(0, 4).forEach(item => {
+                    indicatorsRow.insertAdjacentHTML('beforeend', createCard(
+                        item[CONFIG.COL_INDICADOR],
+                        item[CONFIG.COL_ACUMULADO_TOTAL],
+                        item[CONFIG.COL_TAREA],
+                        getIconForIndicator(item[CONFIG.COL_INDICADOR]),
+                        'bg-light'
+                    ));
+                });
+            }
+
+            // 4. Renderizar Gráfico
+            if (filteredIndicators.length > 0) {
+                const mainIndicator = filteredIndicators[0];
+                const dataPoints = MONTH_COLUMNS.map(month => mainIndicator[month] || 0);
+                createBarChart(
+                    'chart-talleres',
+                    'Avance Mensual',
+                    MONTH_COLUMNS,
+                    mainIndicator[CONFIG.COL_INDICADOR],
+                    dataPoints,
+                    'rgba(0, 77, 64, 0.7)' // Color verde oscuro
+                );
+            } else {
+                // Forzar la destrucción del gráfico y mostrar mensaje de sin datos
+                createBarChart('chart-talleres', 'Avance Mensual', [], '', [], '');
+            }
+
+            // 5. Renderizar Mapa
+            renderMap(areaName, filteredBarrios);
+        }
+
+        // ---------------------------------------------------------------------
+        // INICIALIZACIÓN DE LA APLICACIÓN
+        // ---------------------------------------------------------------------
+        async function initializeApp() {
+            try {
+                // 1. Cargar datos
+                const fetchedIndicators = await fetchGoogleSheetData(CONFIG.SHEET_INDICADORES);
+                indicatorsData = fetchedIndicators || mockIndicadores;
+
+                const fetchedBarrios = await fetchGoogleSheetData(CONFIG.SHEET_BARRIOS);
+                barriosData = fetchedBarrios || mockBarrios;
+
+                // 2. Agregar Listeners a las pestañas del menú lateral
+                const menuLinks = document.querySelectorAll('#area-menu a');
+                
+                menuLinks.forEach(link => {
+                    // Al hacer clic en el link, disparamos la función de renderizado
+                    link.addEventListener('click', (event) => {
+                        event.preventDefault(); // Prevenir el salto de página si fuera necesario
+                        const area = event.currentTarget.getAttribute('data-area');
+                        renderSection(area);
+                    });
+                });
+                
+                // 3. Renderizar la sección por defecto (la pestaña activa inicial)
+                const defaultArea = document.querySelector('#area-menu a.active').getAttribute('data-area');
+                renderSection(defaultArea);
+
+            } catch (error) {
+                console.error("Fallo crítico en la inicialización. Usando mock data.", error);
+                indicatorsData = mockIndicadores;
+                barriosData = mockBarrios;
+                const defaultArea = document.querySelector('#area-menu a.active').getAttribute('data-area');
+                renderSection(defaultArea);
+
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        window.onload = initializeApp;
+
+    </script>
+</body>
+</html>
