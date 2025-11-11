@@ -50,6 +50,11 @@
             font-size: 1.5rem;
             line-height: 1.2;
         }
+        /* Añadido para ajustar el título más largo */
+        .header-navbar .navbar-brand .header-title-span {
+            font-size: 1.35rem; /* Un poco más pequeño para que entre */
+            line-height: 1.2;
+        }
         .header-navbar .navbar-brand span small {
             font-size: 1rem;
             color: #6c757d;
@@ -178,6 +183,23 @@
             z-index: 1;
         }
 
+        /* ----- Descripción de la Sección ----- */
+        .section-description {
+            background-color: #eef7ff; /* Azul más claro */
+            border-left: 5px solid var(--color-secundario);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            color: #333;
+        }
+        .section-description p {
+            margin-bottom: 0.5rem;
+        }
+        .section-description p:last-child {
+            margin-bottom: 0;
+        }
+
         /* ----- Botones de Descarga ----- */
         .download-section {
             background-color: #e9ecef;
@@ -264,9 +286,9 @@
     <nav class="navbar header-navbar">
         <a class="navbar-brand" href="#">
             <i class="fa-solid fa-seedling"></i>
-            <span>
-                Gestión Ambiental
-                <small>Municipalidad de Salta</small>
+            <span class="header-title-span"> <!-- Clase añadida -->
+                Subsecretaría de Gestión Ambiental
+                <small>Ing. Maria Emilse Arias</small>
             </span>
         </a>
     </nav>
@@ -279,33 +301,57 @@
                 <div class="position-sticky">
                     <ul class="nav nav-pills flex-column" id="main-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#" data-section="Educación Ambiental">
+                            <a class="nav-link active" href="#" data-section="Dir. Gral. de Educación Ambiental">
                                 <i class="fa-solid fa-graduation-cap"></i>
-                                Educación Ambiental
+                                Dir. Gral. Educación Ambiental
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Economía Circular">
+                            <a class="nav-link" href="#" data-section="Dir. Gral. de Desarrollo Sostenible">
                                 <i class="fa-solid fa-recycle"></i>
-                                Economía Circular
+                                Dir. Gral. Desarrollo Sostenible
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Cambio Climático">
+                            <a class="nav-link" href="#" data-section="Dir. Gral. de Cambio Climático">
                                 <i class="fa-solid fa-cloud-sun-rain"></i>
-                                Cambio Climático
+                                Dir. Gral. Cambio Climático
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Desarrollo Sostenible">
+                            <a class="nav-link" href="#" data-section="Dirección de Desarrollo Sostenible">
                                 <i class="fa-solid fa-leaf"></i>
-                                Desarrollo Sostenible
+                                Dir. Desarrollo Sostenible
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Comunicación y Articulación">
+                            <a class="nav-link" href="#" data-section="Dirección de Inspecciones">
+                                <i class="fa-solid fa-clipboard-check"></i>
+                                Dir. Inspecciones
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Dirección de Impacto Ambiental">
+                                <i class="fa-solid fa-mountain-sun"></i>
+                                Dir. Impacto Ambiental
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Direccion de Patrulla Ambiental">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                Dir. Patrulla Ambiental
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Coordinación de Proyectos Ambientales">
+                                <i class="fa-solid fa-tree-city"></i>
+                                Coord. Proyectos Ambientales
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Subsecretaría (Articulación)">
                                 <i class="fa-solid fa-bullhorn"></i>
-                                Comunicación y Articulación
+                                Subsecretaría (Articulación)
                             </a>
                         </li>
                     </ul>
@@ -357,7 +403,7 @@
         // REVISA EL ARCHIVO README.md PARA INSTRUCCIONES DETALLADAS
         const CONFIG = {
             // 1. Pega aquí el ID de tu Google Sheet
-            GOOGLE_SHEET_ID: 'REEMPLAZA_CON_TU_GOOGLE_SHEET_ID',
+            GOOGLE_SHEET_ID: '2PACX-1vRc_CU8K2QFjn9nEuF6lQEnQBgsmjF8bYrkfhGX50U3HCKPoUJX2F1MWa2w8J-2kB_ZP0_jSWJOf1KD',
             
             // 2. Revisa que los nombres de las hojas (pestañas) sean correctos
             SHEET_INDICADORES: 'INDICADORES',
@@ -505,20 +551,32 @@
 
             // Router para renderizar la sección correcta
             switch (sectionName) {
-                case 'Educación Ambiental':
+                case 'Dir. Gral. de Educación Ambiental':
                     renderEducacion(container);
                     break;
-                case 'Economía Circular':
-                    renderEconomia(container);
+                case 'Dir. Gral. de Desarrollo Sostenible':
+                    renderEconomia(container); // Re-usada para Neumatón/RAEE
                     break;
-                case 'Cambio Climático':
+                case 'Dir. Gral. de Cambio Climático':
                     renderCambioClimatico(container);
                     break;
-                case 'Desarrollo Sostenible':
-                    renderDesarrollo(container);
+                case 'Dirección de Desarrollo Sostenible':
+                    renderDesarrollo(container); // Re-usada para Huertas
                     break;
-                case 'Comunicación y Articulación':
-                    renderComunicacion(container);
+                case 'Dirección de Inspecciones':
+                    renderInspecciones(container);
+                    break;
+                case 'Dirección de Impacto Ambiental':
+                    renderImpacto(container);
+                    break;
+                case 'Direccion de Patrulla Ambiental':
+                    renderPatrulla(container);
+                    break;
+                case 'Coordinación de Proyectos Ambientales':
+                    renderProyectos(container);
+                    break;
+                case 'Subsecretaría (Articulación)':
+                    renderComunicacion(container); // Re-usada para Convenios/Campañas
                     break;
                 default:
                     container.innerHTML = '<p>Sección en construcción.</p>';
@@ -529,6 +587,13 @@
          * Renderiza la sección "Educación Ambiental"
          */
         function renderEducacion(container) {
+            // 0. Add Description
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Esta área se encarga de actividades como talleres de educación ambiental, operativos puerta a puerta, la conformación de la mesa intersectorial de Educación Ambiental, eventos de siembra de árboles, capacitación de docentes, y la difusión de contenido ambiental en redes y medios.</p>
+                </div>
+            `;
+
             // 1. Filtrar datos
             const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Educación Ambiental');
             const talleres = findIndicator(data, 'TALLERES');
@@ -576,6 +641,14 @@
          * Renderiza la sección "Economía Circular"
          */
         function renderEconomia(container) {
+            // 0. Add Description
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Participa en actividades como el Neumatón (recolección de Neumáticos Fuera de Uso), la RAEETÓN (recolección de Residuos Electrónicos y Eléctricos en Desuso), la formulación de proyectos, la instalación de Ecopuntos y Puntos Limpios, y la coordinación de retiros masivos de NFU.</p>
+                    <p class="fw-bold small text-muted mb-0">Nota: Los indicadores (Neumatón, RAEETÓN, Puntos Limpios) provienen de los datos de "Dir. Gral. de Economía Circular" y se muestran aquí según la nueva estructura de áreas.</p>
+                </div>
+            `;
+
             const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Economía Circular');
             const neumaticos = findIndicator(data, 'NEUMATÓN');
             const raee = findIndicator(data, 'RAEETÓN');
@@ -617,6 +690,13 @@
          * Renderiza la sección "Cambio Climático"
          */
         function renderCambioClimatico(container) {
+            // 0. Add Description
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Colabora en la RAEETÓN, el Neumatón (a través de la certificación de disposición final), y se enfoca en el mapeo de calidad de aire y ruido ambiental, el relevamiento y toma de muestras de agua en los ríos Arias-Arenales, la implementación de Biobardas, y las actividades de descacharrado y retiro de chatarra.</p>
+                </div>
+            `;
+
             const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Cambio Climático');
             const medicionesAire = findIndicator(data, 'CALIDAD DEL AIRE');
             const descacharrado = findIndicator(data, 'DESCACHARRADO');
@@ -656,6 +736,13 @@
          * Renderiza la sección "Desarrollo Sostenible"
          */
         function renderDesarrollo(container) {
+            // 0. Add Description
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Se menciona en tareas de formulación de proyectos y relevamiento a plantas de tratamiento. El indicador de "Huertas" proviene de los datos de "Dir. Gral. de Desarrollo Sostenible".</p>
+                </div>
+            `;
+
             const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Desarrollo Sostenible');
             const huertas = findIndicator(data, 'HUERTAS');
 
@@ -690,6 +777,13 @@
          * Renderiza la sección "Comunicación y Articulación"
          */
         function renderComunicacion(container) {
+            // 0. Add Description
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Indicadores de alto nivel gestionados directamente por la Subsecretaría, incluyendo convenios interinstitucionales y campañas de comunicación masiva.</p>
+                </div>
+            `;
+
             const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Subsecretaría de Gestión Ambiental');
             const convenios = findIndicator(data, 'CONVENIOS');
             const campanas = findIndicator(data, 'CAMPAÑAS');
@@ -707,6 +801,56 @@
             
             animateCounter('kpi-convenios-firmados', convenios['ACUMULADO TOTAL']);
             animateCounter('kpi-campanas-de', campanas['ACUMULADO TOTAL']);
+        }
+
+
+        // ----- NUEVAS FUNCIONES PARA ÁREAS SIN DATOS -----
+        function renderInspecciones(container) {
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Realiza inspecciones, inspecciones conjuntas (con la Dirección de Inspecciones Comerciales), labra actas de comprobación y actas de clausura, y ejecuta operativos de fiscalización.</p>
+                </div>
+                <div class="alert alert-info" role="alert">
+                    <i class="fa-solid fa-info-circle me-2"></i>
+                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                </div>
+            `;
+        }
+
+        function renderImpacto(container) {
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Es responsable de la emisión de las Resoluciones de CAAM (Certificado de Aptitud Ambiental) y de la capacitación o asesoramiento para la obtención del mismo.</p>
+                </div>
+                <div class="alert alert-info" role="alert">
+                    <i class="fa-solid fa-info-circle me-2"></i>
+                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                </div>
+            `;
+        }
+
+        function renderPatrulla(container) {
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Sus funciones incluyen operativos de fiscalización y control de microbasurales, colaboraciones especiales con otras áreas municipales, la generación de reportes diarios/denuncias, y la emisión de actas de infracción y cédulas de notificación.</p>
+                </div>
+                <div class="alert alert-info" role="alert">
+                    <i class="fa-solid fa-info-circle me-2"></i>
+                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                </div>
+            `;
+        }
+
+        function renderProyectos(container) {
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Se encarga de la puesta a punto, el enriquecimiento y el mantenimiento de espacios verdes (plazas, platabandas, rotondas, etc.).</p>
+                </div>
+                <div class="alert alert-info" role="alert">
+                    <i class="fa-solid fa-info-circle me-2"></i>
+                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                </div>
+            `;
         }
 
 
