@@ -14,6 +14,14 @@
     <!-- 3. FontAwesome (Iconos) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!--
+      Content Security Policy (CSP): se añade 'unsafe-eval' a script-src para
+      permitir que librerías como Chart.js funcionen en GitHub Pages. Esta
+      directiva reduce la protección frente a código inyectado, por lo que
+      sólo debería usarse si las dependencias son de confianza.
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; connect-src 'self' https://docs.google.com;">
+
     <!-- Estilos personalizados -->
     <style>
         body {
@@ -401,17 +409,4 @@
         // CONFIGURACIÓN (EL USUARIO DEBE MODIFICAR ESTO)
         // ---------------------------------------------------------------------
         // REVISA EL ARCHIVO README.md PARA INSTRUCCIONES DETALLADAS
-        const CONFIG = {
-            // 1. Pega aquí el ID de tu Google Sheet
-            GOOGLE_SHEET_ID: '1pV10qTgEWIRtmpVpZEJMFa_G9dluMACSoKFw6JNvFQ4',
-            
-            // 2. Revisa que los nombres de las hojas (pestañas) sean correctos
-            SHEET_INDICADORES: 'INDICADORES',
-            SHEET_BARRIOS: 'BARRIOS INTERVENIDOS',
-        };
-
-        // ---------------------------------------------------------------------
-        // DATOS DE EJEMPLO (MOCK DATA)
-        // ---------------------------------------------------------------------
-        // Usados si la carga de Google Sheets falla.
-        // Basados en los archivos CSV proporcionados
+        const CONFIG = 
