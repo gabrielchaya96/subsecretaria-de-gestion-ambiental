@@ -4,537 +4,414 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión Ambiental - Municipalidad de Salta</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <!-- Custom Styles -->
+
+    <!-- 1. Bootstrap 5 (CSS) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- 2. Leaflet (Mapas) CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <!-- 3. FontAwesome (Iconos) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Estilos personalizados -->
     <style>
-        :root {
-            --color-primary: #2c3e50;
-            --color-secondary: #27ae60;
-            --color-accent: #e67e22;
-            --color-text: #2c3e50;
-            --color-text-light: #7f8c8d;
-            --color-background: #fafafa;
-            --color-surface: #ffffff;
-            --color-border: #ecf0f1;
-            --shadow-soft: 0 2px 20px rgba(0,0,0,0.08);
-            --shadow-medium: 0 8px 30px rgba(0,0,0,0.12);
-            --border-radius: 12px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--color-background);
-            color: var(--color-text);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa; /* Gris claro de fondo */
         }
 
-        .serif {
-            font-family: 'Playfair Display', serif;
+        /* ----- Paleta de Colores Institucional ----- */
+        :root {
+            --color-primario: #004a99; /* Azul institucional (ajustar) */
+            --color-secundario: #02b3e4; /* Celeste */
+            --color-gestion: #009a44; /* Verde gestión */
+            --color-texto: #333;
         }
 
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--color-primary) 0%, #34495e 100%);
-            color: white;
-            padding: 2rem 0;
-            position: relative;
-            overflow: hidden;
+        /* ----- Encabezado ----- */
+        .header-navbar {
+            background-color: #ffffff;
+            border-bottom: 4px solid var(--color-gestion);
+            padding: 1rem 2rem;
         }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.1;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .header-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .header-subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-
-        /* Navigation */
-        .sidebar {
-            background: var(--color-surface);
-            border-right: 1px solid var(--color-border);
-            min-height: calc(100vh - 200px);
-            padding: 2rem 0;
-            position: sticky;
-            top: 0;
-        }
-
-        .nav-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-link {
+        .header-navbar .navbar-brand {
             display: flex;
             align-items: center;
-            padding: 1rem 1.5rem;
-            color: var(--color-text);
-            text-decoration: none;
-            border-radius: 0;
-            transition: all 0.3s ease;
-            border-left: 3px solid transparent;
+            color: var(--color-texto);
+            font-weight: 700;
+        }
+        .header-navbar .navbar-brand i {
+            font-size: 2.5rem;
+            color: var(--color-gestion);
+            margin-right: 15px;
+        }
+        .header-navbar .navbar-brand span {
+            font-size: 1.5rem;
+            line-height: 1.2;
+        }
+        /* Añadido para ajustar el título más largo */
+        .header-navbar .navbar-brand .header-title-span {
+            font-size: 1.35rem; /* Un poco más pequeño para que entre */
+            line-height: 1.2;
+        }
+        .header-navbar .navbar-brand span small {
+            font-size: 1rem;
+            color: #6c757d;
+            display: block;
         }
 
-        .nav-link:hover {
-            background-color: #f8f9fa;
-            color: var(--color-secondary);
-            border-left-color: var(--color-secondary);
+        /* ----- Navegación Lateral ----- */
+        .sidebar {
+            background-color: #ffffff;
+            border-right: 1px solid #dee2e6;
+            height: calc(100vh - 90px); /* Alto completo menos el header */
+            position: sticky;
+            top: 90px; /* Pegado debajo del header */
+            padding-top: 1.5rem;
+            overflow-y: auto;
         }
-
-        .nav-link.active {
-            background-color: var(--color-secondary);
-            color: white;
-            border-left-color: var(--color-secondary);
-            box-shadow: var(--shadow-soft);
+        .nav-pills .nav-link {
+            display: flex;
+            align-items: center;
+            color: #495057;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
         }
-
-        .nav-link i {
-            width: 20px;
+        .nav-pills .nav-link i {
             margin-right: 12px;
             font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+            color: #adb5bd;
         }
-
-        /* Main Content */
+        .nav-pills .nav-link:hover {
+            background-color: #f1f3f5;
+            color: var(--color-primario);
+        }
+        .nav-pills .nav-link.active {
+            background-color: var(--color-gestion);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 154, 68, 0.2);
+        }
+        .nav-pills .nav-link.active i {
+            color: #ffffff;
+        }
+        
+        /* ----- Contenido Principal ----- */
         .main-content {
             padding: 2rem;
-            min-height: calc(100vh - 200px);
+            height: calc(100vh - 90px);
+            overflow-y: auto;
         }
-
-        .section-header {
-            margin-bottom: 2rem;
-        }
-
+        
         .section-title {
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--color-primary);
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.01em;
+            color: var(--color-primario);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
         }
 
-        .section-description {
-            color: var(--color-text-light);
-            font-size: 1.1rem;
-            line-height: 1.7;
-            max-width: 600px;
-        }
-
-        /* KPI Cards */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
+        /* ----- Tarjetas de KPI ----- */
         .kpi-card {
-            background: var(--color-surface);
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--shadow-soft);
-            transition: all 0.3s ease;
-            border: 1px solid var(--color-border);
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            background-color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
-
-        .kpi-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
-        }
-
-        .kpi-header {
+        .kpi-card .card-body {
             display: flex;
             align-items: center;
+            padding: 1.5rem;
+        }
+        .kpi-card-icon {
+            font-size: 2.5rem;
+            padding: 1.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.25rem;
+        }
+        /* Colores de íconos */
+        .kpi-icon-green { background-color: #e6f6e6; color: #009a44; }
+        .kpi-icon-blue { background-color: #e0f3ff; color: #02b3e4; }
+        .kpi-icon-orange { background-color: #fff4e6; color: #ff8c00; }
+        .kpi-icon-purple { background-color: #f3e8ff; color: #7b2cbf; }
+        .kpi-icon-red { background-color: #ffeeee; color: #d90429; }
+        
+        .kpi-card-content .kpi-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--color-texto);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+        .kpi-card-content .kpi-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 0;
+            white-space: normal;
+        }
+
+        /* ----- Contenedor de Gráfico/Mapa ----- */
+        .chart-container {
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .chart-container h5 {
+            font-weight: 600;
+            color: #495057;
             margin-bottom: 1rem;
         }
 
-        .kpi-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            font-size: 1.5rem;
+        /* ----- Mapa Leaflet ----- */
+        #map {
+            height: 450px;
+            width: 100%;
+            border-radius: 0.5rem;
+            z-index: 1;
         }
 
-        .kpi-icon.green {
-            background: rgba(39, 174, 96, 0.1);
-            color: var(--color-secondary);
+        /* ----- Descripción de la Sección ----- */
+        .section-description {
+            background-color: #eef7ff; /* Azul más claro */
+            border-left: 5px solid var(--color-secundario);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            color: #333;
         }
-
-        .kpi-icon.blue {
-            background: rgba(52, 152, 219, 0.1);
-            color: #3498db;
-        }
-
-        .kpi-icon.orange {
-            background: rgba(230, 126, 34, 0.1);
-            color: var(--color-accent);
-        }
-
-        .kpi-icon.purple {
-            background: rgba(155, 89, 182, 0.1);
-            color: #9b59b6;
-        }
-
-        .kpi-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--color-primary);
-            line-height: 1;
+        .section-description p {
             margin-bottom: 0.5rem;
         }
-
-        .kpi-label {
-            color: var(--color-text-light);
-            font-size: 0.95rem;
-            font-weight: 500;
+        .section-description p:last-child {
+            margin-bottom: 0;
         }
 
-        /* Chart Container */
-        .chart-container {
-            background: var(--color-surface);
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid var(--color-border);
-            margin-bottom: 2rem;
+        /* ----- Botones de Descarga ----- */
+        .download-section {
+            background-color: #e9ecef;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
         }
 
-        .chart-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--color-primary);
-            margin-bottom: 1.5rem;
+        /* ----- Footer ----- */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: #343a40;
+            color: #f8f9fa;
+            font-size: 0.9rem;
+        }
+        .footer p {
+            margin-bottom: 0;
         }
 
-        .chart-wrapper {
-            position: relative;
-            height: 400px;
-        }
-
-        /* Map */
-        .map-container {
-            height: 500px;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--shadow-soft);
-        }
-
-        #map {
-            height: 100%;
+        /* ----- Loader ----- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-        }
-
-        /* Loading States */
-        .loading-container {
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 400px;
+            z-index: 9999;
             flex-direction: column;
         }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid var(--color-border);
-            border-top: 3px solid var(--color-secondary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: var(--color-text-light);
-            font-size: 1.1rem;
-        }
-
-        /* Error States */
-        .error-container {
-            text-align: center;
-            padding: 3rem;
-            color: var(--color-text-light);
-        }
-
-        .error-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--color-primary);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-        }
-
-        .footer p {
-            margin: 0;
-            opacity: 0.8;
-        }
-
-        /* Download Section */
-        .download-section {
-            background: var(--color-surface);
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid var(--color-border);
-            margin-top: 2rem;
-        }
-
-        .download-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--color-primary);
-            margin-bottom: 1rem;
-        }
-
-        .download-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn-download {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
+        #loader p {
+            margin-top: 1rem;
             font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            color: var(--color-primario);
         }
 
-        .btn-download:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-soft);
-        }
-
-        .btn-download.csv {
-            background: var(--color-secondary);
-            color: white;
-        }
-
-        .btn-download.pdf {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .btn-download i {
-            margin-right: 0.5rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-title {
-                font-size: 2rem;
+        /* ----- Estilos de Impresión (para PDF) ----- */
+        @media print {
+            body {
+                background-color: #ffffff;
             }
-            
+            .sidebar, .header-navbar, .download-section, .footer {
+                display: none;
+            }
             .main-content {
-                padding: 1rem;
+                width: 100%;
+                height: auto;
+                overflow-y: visible;
+                padding: 0;
             }
-            
-            .kpi-grid {
-                grid-template-columns: 1fr;
+            .col-lg-9 { /* Ajusta el contenedor de contenido principal */
+                width: 100% !important;
+                flex: 0 0 100%;
+                max-width: 100%;
             }
-            
-            .download-buttons {
-                flex-direction: column;
+            .kpi-card, .chart-container {
+                box-shadow: none;
+                border: 1px solid #dee2e6;
+                page-break-inside: avoid;
             }
-        }
-
-        /* Animation Classes */
-        .fade-in {
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+            #map {
+                display: none; /* Ocultar mapas interactivos en impresión */
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .slide-in {
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
+            .chart-container canvas {
+                max-width: 100% !important;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <h1 class="header-title serif">Gestión Ambiental</h1>
-                <p class="header-subtitle">Municipalidad de Salta - Subsecretaría de Gestión Ambiental</p>
-            </div>
+
+    <!-- ----- Loader ----- -->
+    <div id="loader">
+        <div class="spinner-border text-success" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Cargando...</span>
         </div>
-    </header>
+        <p>Cargando datos de gestión...</p>
+    </div>
+
+    <!-- ----- Encabezado ----- -->
+    <nav class="navbar header-navbar">
+        <a class="navbar-brand" href="#">
+            <i class="fa-solid fa-seedling"></i>
+            <span class="header-title-span"> <!-- Clase añadida -->
+                Subsecretaría de Gestión Ambiental
+                <small>Ing. Maria Emilse Arias</small>
+            </span>
+        </a>
+    </nav>
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-lg-2 sidebar">
-                <ul class="nav flex-column" id="main-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#" data-section="educacion">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                            Educación Ambiental
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="economia">
-                            <i class="fa-solid fa-recycle"></i>
-                            Economía Circular
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="climatico">
-                            <i class="fa-solid fa-cloud-sun-rain"></i>
-                            Cambio Climático
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="desarrollo">
-                            <i class="fa-solid fa-leaf"></i>
-                            Desarrollo Sostenible
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="inspecciones">
-                            <i class="fa-solid fa-clipboard-check"></i>
-                            Inspecciones
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="impacto">
-                            <i class="fa-solid fa-mountain-sun"></i>
-                            Impacto Ambiental
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="patrulla">
-                            <i class="fa-solid fa-shield-halved"></i>
-                            Patrulla Ambiental
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="proyectos">
-                            <i class="fa-solid fa-tree-city"></i>
-                            Proyectos Ambientales
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-section="articulacion">
-                            <i class="fa-solid fa-bullhorn"></i>
-                            Articulación
-                        </a>
-                    </li>
-                </ul>
-            </nav>
 
-            <!-- Main Content -->
-            <main class="col-lg-10 main-content">
-                <div id="content-area">
-                    <!-- Content will be loaded here -->
-                </div>
+            <!-- ----- Navegación Lateral ----- -->
+            <nav id="sidebarMenu" class="col-lg-3 d-none d-lg-block sidebar">
+                <div class="position-sticky">
+                    <ul class="nav nav-pills flex-column" id="main-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" data-section="Dir. Gral. de Educación Ambiental">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                Dir. Gral. Educación Ambiental
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Dir. Gral. de Desarrollo Sostenible">
+                                <i class="fa-solid fa-recycle"></i>
+                                Dir. Gral. Desarrollo Sostenible
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Dir. Gral. de Cambio Climático">
+                                <i class="fa-solid fa-cloud-sun-rain"></i>
+                                Dir. Gral. Cambio Climático
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Dirección de Desarrollo Sostenible">
+                                <i class="fa-solid fa-leaf"></i>
+                                Dir. Desarrollo Sostenible
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Dirección de Inspecciones">
+                                <i class="fa-solid fa-clipboard-check"></i>
+                                Dir. Inspecciones
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Dirección de Impacto Ambiental">
+                                <i class="fa-solid fa-mountain-sun"></i>
+                                Dir. Impacto Ambiental
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Direccion de Patrulla Ambiental">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                Dir. Patrulla Ambiental
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Coordinación de Proyectos Ambientales">
+                                <i class="fa-solid fa-tree-city"></i>
+                                Coord. Proyectos Ambientales
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="Subsecretaría (Articulación)">
+                                <i class="fa-solid fa-bullhorn"></i>
+                                Subsecretaría (Articulación)
+                            </a>
+                        </li>
+                    </ul>
 
-                <!-- Download Section -->
-                <div class="download-section">
-                    <h3 class="download-title">Descargar Datos</h3>
-                    <div class="download-buttons">
-                        <button class="btn-download csv" id="download-csv">
-                            <i class="fa-solid fa-file-csv"></i>
-                            Descargar CSV
+                    <!-- Sección de Descarga -->
+                    <div class="download-section mt-4 mx-3">
+                        <h6 class="fw-bold">Reportes</h6>
+                        <p class="small text-muted">Descargue los datos completos o genere un PDF.</p>
+                        <button class="btn btn-sm btn-success w-100 mb-2" id="download-csv">
+                            <i class="fa-solid fa-file-csv me-1"></i> Descargar .CSV
                         </button>
-                        <button class="btn-download pdf" id="download-pdf">
-                            <i class="fa-solid fa-file-pdf"></i>
-                            Generar PDF
+                        <button class="btn btn-sm btn-danger w-100" id="download-pdf">
+                            <i class="fa-solid fa-file-pdf me-1"></i> Generar .PDF
                         </button>
                     </div>
+
                 </div>
+            </nav>
+
+            <!-- ----- Contenido Principal ----- -->
+            <main class="col-lg-9 ms-sm-auto main-content">
+                <div id="main-content-area">
+                    <!-- El contenido de la sección se renderizará aquí -->
+                </div>
+
+                <!-- ----- Footer Interno ----- -->
+                <footer class="footer mt-5">
+                    <p>&copy; 2025 Municipalidad de Salta - Subsecretaría de Gestión Ambiental. Todos los derechos reservados.</p>
+                </footer>
             </main>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Municipalidad de Salta - Subsecretaría de Gestión Ambiental</p>
-        </div>
-    </footer>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 1. Bootstrap 5 (JS) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <!-- 2. Chart.js (Gráficos) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="app.js"></script>
-</body>
-</html>
+    
+    <!-- 3. Leaflet (Mapas) JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- 4. Aplicación JS -->
+    <script type="module">
+        // ---------------------------------------------------------------------
+        // CONFIGURACIÓN (EL USUARIO DEBE MODIFICAR ESTO)
+        // ---------------------------------------------------------------------
+        // REVISA EL ARCHIVO README.md PARA INSTRUCCIONES DETALLADAS
+        const CONFIG = {
+            // 1. Pega aquí el ID de tu Google Sheet
+            GOOGLE_SHEET_ID: '1pV10qTgEWIRtmpVpZEJMFa_G9dluMACSoKFw6JNvFQ4',
+            
+            // 2. Revisa que los nombres de las hojas (pestañas) sean correctos
+            SHEET_INDICADORES: 'INDICADORES',
+            SHEET_BARRIOS: 'BARRIOS INTERVENIDOS',
+        };
+
+        // ---------------------------------------------------------------------
+        // DATOS DE EJEMPLO (MOCK DATA)
+        // ---------------------------------------------------------------------
+        // Usados si la carga de Google Sheets falla.
+        // Basados en los archivos CSV proporcionados
