@@ -1,7 +1,17 @@
-// === app.js corregido para carga de Google Sheets ===
-// Mantiene toda la estructura y UI actual; solo mejora la carga y parsing de datos.
+// === app.js FINAL para Subsecretaría de Gestión Ambiental ===
+// Mantiene toda la estructura visual original. Corrige la carga de datos desde Google Sheets.
+// Normaliza encabezados, ignora filas vacías y filtra títulos internos ("INDICADOR DE...").
 
-// --- Utilidad: parseo CSV robusto ---
+function normalizeKey(key) {
+  if (!key) return "";
+  return key
+    .toString()
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // quita tildes
+    .replace(/[^a-z0-9]+/g, "_") // reemplaza símbolos y espacios por "_"
+    .replace(/^_+|_+$/g, ""); // quita guiones bajos al inicio o final
+}
+
 function parseCSV(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
   return lines.map(line => {
@@ -28,43 +38,37 @@ function parseCSV(text) {
   });
 }
 
-// --- Normaliza texto numérico a número real ---
 function parseNumber(value) {
-  if (typeof value !== 'string') return value;
-  const cleaned = value.replace(/[^\d,.-]/g, '').replace(',', '.');
+  if (typeof value !== "string") return value;
+  const cleaned = value.replace(/[^0-9,.-]/g, "").replace(",", ".");
   const num = parseFloat(cleaned);
   return isNaN(num) ? value : num;
 }
 
-// --- Carga datos desde Google Sheets (CSV) ---
 async function fetchGoogleSheetData(sheetId, sheetName) {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Error al cargar CSV: ${res.status}`);
   const text = await res.text();
 
-  // Salta filas vacías o encabezados previos (primeras 6 filas)
+  // Saltar filas vacías o encabezados iniciales (primeras 6)
   const lines = text.split(/\r?\n/).slice(6);
-  const rows = parseCSV(lines.join('\n'));
+  const rows = parseCSV(lines.join("\n"));
   if (!rows.length) return [];
 
-  const headers = rows[0].map(h => h.trim());
-  const data = rows.slice(1)
-    .map(r => {
-      const obj = {};
-      headers.forEach((h, i) => {
-        obj[h] = parseNumber(r[i] ?? null);
-      });
-      return obj;
-    })
-    // Filtra títulos como "INDICADOR DE PROCESO"
-    .filter(r => r["INDICADOR"] && !r["INDICADOR"].toUpperCase().includes("INDICADOR DE"));
+  const headers = rows[0].map(normalizeKey);
+  const data = rows.slice(1).map(r => {
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = parseNumber(r[i] ?? null));
+    return obj;
+  })
+  .filter(r => r.indicador && !r.indicador.toUpperCase().includes("INDICADOR DE"));
 
-  console.log("Datos procesados:", data.slice(0, 5));
+  console.log(`✅ Datos cargados (${sheetName}):`, data.length, "filas");
   return data;
 }
 
-// --- Inicialización principal (mantiene todo lo demás igual) ---
+// --- Inicialización completa ---
 document.addEventListener("DOMContentLoaded", async () => {
   const loader = document.getElementById("loader");
   try {
@@ -77,16 +81,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       fetchGoogleSheetData(SHEET_ID, SHEET_BARRIOS)
     ]);
 
-    console.log("Indicadores cargados:", indicadores.length, "filas");
-    console.log("Barrios cargados:", barrios.length, "filas");
-
+    // Si tu script principal define initializeApp(), se ejecuta aquí
     if (typeof initializeApp === "function") {
       initializeApp(indicadores, barrios);
     } else {
-      console.warn("⚠️ initializeApp() no encontrada — revisá el script principal.");
+      console.warn("⚠️ No se encontró initializeApp(). Verificá que esté definido.");
     }
   } catch (e) {
-    console.error("Error al cargar datos:", e);
+    console.error("❌ Error al cargar datos:", e);
   } finally {
     if (loader) loader.style.display = "none";
   }
