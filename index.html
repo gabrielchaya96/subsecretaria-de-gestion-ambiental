@@ -21,7 +21,17 @@
       directiva reduce la protección frente a código inyectado, por lo que
       sólo debería usarse si las dependencias son de confianza.
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; style-src-attr 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:; connect-src 'self' https://docs.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; img-src 'self' data: https://*;">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        /* Permite scripts propios y de CDNs de confianza. Se añade 'unsafe-eval' porque algunas librerías lo requieren. */
+        script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com;
+        /* Permite estilos en línea (necesario para Bootstrap) y CSS de CDNs */
+        style-src  'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com;
+        /* Permite la carga de fuentes desde CDNs y Data URIs. */
+        font-src   'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://r2cdn.perplexity.ai data:;
+        /* Permite solicitudes a Google Sheets y a los CDNs para archivos .map */
+        connect-src 'self' https://docs.google.com https://docs.googleusercontent.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com;
+    ">
 
     <!-- Estilos personalizados -->
     <link rel="stylesheet" href="styles.css">
