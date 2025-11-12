@@ -931,65 +931,30 @@
          * @param {string} sheetName - El nombre de la pestaña (hoja).
          */
         async function fetchGoogleSheetData(sheetId, sheetName) {
-            if (sheetId === 'REEMPLAZA_CON_TU_GOOGLE_SHEET_ID') {
-                throw new Error("ID de Google Sheet no configurado.");
+    // Intenta primero por CSV (más estable que gviz JSONP)
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+    const res = await fetch(csvUrl);
+    if (!res.ok) {
+        throw new Error(`Error al cargar CSV de Google Sheet: ${res.status} ${res.statusText}`);
+    }
+    const csvText = await res.text();
+    const rows = parseCSV(csvText);
+    if (!rows || rows.length === 0) {
+        throw new Error("CSV vacío o no válido.");
+    }
+    // La primera fila son los encabezados
+    const headers = rows[0];
+    const data = rows.slice(1).map(r => {
+        const obj = {};
+        headers.forEach((h, i) => {
+            const key = (h || `col${i+1}`).toString().trim();
+            obj[key] = r[i] === undefined ? null : r[i];
+            // intenta números
+            if (typeof obj[key] === 'string' && obj[key].trim() !== '' && !isNaN(obj[key].replace(',', '.'))) {
+                obj[key] = parseFloat(obj[key].replace(',', '.'));
             }
-            
-            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
-            
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Error al cargar datos de Google Sheet: ${response.statusText}`);
-            }
-
-            let text = await response.text();
-            
-            // El API gviz devuelve JSONP, no JSON. Hay que limpiarlo.
-            // Respuesta: google.visualization.Query.setResponse({...});
-            // 1. Encontrar el primer '(' y el último ')'
-            const startIndex = text.indexOf('(') + 1;
-            const endIndex = text.lastIndexOf(')');
-            
-            if (startIndex === 0 || endIndex === -1) {
-                throw new Error("Respuesta de Google Sheet inválida.");
-            }
-
-            // 2. Extraer el JSON
-            const jsonText = text.substring(startIndex, endIndex);
-            
-            // 3. Parsear el JSON
-            const data = JSON.parse(jsonText);
-            
-            if (data.status === 'error') {
-                throw new Error(`Error en API de Google Sheet: ${data.errors.map(e => e.detailed_message).join(', ')}`);
-            }
-
-            // 4. Convertir el formato de Google (cols/rows) a un array de objetos
-            return parseGoogleSheetResponse(data.table);
-        }
-        
-        /**
-         * Convierte la respuesta de gviz en un array de objetos.
-         * @param {object} table - El objeto 'table' de la respuesta gviz.
-         */
-        function parseGoogleSheetResponse(table) {
-            const headers = table.cols.map(col => col.label || col.id);
-            const rows = table.rows.map(row => {
-                const obj = {};
-                row.c.forEach((cell, i) => {
-                    const header = headers[i];
-                    let value = null;
-                    if (cell) {
-                        value = cell.f || cell.v; // 'f' es valor formateado, 'v' es valor crudo
-                    }
-                    // Intentar convertir números
-                    if (typeof value === 'string' && !isNaN(parseFloat(value.replace(',', '.')))) {
-                        obj[header] = parseFloat(value.replace(',', '.'));
-                    } else {
-                        obj[header] = value;
-                    }
-                });
-                return obj;
-            });
-            return rows;
-        }
+        });
+        return obj;
+    }).filter(row => Object.values(row).some(v => v !== null && v !== ''));
+    return data;
+}
