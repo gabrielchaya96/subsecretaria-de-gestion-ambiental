@@ -417,39 +417,157 @@
 
         // ----- NUEVAS FUNCIONES PARA ÁREAS SIN DATOS -----
         function renderInspecciones(container) {
+            // Descripción de la Dirección
             container.innerHTML += `
                 <div class="section-description">
                     <p>Realiza inspecciones, inspecciones conjuntas (con la Dirección de Inspecciones Comerciales), labra actas de comprobación y actas de clausura, y ejecuta operativos de fiscalización.</p>
                 </div>
-                <div class="alert alert-info" role="alert">
-                    <span class="emoji-icon">ℹ️</span>
-                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+            `;
+
+            // Filtrar datos para la Dirección de Inspecciones (usando normalización de acentos)
+            const data = filterByArea('Dirección de Inspecciones');
+
+            // Indicadores específicos de esta área
+            const inspRealizadas   = findIndicator(data, 'INSPECCIONES REALIZADAS');
+            const inspConjuntas    = findIndicator(data, 'INSPECCIONES CONJUNTAS');
+            const actasComprobacion = findIndicator(data, 'ACTAS DE COMPROBACIÓN');
+            const actasClausura    = findIndicator(data, 'ACTAS DE CLAUSURA');
+            const operativos       = findIndicator(data, 'OPERATIVOS');
+
+            // Verificar si hay algún indicador con valor > 0
+            const hasData = [inspRealizadas, inspConjuntas, actasComprobacion, actasClausura, operativos].some(ind => ind['ACUMULADO TOTAL'] > 0);
+            if (!hasData) {
+                container.innerHTML += `
+                    <div class="alert alert-info" role="alert">
+                        <span class="emoji-icon">ℹ️</span>
+                        No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Inspecciones Realizadas',   inspRealizadas['ACUMULADO TOTAL'], '🔍', 'kpi-icon-green')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Inspecciones Conjuntas',    inspConjuntas['ACUMULADO TOTAL'], '👥', 'kpi-icon-blue')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Actas de Comprobación',     actasComprobacion['ACUMULADO TOTAL'], '📄', 'kpi-icon-orange')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Actas de Clausura',         actasClausura['ACUMULADO TOTAL'], '📑', 'kpi-icon-purple')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Operativos',                operativos['ACUMULADO TOTAL'], '🚨', 'kpi-icon-red')}
+                    </div>
                 </div>
             `;
+
+            // Animar contadores
+            animateCounter(getKpiId('Inspecciones Realizadas'), inspRealizadas['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Inspecciones Conjuntas'), inspConjuntas['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Actas de Comprobación'), actasComprobacion['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Actas de Clausura'), actasClausura['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Operativos'), operativos['ACUMULADO TOTAL']);
         }
 
         function renderImpacto(container) {
+            // Descripción de la Dirección
             container.innerHTML += `
                 <div class="section-description">
                     <p>Es responsable de la emisión de las Resoluciones de CAAM (Certificado de Aptitud Ambiental) y de la capacitación o asesoramiento para la obtención del mismo.</p>
                 </div>
-                <div class="alert alert-info" role="alert">
-                    <span class="emoji-icon">ℹ️</span>
-                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+            `;
+
+            // Filtrar datos para Impacto Ambiental
+            const data = filterByArea('Dirección de Impacto Ambiental');
+
+            // Indicadores específicos
+            const resoluciones = findIndicator(data, 'RESOLUCIONES DE CAAM');
+            const capacitaciones = findIndicator(data, 'CAPACITACIONES');
+
+            const hasData = [resoluciones, capacitaciones].some(ind => ind['ACUMULADO TOTAL'] > 0);
+            if (!hasData) {
+                container.innerHTML += `
+                    <div class="alert alert-info" role="alert">
+                        <span class="emoji-icon">ℹ️</span>
+                        No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Resoluciones de CAAM', resoluciones['ACUMULADO TOTAL'], '📜', 'kpi-icon-green')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Capacitaciones CAAM', capacitaciones['ACUMULADO TOTAL'], '🎓', 'kpi-icon-blue')}
+                    </div>
                 </div>
             `;
+
+            animateCounter(getKpiId('Resoluciones de CAAM'), resoluciones['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Capacitaciones CAAM'), capacitaciones['ACUMULADO TOTAL']);
         }
 
         function renderPatrulla(container) {
+            // Descripción
             container.innerHTML += `
                 <div class="section-description">
                     <p>Sus funciones incluyen operativos de fiscalización y control de microbasurales, colaboraciones especiales con otras áreas municipales, la generación de reportes diarios/denuncias, y la emisión de actas de infracción y cédulas de notificación.</p>
                 </div>
-                <div class="alert alert-info" role="alert">
-                    <span class="emoji-icon">ℹ️</span>
-                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+            `;
+
+            // Filtrar datos para Patrulla Ambiental
+            const data = filterByArea('Patrulla Ambiental');
+
+            const operativos      = findIndicator(data, 'OPERATIVOS DE FIZCALIZACIÓN');
+            const colaboraciones = findIndicator(data, 'COLABORACIONES ESPECIALES');
+            const reportes       = findIndicator(data, 'REPORTES REALIZADOS');
+            const actasInfraccion = findIndicator(data, 'ACTAS DE INFRACCIÓN');
+            const cedulas        = findIndicator(data, 'CÉDULAS DE NOTIFICACIÓN');
+
+            const hasData = [operativos, colaboraciones, reportes, actasInfraccion, cedulas].some(ind => ind['ACUMULADO TOTAL'] > 0);
+            if (!hasData) {
+                container.innerHTML += `
+                    <div class="alert alert-info" role="alert">
+                        <span class="emoji-icon">ℹ️</span>
+                        No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Operativos', operativos['ACUMULADO TOTAL'], '🚓', 'kpi-icon-green')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Colaboraciones Especiales', colaboraciones['ACUMULADO TOTAL'], '🤝', 'kpi-icon-blue')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Reportes Realizados', reportes['ACUMULADO TOTAL'], '📈', 'kpi-icon-orange')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Actas de Infracción', actasInfraccion['ACUMULADO TOTAL'], '📝', 'kpi-icon-purple')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Cédulas de Notificación', cedulas['ACUMULADO TOTAL'], '📮', 'kpi-icon-red')}
+                    </div>
                 </div>
             `;
+
+            animateCounter(getKpiId('Operativos'), operativos['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Colaboraciones Especiales'), colaboraciones['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Reportes Realizados'), reportes['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Actas de Infracción'), actasInfraccion['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Cédulas de Notificación'), cedulas['ACUMULADO TOTAL']);
         }
 
         function renderProyectos(container) {
@@ -457,11 +575,41 @@
                 <div class="section-description">
                     <p>Se encarga de la puesta a punto, el enriquecimiento y el mantenimiento de espacios verdes (plazas, platabandas, rotondas, etc.).</p>
                 </div>
-                <div class="alert alert-info" role="alert">
-                    <span class="emoji-icon">ℹ️</span>
-                    No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+            `;
+
+            const data = filterByArea('Proyectos Ambientales');
+            const puesta   = findIndicator(data, 'PUESTA A PUNTO');
+            const enriquec = findIndicator(data, 'ENRIQUECIMIENTO');
+            const manteni  = findIndicator(data, 'MANTENIMIENTO');
+
+            const hasData = [puesta, enriquec, manteni].some(ind => ind['ACUMULADO TOTAL'] > 0);
+            if (!hasData) {
+                container.innerHTML += `
+                    <div class="alert alert-info" role="alert">
+                        <span class="emoji-icon">ℹ️</span>
+                        No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Puesta a Punto', puesta['ACUMULADO TOTAL'], '🌱', 'kpi-icon-green')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Enriquecimiento', enriquec['ACUMULADO TOTAL'], '🌿', 'kpi-icon-blue')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Mantenimiento', manteni['ACUMULADO TOTAL'], '🌳', 'kpi-icon-orange')}
+                    </div>
                 </div>
             `;
+
+            animateCounter(getKpiId('Puesta a Punto'), puesta['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Enriquecimiento'), enriquec['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Mantenimiento'), manteni['ACUMULADO TOTAL']);
         }
 
 
@@ -715,6 +863,25 @@
                 .replace(/-+/g, '-')
                 // Elimina guiones al inicio o fin
                 .replace(/^-|-$/g, '');
+        }
+
+        /**
+         * Filtra el array global de indicadores por área/dependencia. La comparación
+         * ignora tildes y mayúsculas/minúsculas para que "Dirección de Inspecciones" coincida
+         * con "Dir. Inspecciones" u otras variantes.
+         *
+         * @param {string} areaName Nombre (o parte) del área a buscar.
+         * @returns {Array} Subconjunto de indicatorsData correspondiente al área.
+         */
+        function filterByArea(areaName) {
+            const normalize = (str) => {
+                return (str || '')
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .toLowerCase();
+            };
+            const target = normalize(areaName);
+            return indicatorsData.filter(d => normalize(d['AREA/DEPENDENCIA']).includes(target));
         }
         
         /**
