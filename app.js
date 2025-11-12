@@ -677,9 +677,25 @@
          * @param {string} nameSubstring - Substring del nombre a buscar.
          */
         function findIndicator(data, nameSubstring) {
-            const lowerCaseName = nameSubstring.toLowerCase();
-            return data.find(d => d.INDICADOR && d.INDICADOR.toLowerCase().includes(lowerCaseName)) || 
-                   { "ACUMULADO TOTAL": 0, "ACUMULADO 2024": 0, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0 }; // Devuelve objeto vacío si no se encuentra
+            /**
+             * Busca un indicador dentro de un conjunto de datos. La comparación ignora
+             * tildes/acentos y diferencia entre mayúsculas y minúsculas, para que
+             * "neumaton" coincida tanto con "NEUMATÓN" como con "Neumaton".
+             *
+             * @param {Array} data Array de objetos con la propiedad INDICADOR.
+             * @param {string} nameSubstring Substring a buscar dentro del nombre del indicador.
+             * @returns {Object} El primer objeto que coincide, o un objeto con valores 0.
+             */
+            // Función para normalizar textos (elimina diacríticos y convierte a minúsculas)
+            const normalize = (str) => {
+                return (str || '')
+                    .normalize('NFD') // Descompone caracteres acentuados en base + marca diacrítica
+                    .replace(/[\u0300-\u036f]/g, '') // Elimina marcas diacríticas
+                    .toLowerCase();
+            };
+            const target = normalize(nameSubstring);
+            return data.find(d => d.INDICADOR && normalize(d.INDICADOR).includes(target)) ||
+                   { "ACUMULADO TOTAL": 0, "ACUMULADO 2024": 0, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0 };
         }
 
         /**
