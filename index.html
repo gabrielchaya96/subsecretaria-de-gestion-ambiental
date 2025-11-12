@@ -21,15 +21,31 @@
       directiva reduce la protección frente a código inyectado, por lo que
       sólo debería usarse si las dependencias son de confianza.
     -->
-    <meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com;
-  style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com;
-  font-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data:;
-  img-src 'self' data: blob: https://*;
-  connect-src 'self' https://docs.google.com https://docs.googleusercontent.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com;
-  style-src-attr 'unsafe-inline';
+<meta http-equiv="Content-Security-Policy" content="
+default-src 'self';
+script-src 'self' 'unsafe-inline' 'unsafe-eval'
+  https://cdn.jsdelivr.net
+  https://cdnjs.cloudflare.com
+  https://unpkg.com
+  https://maps.googleapis.com
+  https://tile.openstreetmap.org;
+style-src 'self' 'unsafe-inline'
+  https://cdn.jsdelivr.net
+  https://cdnjs.cloudflare.com
+  https://unpkg.com;
+font-src 'self' data: https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;
+img-src 'self' data: blob: filesystem: https://*;
+connect-src 'self'
+  https://docs.google.com
+  https://docs.googleusercontent.com
+  https://cdn.jsdelivr.net
+  https://cdnjs.cloudflare.com
+  https://unpkg.com
+  https://tile.openstreetmap.org;
+style-src-attr 'unsafe-inline';
 ">
+
+
 
 
     <!-- Estilos personalizados -->
@@ -170,4 +186,5 @@
     <script type="module" src="app.js"></script>
 </body>
 </html>
+
 
