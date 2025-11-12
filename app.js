@@ -219,8 +219,10 @@
                         <div class="chart-container">
                             <h5>Comparativa Anual de Talleres</h5>
                             <!-- Añadido div wrapper con altura fija -->
-                            <div class="chart-wrapper" style="position: relative; height: 350px;">
-                                <canvas id="chart-talleres"></canvas>
+                <div class="chart-wrapper" style="position: relative; height: 350px;">
+                                <!-- Para cumplir con la CSP de GitHub Pages, reemplazamos el <canvas> por un <div>.  -->
+                                <!-- El contenedor se identifica por ID y createBarChart insertará en él la gráfica generada con divs -->
+                                <div id="chart-talleres"></div>
                             </div>
                         </div>
                     </div>
@@ -363,7 +365,8 @@
                             <h5>Comparativa Huertas Creadas</h5>
                             <!-- Añadido div wrapper con altura fija -->
                             <div class="chart-wrapper" style="position: relative; height: 350px;">
-                                <canvas id="chart-huertas"></canvas>
+                                <!-- Para cumplir con la CSP de GitHub Pages, reemplazamos el <canvas> por un <div>.  -->
+                                <div id="chart-huertas"></div>
                             </div>
                         </div>
                     </div>
