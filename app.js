@@ -1052,9 +1052,14 @@ const areaMapping = {
  * Normaliza si un registro pertenece al área seleccionada.
  */
 function matchesArea(row, areaKey) {
-    const raw = row["SUBSECRETARIA/DIRECCION GRAL/DIRECCION/AREA"]?.trim()
-        || row["AREA/DEPENDENCIA"]?.trim()
-        || "";
+    // Detecta automáticamente el nombre real de la columna
+    const raw = (
+        row["SUBSECRETARIA/DIRECCION GRAL/DIRECCION/AREA"] ||
+        row["AREA/DEPENDENCIA"] ||
+        row["AREA / DEPENDENCIA"] ||
+        row["ÁREA/DEPENDENCIA"] ||
+        ""
+    ).trim();
 
     if (!raw) return false;
 
@@ -1062,7 +1067,6 @@ function matchesArea(row, areaKey) {
         entry => entry.toLowerCase() === raw.toLowerCase()
     );
 }
-
 
 // Parser CSV simple (comillas, comas y saltos de línea)
 function parseCSV(text) {
