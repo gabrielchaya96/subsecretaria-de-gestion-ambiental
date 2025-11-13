@@ -1006,45 +1006,47 @@
 // ----------------------------------------------------
 
 const areaMapping = {
-    "EDUCACION": [
-        "Direccion General de Educación Ambiental",
-        "Dirección General de Educación Ambiental",
-        "Dirección Gral de Educación Ambiental"
+    EDUCACION: [
+        "direccion general de educacion ambiental",
+        "direccion gral de educacion ambiental",
+        "direccion general de educacion ambiental- direccion general de desarrollo sostenible",
+        "direccion general de educacion ambiental- direccion general de desarrollo sostenible- direccion generla de cambio climatico"
     ],
 
-    "DESARROLLO_SOSTENIBLE": [
-        "Dirección General de Desarrollo Sostenible",
-        "Dirección Gral de Desarrollo Sostenible",
-        "Dirección de Desarrollo Sostenible"
+    DESARROLLO_SOSTENIBLE: [
+        "direccion general de desarrollo sostenible",
+        "direccion gral de desarrollo sostenible",
+        "direccion de desarrollo sostenible",
+        "direccion general de desarrollo sostenible / direccion general de cambio climatico",
+        "direccion de desarrollo sostenible / direccion de cambio climatico"
     ],
 
-    "CAMBIO_CLIMATICO": [
-        "Dirección General de Cambio Climático",
-        "Dirección Generla de Cambio climático",
-        "Direcion de Cambio Climático"
+    CAMBIO_CLIMATICO: [
+        "direccion de cambio climatico",
+        "direccion general de cambio climatico",
+        "direccion generla de cambio climatico",
+        "direccion general de desarrollo sostenible- direccion generla de cambio climatico"
     ],
 
-    "INSPECCIONES": [
-        "Dirección de Inspecciones",
-        "Direccion de Inspecciones",
-        "Dirección de Inspecciones/Direccion de Inspecciones Comerciales"
+    INSPECCIONES: [
+        "direccion de inspecciones",
+        "direccion de inspecciones/direccion de inspecciones comerciales"
     ],
 
-    "IMPACTO_AMBIENTAL": [
-        "Dirección de Impacto Ambiental"
+    IMPACTO_AMBIENTAL: [
+        "direccion de impacto ambiental"
     ],
 
-    "PATRULLA_AMBIENTAL": [
-        "Direccion de Patrulla Ambiental",
-        "Dirección de Patrulla Ambiental"
+    PATRULLA_AMBIENTAL: [
+        "direccion de patrulla ambiental"
     ],
 
-    "PROYECTOS_AMBIENTALES": [
-        "Coordinación de Proyectos Ambientales"
+    PROYECTOS_AMBIENTALES: [
+        "coordinacion de proyectos ambientales"
     ],
 
-    "SUBSECRETARIA": [
-        "Subsecretaría de Gestión Ambiental"
+    SUBSECRETARIA: [
+        "subsecretaria de gestion ambiental"
     ]
 };
 
@@ -1052,22 +1054,26 @@ const areaMapping = {
  * Normaliza si un registro pertenece al área seleccionada.
  */
 function matchesArea(row, areaKey) {
-    // Detecta automáticamente el nombre real de la columna
-    const raw = (
-        row["SUBSECRETARIA/DIRECCION GRAL/DIRECCION/AREA"] ||
+    const rawValue =
         row["AREA/DEPENDENCIA"] ||
         row["AREA / DEPENDENCIA"] ||
         row["ÁREA/DEPENDENCIA"] ||
-        ""
-    ).trim();
+        row["SUBSECRETARIA/DIRECCION GRAL/DIRECCION/AREA"] ||
+        "";
 
-    if (!raw) return false;
+    const normalize = (str) =>
+        (str || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .trim();
 
-    return areaMapping[areaKey].some(
-        entry => entry.toLowerCase() === raw.toLowerCase()
+    const normalizedRow = normalize(rawValue);
+
+    return areaMapping[areaKey].some((pattern) =>
+        normalizedRow.includes(normalize(pattern))
     );
 }
-
 // Parser CSV simple (comillas, comas y saltos de línea)
 function parseCSV(text) {
     const rows = [];
