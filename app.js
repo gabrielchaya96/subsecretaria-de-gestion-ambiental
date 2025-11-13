@@ -8,7 +8,7 @@
             
             // 2. Revisa que los nombres de las hojas (pestañas) sean correctos
             SHEET_INDICADORES: 'INDICADORES',
-            SHEET_BARRIOS: 'BARRIOS INTERVENIDOS',
+            SHEET_BARRIOS: 'INDICADORES, BARRIOS INTERVENIDOS',
         };
 
         // ---------------------------------------------------------------------
