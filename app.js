@@ -993,6 +993,57 @@
             });
             return rows;
         }
+// ----------------------------------------------------
+// MAPPING OFICIAL DE ÁREAS (normalización unificada)
+// ----------------------------------------------------
+
+const areaMapping = {
+    "EDUCACION": [
+        "Direccion General de Educación Ambiental",
+        "Dirección General de Educación Ambiental",
+        "Dirección Gral de Educación Ambiental"
+    ],
+    "DESARROLLO_SOSTENIBLE": [
+        "Dirección General de Desarrollo Sostenible",
+        "Dirección Gral de Desarrollo Sostenible",
+        "Dirección de Desarrollo Sostenible"
+    ],
+    "CAMBIO_CLIMATICO": [
+        "Dirección General de Cambio Climático",
+        "Dirección Generla de Cambio climático",
+        "Direccion de Cambio Climático",
+        "Direcion de Cambio Climático"
+    ],
+    "INSPECCIONES": [
+        "Dirección de Inspecciones",
+        "Direccion de Inspecciones",
+        "Dirección de Inspecciones/Direccion de Inspecciones Comerciales"
+    ],
+    "IMPACTO_AMBIENTAL": [
+        "Dirección de Impacto Ambiental"
+    ],
+    "PATRULLA_AMBIENTAL": [
+        "Direccion de Patrulla Ambiental"
+    ],
+    "PROYECTOS_AMBIENTALES": [
+        "Coordinación de Proyectos Ambientales"
+    ],
+    "SUBSECRETARIA": [
+        "Subsecretaría de Gestión Ambiental"
+    ]
+};
+
+/**
+ * Normaliza si un registro pertenece al área seleccionada.
+ */
+function matchesArea(row, areaKey) {
+    const raw = row["AREA/DEPENDENCIA"]?.trim();
+    if (!raw) return false;
+
+    return areaMapping[areaKey].some(
+        entry => entry.toLowerCase() === raw.toLowerCase()
+    );
+}
 
 
 // Parser CSV simple (comillas, comas y saltos de línea)
