@@ -80,7 +80,12 @@
                 indicatorsData = indicators;
                 barriosData = barrios;
                 console.log("Datos cargados desde Google Sheets:", indicatorsData, barriosData);
-                
+                console.log("Primeras filas de INDICADORES:");
+                console.log(indicatorsData.slice(0, 5));
+
+                console.log("Primeras filas de BARRIOS:");
+                console.log(barriosData.slice(0, 5));
+
                 // IMPORTANTE: Tus datos de barrios necesitan columnas 'lat' y 'lng'
                 // Si no las tienen, usamos datos mock para el mapa.
                 if (!barriosData.length || !barriosData[0].lat) {
@@ -825,6 +830,9 @@
          * @param {string} nameSubstring - Substring del nombre a buscar.
          */
         function findIndicator(data, nameSubstring) {
+                console.log("findIndicator buscando:", nameSubstring);
+                console.log("Dentro de data:", data);
+
             /**
              * Busca un indicador dentro de un conjunto de datos. La comparación ignora
              * tildes/acentos y diferencia entre mayúsculas y minúsculas, para que
@@ -1037,6 +1045,8 @@ const areaMapping = {
  * Normaliza si un registro pertenece al área seleccionada.
  */
 function matchesArea(row, areaKey) {
+        console.log("Comparando AREA:", row["AREA/DEPENDENCIA"], " con KEY:", areaKey);
+
     const raw = row["AREA/DEPENDENCIA"]?.trim();
     if (!raw) return false;
 
