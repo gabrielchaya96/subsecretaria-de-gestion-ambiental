@@ -176,7 +176,73 @@
                     renderImpacto(container);
                     break;
                 case 'Direccion de Patrulla Ambiental':
-                    renderPatrulla(container);
+                    function renderPatrulla(container) {
+            // Descripción
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Sus funciones incluyen operativos de fiscalización y control de microbasurales, colaboraciones especiales con otras áreas municipales, la generación de reportes diarios/denuncias, y la emisión de actas de infracción y cédulas de notificación.</p>
+                </div>
+            `;
+
+            // Filtrar datos para Patrulla Ambiental
+            const data = indicatorsData.filter(row => matchesArea(row, "PATRULLA_AMBIENTAL"));
+
+            // ---- INICIO DE CAMBIOS ----
+            
+            // CORREGIDO: "FIZCALIZACIÓN" -> "FISCALIZACIÓN"
+            const operativos      = findIndicator(data, 'OPERATIVOS DE FISCALIZACIÓN'); 
+            const colaboraciones = findIndicator(data, 'COLABORACIONES ESPECIALES');
+            // CORREGIDO: "REPORTES REALIZADOS" -> "REPORTES DIARIOS"
+            const reportes       = findIndicator(data, 'REPORTES DIARIOS');
+            
+            const actasInfraccion = findIndicator(data, 'ACTAS DE INFRACCIÓN');
+            const cedulas        = findIndicator(data, 'CÉDULAS DE NOTIFICACIÓN');
+            
+            // ---- FIN DE CAMBIOS ----
+
+
+            const hasData = [operativos, colaboraciones, reportes, actasInfraccion, cedulas].some(ind => ind['ACUMULADO TOTAL'] > 0);
+            if (!hasData) {
+                container.innerHTML += `
+                    <div class="alert alert-info" role="alert">
+                        <span class="emoji-icon">ℹ️</span>
+                        No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Operativos', operativos['ACUMULADO TOTAL'], '🚓', 'kpi-icon-green')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Colaboraciones Especiales', colaboraciones['ACUMULADO TOTAL'], '🤝', 'kpi-icon-blue')}
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Reportes Diarios / Denuncias', reportes['ACUMULADO TOTAL'], '📈', 'kpi-icon-orange')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Actas de Infracción', actasInfraccion['ACUMULADO TOTAL'], '📝', 'kpi-icon-purple')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Cédulas de Notificación', cedulas['ACUMULADO TOTAL'], '📮', 'kpi-icon-red')}
+                    </div>
+                </div>
+            `;
+
+            animateCounter(getKpiId('Operativos'), operativos['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Colaboraciones Especiales'), colaboraciones['ACUMULADO TOTAL']);
+            
+            // INICIO DE CAMBIOS (ID del contador)
+            animateCounter(getKpiId('Reportes Diarios / Denuncias'), reportes['ACUMULADO TOTAL']);
+            // FIN DE CAMBIOS
+            
+            animateCounter(getKpiId('Actas de Infracción'), actasInfraccion['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Cédulas de Notificación'), cedulas['ACUMULADO TOTAL']);
+        }
                     break;
                 case 'Coordinación de Proyectos Ambientales':
                     renderProyectos(container);
