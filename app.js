@@ -136,47 +136,98 @@
         }
 
         // ---------------------------------------------------------------------
-        // FUNCIONES DE RENDERIZADO
+        // MANEJO DE DATOS Y RENDERIZADO
         // ---------------------------------------------------------------------
 
-        /**
-         * Renderiza la sección solicitada en el área de contenido principal.
-         * @param {string} sectionName - El nombre de la sección a renderizar.
-         */
-        function renderSection(sectionName) {
-            const container = document.getElementById('main-content-area');
-            container.innerHTML = ''; // Limpia el contenido anterior
-            destroyCharts(); // Limpia gráficos anteriores
-            destroyMap(); // Limpia mapa anterior
+        // Transforma los datos de barrios a un formato usable (incluye validación de lat/lng)
+        function transformBarriosData(rawBarriosData) {
+            // CORRECCIÓN 2: El script debe usar 'LATITUD' y 'LONGITUD' que son los nombres reales de la columna.
+            const hasLatLong = rawBarriosData.some(row => row.LATITUD && row.LONGITUD);
 
-            // Título de la sección
-            const title = document.createElement('h2');
-            title.className = 'section-title';
-            title.textContent = sectionName;
-            container.appendChild(title);
+            if (!hasLatLong) {
+                console.warn("Datos de barrios sin LATITUD/LONGITUD. Usando datos mock para el mapa.");
+                // Si faltan las coordenadas, se usa el mock data
+                return mockBarrios;
+            }
 
-            // Router para renderizar la sección correcta
-            switch (sectionName) {
-                case 'Dir. Gral. de Educación Ambiental':
-                    renderEducacion(container);
-                    break;
-                case 'Dir. Gral. de Desarrollo Sostenible':
-                    renderEconomia(container); // Re-usada para Neumatón/RAEE
-                    break;
-                case 'Dir. Gral. de Cambio Climático':
-                    renderCambioClimatico(container);
-                    break;
-                case 'Dirección de Desarrollo Sostenible':
-                    renderDesarrollo(container); // Re-usada para Huertas
-                    break;
-                case 'Dirección de Inspecciones':
-                    renderInspecciones(container);
-                    break;
-                case 'Dirección de Impacto Ambiental':
-                    renderImpacto(container);
-                    break;
-                case 'Direccion de Patrulla Ambiental':
-                    function renderPatrulla(container) {
+            return rawBarriosData.map(row => {
+                // Usar los nombres de columna reales
+                const lat = parseFloat(row.LATITUD);
+                const lng = parseFloat(row.LONGITUD);
+
+                if (isNaN(lat) || isNaN(lng)) {
+                    // Si las coordenadas son inválidas, se retorna un objeto no válido para filtrar más tarde
+                    return null;
+                }
+
+                return {
+                    nombre: row['NOMBRE DEL BARRIO'],
+                    tareas: row['TAREAS DESARROLLADAS'],
+                    lat: lat,
+                    lng: lng
+                };
+            }).filter(row => row !== null); // Eliminar filas con lat/lng inválidos
+        }
+
+        // ... (resto de funciones auxiliares omitidas para claridad, como findIndicator, matchesArea, etc.)
+
+        // Renderiza el contenido de la sección PATRULLA AMBIENTAL
+        function renderPatrulla(container) {
+            // Descripción
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Sus funciones incluyen operativos de fiscalización y control de microbasurales, colaboraciones especiales con otras áreas municipales, la generación de reportes diarios/denuncias, y la emisión de actas de infracción y cédulas de notificación.</p>
+                </div>
+            `;
+
+            // Filtrar datos para Patrulla Ambiental
+            const data = indicatorsData.filter(row => matchesArea(row, "PATRULLA_AMBIENTAL"));
+
+            // CORRECCIÓN 3: Ajuste de nombres de indicadores para coincidir con el Sheet
+            const operativos      = findIndicator(data, 'OPERATIVOS DE FISCALIZACIÓN'); // Corregido el error tipográfico FIZCALIZACIÓN -> FISCALIZACIÓN
+            const colaboraciones = findIndicator(data, 'COLABORACIONES ESPECIALES');
+            const reportes       = findIndicator(data, 'REPORTES DIARIOS'); // Buscamos por "REPORTES DIARIOS" que es el inicio de "REPORTES DIARIOS / DENUNCIAS"
+            const actasInfraccion = findIndicator(data, 'ACTAS DE INFRACCIÓN');
+            const cedulas        = findIndicator(data, 'CÉDULAS DE NOTIFICACIÓN');
+
+
+            const hasData = [operativos, colaboraciones, reportes, actasInfraccion, cedulas].some(ind => ind['ACUMULADO TOTAL'] > 0);
+            if (!hasData) {
+                container.innerHTML += `
+                    <div class="alert alert-info" role="alert">
+                        <span class="emoji-icon">ℹ️</span>
+                        No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Operativos', operativos['ACUMULADO TOTAL'], '🚓', 'kpi-icon-green')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Colaboraciones Especiales', colaboraciones['ACUMULADO TOTAL'], '🤝', 'kpi-icon-blue')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Reportes Diarios / Denuncias', reportes['ACUMULADO TOTAL'], '📈', 'kpi-icon-orange')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Actas de Infracción', actasInfraccion['ACUMULADO TOTAL'], '📝', 'kpi-icon-purple')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Cédulas de Notificación', cedulas['ACUMULADO TOTAL'], '📮', 'kpi-icon-red')}
+                    </div>
+                </div>
+            `;
+
+            animateCounter(getKpiId('Operativos'), operativos['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Colaboraciones Especiales'), colaboraciones['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Reportes Diarios / Denuncias'), reportes['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Actas de Infracción'), actasInfraccion['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Cédulas de Notificación'), cedulas['ACUMULADO TOTAL']);
+        }
             // Descripción
             container.innerHTML += `
                 <div class="section-description">
