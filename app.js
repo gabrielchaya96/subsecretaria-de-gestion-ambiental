@@ -142,28 +142,50 @@ async function initializeApp() {
 // ---------------------------------------------------------------------
 function normalizeIndicators(rawData) {
     return rawData.map(row => {
-        const area = row[COLUMN_NAMES.AREA] ||
-                     row[COLUMN_NAMES.AREA_ALT] ||
-                     row['AREA/DEPENDENCIA '] ||
-                     '';
 
-        const indicador = row[COLUMN_NAMES.INDICADOR] || row['INDICADOR'] || '';
+        // Google devuelve 1 solo campo gigante → lo extraemos
+        const fullText = Object.values(row)[0] || "";
 
-        const total = parseFloat(row[COLUMN_NAMES.TOTAL] || row['ACUMULADO TOTAL'] || 0);
-        const y2024 = parseFloat(row[COLUMN_NAMES.Y2024] || row['ACUMULADO 2024'] || 0);
-        const y2025 = parseFloat(row[COLUMN_NAMES.Y2025] || row['ACUMULADO 2025'] || 0);
-        const y2026 = parseFloat(row[COLUMN_NAMES.Y2026] || row['ACUMULADO 2026'] || 0);
+        const clean = normalize(fullText);
+
+        // Detectar área
+        let area = "";
+        if (clean.includes("educacion")) area = "Direccion General de Educación Ambiental";
+        if (clean.includes("desarrollo sostenible")) area = "Dirección General de Desarrollo Sostenible";
+        if (clean.includes("cambio climatico")) area = "Dirección General de Cambio Climático";
+        if (clean.includes("inspecciones")) area = "Dirección de Inspecciones";
+        if (clean.includes("impacto ambiental")) area = "Dirección de Impacto Ambiental";
+        if (clean.includes("patrulla ambiental")) area = "Dirección de Patrulla Ambiental";
+        if (clean.includes("proyectos ambientales")) area = "Coordinación de Proyectos Ambientales";
+        if (clean.includes("subsecretaria de gestion ambiental")) area = "Subsecretaría de Gestión Ambiental";
+
+        // Detectar indicador por palabras clave
+        let indicador = "";
+        if (clean.includes("taller")) indicador = "TALLERES DE EDUCACIÓN AMBIENTAL";
+        if (clean.includes("promesa")) indicador = "PROMESA DEL MEDIO AMBIENTE";
+        if (clean.includes("neumaton")) indicador = "NEUMATON";
+        if (clean.includes("raee")) indicador = "RAEETON";
+        if (clean.includes("punto limpio")) indicador = "PUNTO LIMPIO";
+
+        // Detectar totales (busca números aislados)
+        const numbers = fullText.match(/\b\d+\b/g) || [];
+        const total = numbers[0] ? parseInt(numbers[0]) : 0;
+        const y2024 = numbers[1] ? parseInt(numbers[1]) : 0;
+        const y2025 = numbers[2] ? parseInt(numbers[2]) : 0;
+        const y2026 = numbers[3] ? parseInt(numbers[3]) : 0;
 
         return {
-            'INDICADOR': indicador.trim(),
-            'AREA': area.trim(),
-            'ACUMULADO TOTAL': isNaN(total) ? 0 : total,
-            'ACUMULADO 2024': isNaN(y2024) ? 0 : y2024,
-            'ACUMULADO 2025': isNaN(y2025) ? 0 : y2025,
-            'ACUMULADO 2026': isNaN(y2026) ? 0 : y2026
+            "INDICADOR": indicador,
+            "AREA": area,
+            "ACUMULADO TOTAL": total,
+            "ACUMULADO 2024": y2024,
+            "ACUMULADO 2025": y2025,
+            "ACUMULADO 2026": y2026
         };
+
     }).filter(row => row.INDICADOR && row.AREA);
 }
+
 
 // ---------------------------------------------------------------------
 // FUNCIÓN COMPLETA PARA LEER GOOGLE SHEETS
