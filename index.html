@@ -4,68 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión Ambiental - Municipalidad de Salta</title>
-
-    <!-- 1. Bootstrap 5 (CSS) -->
-    <!-- Se usa la versión local de Bootstrap descargada (bootstrap-5.3.8-dist) -->
-    <link rel="stylesheet" href="bootstrap-5.3.8-dist/css/bootstrap.min.css">
-
-    <!-- 2. Leaflet (Mapas) CSS -->
-    <!-- Carga Leaflet desde archivos locales. Coloca leaflet/leaflet.css en el repositorio -->
-    <link rel="stylesheet" href="leaflet/leaflet.css"/>
-
-    <!-- 3. FontAwesome eliminado: usaremos emojis en lugar de iconos externos -->
-
-    <!--
-      Content Security Policy (CSP): se añade 'unsafe-eval' a script-src para
-      permitir que librerías como Chart.js funcionen en GitHub Pages. Esta
-      directiva reduce la protección frente a código inyectado, por lo que
-      sólo debería usarse si las dependencias son de confianza.
-    -->
-<meta http-equiv="Content-Security-Policy" content="
-default-src 'self';
-font-src 'self' data: https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://r2cdn.perplexity.ai;
-  https://cdn.jsdelivr.net
-  https://cdnjs.cloudflare.com
-  https://unpkg.com
-  https://maps.googleapis.com
-  https://tile.openstreetmap.org;
-style-src 'self' 'unsafe-inline'
-  https://cdn.jsdelivr.net
-  https://cdnjs.cloudflare.com
-  https://unpkg.com;
-font-src 'self' data: https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://r2cdn.perplexity.ai;
-img-src 'self' data: blob: filesystem: https://*;
-connect-src 'self'
-  https://docs.google.com
-  https://docs.googleusercontent.com
-  https://cdn.jsdelivr.net
-  https://cdnjs.cloudflare.com
-  https://unpkg.com
-  https://tile.openstreetmap.org;
-style-src-attr 'unsafe-inline';
-">
-
-
-
-
-    <!-- Estilos personalizados -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <!-- ----- Loader ----- -->
+    <!-- Loader -->
     <div id="loader">
-        <div class="spinner-border text-success" role="status" style="width: 3rem; height: 3rem;">
+        <div class="spinner-border text-success" role="status">
             <span class="visually-hidden">Cargando...</span>
         </div>
         <p>Cargando datos de gestión...</p>
     </div>
 
-    <!-- ----- Encabezado ----- -->
+    <!-- Encabezado -->
     <nav class="navbar header-navbar">
         <a class="navbar-brand" href="#">
             <span class="emoji-icon">🌱</span>
-            <span class="header-title-span"> <!-- Clase añadida -->
+            <span>
                 Subsecretaría de Gestión Ambiental
                 <small>Ing. Maria Emilse Arias</small>
             </span>
@@ -74,63 +30,62 @@ style-src-attr 'unsafe-inline';
 
     <div class="container-fluid">
         <div class="row">
-
-            <!-- ----- Navegación Lateral ----- -->
+            <!-- Navegación Lateral -->
             <nav id="sidebarMenu" class="col-lg-3 d-none d-lg-block sidebar">
                 <div class="position-sticky">
                     <ul class="nav nav-pills flex-column" id="main-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#" data-section="Dir. Gral. de Educación Ambiental">
+                            <a class="nav-link active" href="#" data-section="educacion">
                                 <span class="emoji-icon">🎓</span>
-                                Dir. Gral. Educación Ambiental
+                                Educación Ambiental
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Dir. Gral. de Desarrollo Sostenible">
+                            <a class="nav-link" href="#" data-section="economia">
                                 <span class="emoji-icon">♻️</span>
-                                Dir. Gral. Desarrollo Sostenible
+                                Economía Circular
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Dir. Gral. de Cambio Climático">
+                            <a class="nav-link" href="#" data-section="cambio-climatico">
                                 <span class="emoji-icon">🌦️</span>
-                                Dir. Gral. Cambio Climático
+                                Cambio Climático
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Dirección de Desarrollo Sostenible">
+                            <a class="nav-link" href="#" data-section="desarrollo">
                                 <span class="emoji-icon">🍃</span>
-                                Dir. Desarrollo Sostenible
+                                Desarrollo Sostenible
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Dirección de Inspecciones">
+                            <a class="nav-link" href="#" data-section="inspecciones">
                                 <span class="emoji-icon">📋</span>
-                                Dir. Inspecciones
+                                Inspecciones
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Dirección de Impacto Ambiental">
+                            <a class="nav-link" href="#" data-section="impacto">
                                 <span class="emoji-icon">🏞️</span>
-                                Dir. Impacto Ambiental
+                                Impacto Ambiental
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Direccion de Patrulla Ambiental">
+                            <a class="nav-link" href="#" data-section="patrulla">
                                 <span class="emoji-icon">🛡️</span>
-                                Dir. Patrulla Ambiental
+                                Patrulla Ambiental
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Coordinación de Proyectos Ambientales">
+                            <a class="nav-link" href="#" data-section="proyectos">
                                 <span class="emoji-icon">🌳</span>
-                                Coord. Proyectos Ambientales
+                                Proyectos Ambientales
                             </a>
                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-section="Subsecretaría (Articulación)">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="articulacion">
                                 <span class="emoji-icon">📢</span>
-                                Subsecretaría (Articulación)
+                                Articulación
                             </a>
                         </li>
                     </ul>
@@ -138,7 +93,7 @@ style-src-attr 'unsafe-inline';
                     <!-- Sección de Descarga -->
                     <div class="download-section mt-4 mx-3">
                         <h6 class="fw-bold">Reportes</h6>
-                        <p class="small text-muted">Descargue los datos completos o genere un PDF.</p>
+                        <p class="small text-muted">Descargue los datos completos.</p>
                         <button class="btn btn-sm btn-success w-100 mb-2" id="download-csv">
                             <span class="emoji-icon">📄</span> Descargar .CSV
                         </button>
@@ -146,17 +101,16 @@ style-src-attr 'unsafe-inline';
                             <span class="emoji-icon">📄</span> Generar .PDF
                         </button>
                     </div>
-
                 </div>
             </nav>
 
-            <!-- ----- Contenido Principal ----- -->
+            <!-- Contenido Principal -->
             <main class="col-lg-9 ms-sm-auto main-content">
                 <div id="main-content-area">
-                    <!-- El contenido de la sección se renderizará aquí -->
+                    <!-- El contenido se cargará aquí dinámicamente -->
                 </div>
 
-                <!-- ----- Footer Interno ----- -->
+                <!-- Footer -->
                 <footer class="footer mt-5">
                     <p>&copy; 2025 Municipalidad de Salta - Subsecretaría de Gestión Ambiental. Todos los derechos reservados.</p>
                 </footer>
@@ -164,25 +118,8 @@ style-src-attr 'unsafe-inline';
         </div>
     </div>
 
-
-    <!-- 1. Bootstrap 5 (JS) -->
-    <!-- Se usa la versión local de Bootstrap descargada (bootstrap-5.3.8-dist) -->
-    <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- 2. Chart.js eliminado -->
-    <!--
-      La librería Chart.js ha sido eliminada porque su uso de `eval` y
-      `new Function()` entra en conflicto con las políticas CSP de GitHub
-      Pages. En su lugar, las gráficas de barras se generan de forma
-      programática con divs y CSS. Ver la función createBarChart en el
-      script para más detalles.
-    -->
-    
-    <!-- 3. Leaflet (Mapas) JS -->
-    <!-- Carga Leaflet desde archivos locales. Coloca leaflet/leaflet.js en el repositorio -->
-    <script src="leaflet/leaflet.js"></script>
-
-    <!-- 4. Aplicación JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
