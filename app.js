@@ -1,354 +1,1058 @@
 // ---------------------------------------------------------------------
-// CONFIGURACIÓN (EL USUARIO DEBE MODIFICAR ESTO)
-// ---------------------------------------------------------------------
-// REVISA EL ARCHIVO README.md PARA INSTRUCCIONES DETALLADAS
-const CONFIG = {
-    // 1. Pega aquí el ID de tu Google Sheet
-    GOOGLE_SHEET_ID: '1pV10qTgEWIRtmpVpZEJMFa_G9dluMACSoKFw6JNvFQ4',
-    
-    // 2. Revisa que los nombres de las hojas (pestañas) sean correctos
-    SHEET_INDICADORES: 'INDICADORES',
-    SHEET_BARRIOS: 'BARRIOS INTERVENIDOS',
-    
-    // NUEVA CORRECCIÓN: Filas de encabezado a saltar manualmente
-    OFFSET_INDICADORES: 9, // La fila 10 es el encabezado real
-    OFFSET_BARRIOS: 4,     // La fila 5 es el encabezado real
-};
+        // CONFIGURACIÓN (EL USUARIO DEBE MODIFICAR ESTO)
+        // ---------------------------------------------------------------------
+        // REVISA EL ARCHIVO README.md PARA INSTRUCCIONES DETALLADAS
+        const CONFIG = {
+            // 1. Pega aquí el ID de tu Google Sheet
+            GOOGLE_SHEET_ID: '1pV10qTgEWIRtmpVpZEJMFa_G9dluMACSoKFw6JNvFQ4',
+            
+            // 2. Revisa que los nombres de las hojas (pestañas) sean correctos
+            SHEET_INDICADORES: 'INDICADORES',
+            SHEET_BARRIOS: 'BARRIOS INTERVENIDOS',
+        };
 
-// URL de consulta de Google Sheets (vuelve a la forma simple)
-const sheetUrl = (sheetName) => `https://docs.google.com/spreadsheets/d/${CONFIG.GOOGLE_SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+        // ---------------------------------------------------------------------
+        // DATOS DE EJEMPLO (MOCK DATA)
+        // ---------------------------------------------------------------------
+        // Usados si la carga de Google Sheets falla.
+        // Basados en los archivos CSV proporcionados.
+        const mockIndicadores = [
+            {"INDICADOR": "TALLERES DE EDUCACIÓN AMBIENTAL", "AREA/DEPENDENCIA": "Dir. Gral. de Educación Ambiental", "ACUMULADO TOTAL": 3600, "ACUMULADO 2024": 3600, "ACUMULADO 2025": 2500, "ACUMULADO 2026": 0},
+            {"INDICADOR": "PROMESA DE LEALTAD AL AMBIENTE", "AREA/DEPENDENCIA": "Dir. Gral. de Educación Ambiental", "ACUMULADO TOTAL": 5800, "ACUMULADO 2024": 5800, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
+            {"INDICADOR": "NEUMATÓN", "AREA/DEPENDENCIA": "Dir. Gral. de Economía Circular", "ACUMULADO TOTAL": 2072, "ACUMULADO 2024": 2072, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
+            {"INDICADOR": "RAEETÓN", "AREA/DEPENDENCIA": "Dir. Gral. de Economía Circular", "ACUMULADO TOTAL": 95.98, "ACUMULADO 2024": 95.98, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
+            {"INDICADOR": "PUNTOS LIMPIOS INSTALADOS", "AREA/DEPENDENCIA": "Dir. Gral. de Economía Circular", "ACUMULADO TOTAL": 2, "ACUMULADO 2024": 2, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
+            {"INDICADOR": "MEDICIONES DE CALIDAD DEL AIRE", "AREA/DEPENDENCIA": "Dir. Gral. de Cambio Climático", "ACUMULADO TOTAL": 54, "ACUMULADO 2024": 54, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
+            {"INDICADOR": "ACCIONES DE DESCACHARRADO", "AREA/DEPENDENCIA": "Dir. Gral. de Cambio Climático", "ACUMULADO TOTAL": 45, "ACUMULADO 2024": 45, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
+            {"INDICADOR": "CONVENIOS FIRMADOS", "AREA/DEPENDENCIA": "Subsecretaría de Gestión Ambiental", "ACUMULADO TOTAL": 18, "ACUMULADO 2024": 13, "ACUMULADO 2025": 5, "ACUMULADO 2026": 0},
+            {"INDICADOR": "CAMPAÑAS DE COMUNICACIÓN", "AREA/DEPENDENCIA": "Subsecretaría de Gestión Ambiental", "ACUMULADO TOTAL": 12, "ACUMULADO 2024": 12, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
+            {"INDICADOR": "HUERTAS COMUNITARIAS", "AREA/DEPENDENCIA": "Dir. Gral. de Desarrollo Sostenible", "ACUMULADO TOTAL": 5, "ACUMULADO 2024": 5, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0},
+        ];
 
-// ---------------------------------------------------------------------
-// DATOS DE EJEMPLO (MOCK DATA)
-// ---------------------------------------------------------------------
-// Usados si la carga de Google Sheets falla.
-// Basados en los archivos CSV proporcionados.
-const mockIndicadores = [
-    {"INDICADOR": "TALLERES DE EDUCACIÓN AMBIENTAL", "AREA/DEPENDENCIA": "Dir. Gral. de Educación Ambiental", "ACUMULADO TOTAL": 3600, "ACUMULADO 2024": 3600, "ACUMULADO 2025": 2500, "ACUMULADO 2026": 0},
-    {"INDICADOR": "PROMESA DE LEALTAD AL AMBIENTE", "AREA/DEPENDENCIA": "Dir. Gral. de Educación Ambiental", "ACUMULADO TOTAL": 5800, "ACUMULADO 2024": 5800, "ACUMULADO 2025": 4000, "ACUMULADO 2026": 0},
-    {"INDICADOR": "JORNADAS DE LIMPIEZA / RECOLECCIÓN", "AREA/DEPENDENCIA": "Dir. Gral. de Residuos Urbanos", "ACUMULADO TOTAL": 35, "ACUMULADO 2024": 35, "ACUMULADO 2025": 20, "ACUMULADO 2026": 0},
-    {"INDICADOR": "OPERATIVOS DE FISCALIZACIÓN", "AREA/DEPENDENCIA": "Patrulla Ambiental", "ACUMULADO TOTAL": 1200, "ACUMULADO 2024": 1200, "ACUMULADO 2025": 800, "ACUMULADO 2026": 0},
-    {"INDICADOR": "COLABORACIONES ESPECIALES", "AREA/DEPENDENCIA": "Patrulla Ambiental", "ACUMULADO TOTAL": 40, "ACUMULADO 2024": 40, "ACUMULADO 2025": 25, "ACUMULADO 2026": 0},
-    {"INDICADOR": "REPORTES DIARIOS / DENUNCIAS", "AREA/DEPENDENCIA": "Patrulla Ambiental", "ACUMULADO TOTAL": 600, "ACUMULADO 2024": 600, "ACUMULADO 2025": 450, "ACUMULADO 2026": 0},
-    {"INDICADOR": "ACTAS DE INFRACCIÓN", "AREA/DEPENDENCIA": "Patrulla Ambiental", "ACUMULADO TOTAL": 150, "ACUMULADO 2024": 150, "ACUMULADO 2025": 100, "ACUMULADO 2026": 0},
-    {"INDICADOR": "CÉDULAS DE NOTIFICACIÓN", "AREA/DEPENDENCIA": "Patrulla Ambiental", "ACUMULADO TOTAL": 200, "ACUMULADO 2024": 200, "ACUMULADO 2025": 120, "ACUMULADO 2026": 0},
-    {"INDICADOR": "PUNTOS LIMPIOS INSTALADOS", "AREA/DEPENDENCIA": "Dir. Gral. de Residuos Urbanos", "ACUMULADO TOTAL": 80, "ACUMULADO 2024": 80, "ACUMULADO 2025": 40, "ACUMULADO 2ULADO 2026": 0},
-    {"INDICADOR": "RECICLADO DE MATERIALES", "AREA/DEPENDENCIA": "Dir. Gral. de Residuos Urbanos", "ACUMULADO TOTAL": 50000, "ACUMULADO 2024": 50000, "ACUMULADO 2025": 30000, "ACUMULADO 2026": 0},
-    {"INDICADOR": "MEDICIONES DE CALIDAD DEL AIRE", "AREA/DEPENDENCIA": "Dir. Gral. de Cambio Climático", "ACUMULADO TOTAL": 12, "ACUMULADO 2024": 12, "ACUMULADO 2025": 8, "ACUMULADO 2026": 0},
-    {"INDICADOR": "PROYECTOS DE ENERGÍAS RENOVABLES", "AREA/DEPENDENCIA": "Dir. Gral. de Cambio Climático", "ACUMULADO TOTAL": 2, "ACUMULADO 2024": 2, "ACUMULADO 2025": 1, "ACUMULADO 2026": 0}
-];
+        const mockBarrios = [
+            {"NOMBRE DEL BARRIO": "Norte Grande", "TAREAS DESARROLLADAS": "Descacharrado/Educacion Sanitaria Dengue", "lat": -24.819, "lng": -65.422},
+            {"NOMBRE DEL BARRIO": "Villa Floresta Alta", "TAREAS DESARROLLADAS": "Descacharrado/Educacion Sanitaria Dengue", "lat": -24.786, "lng": -65.389},
+            {"NOMBRE DEL BARRIO": "Bº San Calixto", "TAREAS DESARROLLADAS": "Descacharrado/Educacion Sanitaria Dengue", "lat": -24.825, "lng": -65.435},
+            {"NOMBRE DEL BARRIO": "B° VILLA ESMERALDA", "TAREAS DESARROLLADAS": "OPERATIVO MILAGRO", "lat": -24.820, "lng": -65.441},
+            {"NOMBRE DEL BARRIO": "B° LIMACHE", "TAREAS DESARROLLADAS": "OPERATIVO MILAGRO", "lat": -24.836, "lng": -65.451},
+        ];
 
-const mockBarrios = [
-    // Datos de ejemplo para el mapa
-    { nombre: 'Norte Grande', tareas: 'Descacharrado/Educación Sanitaria Dengue', lat: -24.7570, lng: -65.4243 },
-    { nombre: 'Villa Floresta Baja', tareas: 'Descacharrado/Educación Sanitaria Dengue', lat: -24.7820, lng: -65.4340 },
-    { nombre: 'San Calixto', tareas: 'Descacharrado/Educación Sanitaria Dengue', lat: -24.7650, lng: -65.4050 },
-    { nombre: 'B° 14 de Mayo', tareas: 'Operativo integral', lat: -24.7930, lng: -65.4180 },
-];
+        const mockPuntosLimpios = [
+            {"NOMBRE": "Punto Limpio Norte", "DIRECCION": "Av. Bolivia 2550", "lat": -24.746, "lng": -65.412},
+            {"NOMBRE": "Punto Limpio Sur", "DIRECCION": "Av. Paraguay 1240", "lat": -24.809, "lng": -65.418},
+        ];
 
-// ---------------------------------------------------------------------
-// VARIABLES GLOBALES
-// ---------------------------------------------------------------------
-let indicatorsData = [];
-let barriosData = [];
-let map = null;
+        // ---------------------------------------------------------------------
+        // VARIABLES GLOBALES DE LA APP
+        // ---------------------------------------------------------------------
+        let indicatorsData = [];
+        let barriosData = [];
+        let chartInstances = {}; // Para destruir gráficos al cambiar de pestaña
+        let mapInstance = null; // Para destruir el mapa
+
+        // Coordenadas de Salta
+        const SALTA_CENTER = [-24.7859, -65.4117];
+
+        // ---------------------------------------------------------------------
+        // LÓGICA PRINCIPAL DE LA APP
+        // ---------------------------------------------------------------------
+        
+        /**
+         * Inicializa la aplicación al cargar el DOM
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp();
+            setupNavigation();
+            setupDownloadButtons();
+        });
+
+        /**
+         * Carga los datos (desde Google Sheets o Mock) y renderiza la sección inicial.
+         */
+        async function initializeApp() {
+            const loader = document.getElementById('loader');
+            try {
+                // Intenta cargar datos en paralelo
+                const [indicators, barrios] = await Promise.all([
+                    fetchGoogleSheetData(CONFIG.GOOGLE_SHEET_ID, CONFIG.SHEET_INDICADORES),
+                    fetchGoogleSheetData(CONFIG.GOOGLE_SHEET_ID, CONFIG.SHEET_BARRIOS)
+                ]);
+                indicatorsData = indicators;
+                barriosData = barrios;
+                console.log("Datos cargados desde Google Sheets:", indicatorsData, barriosData);
+                console.log("Primeras filas de INDICADORES:");
+                console.log(indicatorsData.slice(0, 5));
+
+                console.log("Primeras filas de BARRIOS:");
+                console.log(barriosData.slice(0, 5));
+
+                // IMPORTANTE: Tus datos de barrios necesitan columnas 'lat' y 'lng'
+                // Si no las tienen, usamos datos mock para el mapa.
+                if (!barriosData.length || !barriosData[0].lat) {
+                    console.warn("Datos de barrios sin 'lat'/'lng'. Usando mock data para el mapa.");
+                    barriosData = mockBarrios; // Reemplaza con mock si falta geo
+                }
+
+            } catch (error) {
+                console.error("Error al cargar datos desde Google Sheets. Usando datos de ejemplo (mock).", error);
+                indicatorsData = mockIndicadores;
+                barriosData = mockBarrios;
+            } finally {
+                // Renderiza la sección por defecto (Educación Ambiental)
+                renderSection('Dir. Gral. de Educación Ambiental'); // CORREGIDO: El nombre debe coincidir con el del switch
+                // Oculta el loader
+                loader.style.display = 'none';
+            }
+        }
+
+        /**
+         * Configura los listeners de clic para la navegación lateral.
+         */
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('#main-nav .nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Quita 'active' de todos los links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    // Añade 'active' al clickeado
+                    e.currentTarget.classList.add('active');
+                    
+                    const sectionName = e.currentTarget.getAttribute('data-section');
+                    renderSection(sectionName);
+                });
+            });
+        }
+
+        /**
+         * Configura los botones de descarga (CSV y PDF).
+         */
+        function setupDownloadButtons() {
+            document.getElementById('download-csv').addEventListener('click', exportToCSV);
+            document.getElementById('download-pdf').addEventListener('click', () => {
+                window.print(); // Usa la función de impresión del navegador
+            });
+        }
+
+        // ---------------------------------------------------------------------
+        // FUNCIONES DE RENDERIZADO
+        // ---------------------------------------------------------------------
+
+        /**
+         * Renderiza la sección solicitada en el área de contenido principal.
+         * @param {string} sectionName - El nombre de la sección a renderizar.
+         */
+        function renderSection(sectionName) {
+            const container = document.getElementById('main-content-area');
+            container.innerHTML = ''; // Limpia el contenido anterior
+            destroyCharts(); // Limpia gráficos anteriores
+            destroyMap(); // Limpia mapa anterior
+
+            // Título de la sección
+            const title = document.createElement('h2');
+            title.className = 'section-title';
+            title.textContent = sectionName;
+            container.appendChild(title);
+
+            // Router para renderizar la sección correcta
+            switch (sectionName) {
+                case 'Dir. Gral. de Educación Ambiental':
+                    renderEducacion(container);
+                    break;
+                case 'Dir. Gral. de Desarrollo Sostenible':
+                    renderEconomia(container); // Re-usada para Neumatón/RAEE
+                    break;
+                case 'Dir. Gral. de Cambio Climático':
+                    renderCambioClimatico(container);
+                    break;
+                case 'Dirección de Desarrollo Sostenible':
+                    renderDesarrollo(container); // Re-usada para Huertas
+                    break;
+                case 'Dirección de Inspecciones':
+                    renderInspecciones(container);
+                    break;
+                case 'Dirección de Impacto Ambiental':
+                    renderImpacto(container);
+                    break;
+                case 'Direccion de Patrulla Ambiental':
+                    renderPatrulla(container);
+                    break;
+                case 'Coordinación de Proyectos Ambientales':
+                    renderProyectos(container);
+                    break;
+                case 'Subsecretaría (Articulación)':
+                    renderComunicacion(container); // Re-usada para Convenios/Campañas
+                    break;
+                default:
+                    container.innerHTML = '<p>Sección en construcción.</p>';
+            }
+        }
+
+        /**
+         * Renderiza la sección "Educación Ambiental"
+         */
+        function renderEducacion(container) {
+            // 0. Add Description
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Esta área se encarga de actividades como talleres de educación ambiental, operativos puerta a puerta, la conformación de la mesa intersectorial de Educación Ambiental, eventos de siembra de árboles, capacitación de docentes, y la difusión de contenido ambiental en redes y medios.</p>
+                </div>
+            `;
+
+            // 1. Filtrar datos
+            const data = indicatorsData.filter(row => matchesArea(row, "EDUCACION"));
+            const talleres = findIndicator(data, 'TALLERES');
+            const promesa = findIndicator(data, 'PROMESA');
+
+            // 2. Crear HTML (KPIs y Gráficos)
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <!-- KPI Talleres -->
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Niños en Talleres', talleres['ACUMULADO TOTAL'], '🏫', 'kpi-icon-green')}
+                    </div>
+                    <!-- KPI Promesa -->
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Alumnos en "Promesa al Ambiente"', promesa['ACUMULADO TOTAL'], '👧👦', 'kpi-icon-blue')}
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <!-- Gráfico de Barras -->
+                    <div class="col-lg-12">
+                        <div class="chart-container">
+                            <h5>Comparativa Anual de Talleres</h5>
+                            <!-- Añadido div wrapper con altura fija -->
+                <div class="chart-wrapper" style="position: relative; height: 350px;">
+                                <!-- Para cumplir con la CSP de GitHub Pages, reemplazamos el <canvas> por un <div>.  -->
+                                <!-- El contenedor se identifica por ID y createBarChart insertará en él la gráfica generada con divs -->
+                                <div id="chart-talleres"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 3. Animar contadores
+            // Usa getKpiId() para coincidir con los IDs generados dinámicamente
+            animateCounter(getKpiId('Niños en Talleres'), talleres['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Alumnos en "Promesa al Ambiente"'), promesa['ACUMULADO TOTAL']);
+
+            // 4. Crear gráfico
+            createBarChart(
+                'chart-talleres',
+                ['2024', '2025', '2026 (Meta)'],
+                'Niños capacitados',
+                [talleres['ACUMULADO 2024'], talleres['ACUMULADO 2025'], talleres['ACUMULADO 2026']],
+                '#009a44'
+            );
+        }
+
+        /**
+         * Renderiza la sección "Economía Circular"
+         */
+        function renderEconomia(container) {
+            // 0. Add Description
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Participa en actividades como el Neumatón (recolección de Neumáticos Fuera de Uso), la RAEETÓN (recolección de Residuos Electrónicos y Eléctricos en Desuso), la formulación de proyectos, la instalación de Ecopuntos y Puntos Limpios, y la coordinación de retiros masivos de NFU.</p>
+                    <p class="fw-bold small text-muted mb-0">Nota: Los indicadores (Neumatón, RAEETÓN, Puntos Limpios) provienen de los datos de "Dir. Gral. de Economía Circular" y se muestran aquí según la nueva estructura de áreas.</p>
+                </div>
+            `;
+
+            const data = indicatorsData.filter(row => matchesArea(row, "DESARROLLO_SOSTENIBLE"));
+            const neumaticos = findIndicator(data, 'NEUMATÓN');
+            const raee = findIndicator(data, 'RAEETÓN');
+            const puntosLimpios = findIndicator(data, 'PUNTOS LIMPIOS');
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Neumáticos (Tn)', neumaticos['ACUMULADO TOTAL'], '🚚', 'kpi-icon-orange')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('RAEE (Tn)', raee['ACUMULADO TOTAL'], '💻', 'kpi-icon-purple')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Puntos Limpios Instalados', puntosLimpios['ACUMULADO TOTAL'], '📍', 'kpi-icon-green')}
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <!-- Mapa de Puntos Limpios -->
+                    <div class="col-lg-12">
+                        <div class="chart-container">
+                            <h5>Mapa de Puntos Limpios</h5>
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            animateCounter(getKpiId('Neumáticos (Tn)'), neumaticos['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('RAEE (Tn)'), raee['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Puntos Limpios Instalados'), puntosLimpios['ACUMULADO TOTAL']);
+
+            // Inicializar mapa con Puntos Limpios (usando mock data)
+            initializeMap(mockPuntosLimpios, 'punto-limpio');
+        }
+
+        /**
+         * Renderiza la sección "Cambio Climático"
+         */
+        function renderCambioClimatico(container) {
+            // 0. Add Description
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Colabora en la RAEETÓN, el Neumatón (a través de la certificación de disposición final), y se enfoca en el mapeo de calidad de aire y ruido ambiental, el relevamiento y toma de muestras de agua en los ríos Arias-Arenales, la implementación de Biobardas, y las actividades de descacharrado y retiro de chatarra.</p>
+                </div>
+            `;
+
+            const data = indicatorsData.filter(row => matchesArea(row, "CAMBIO_CLIMATICO"));
+            const medicionesAire = findIndicator(data, 'CALIDAD DEL AIRE');
+            const descacharrado = findIndicator(data, 'DESCACHARRADO');
+            
+            // Filtrar barrios intervenidos para descacharrado
+            const barriosIntervenidos = barriosData.filter(b => b['TAREAS DESARROLLADAS'].toLowerCase().includes('descacharrado'));
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Mediciones Calidad de Aire', medicionesAire['ACUMULADO TOTAL'], '🌬️', 'kpi-icon-blue')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Barrios con Descacharrado', barriosIntervenidos.length, '🏠', 'kpi-icon-red')}
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <!-- Mapa de Intervenciones -->
+                    <div class="col-lg-12">
+                        <div class="chart-container">
+                            <h5>Mapa de Barrios Intervenidos (Descacharrado)</h5>
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            animateCounter(getKpiId('Mediciones Calidad de Aire'), medicionesAire['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Barrios con Descacharrado'), barriosIntervenidos.length);
+
+            // Inicializar mapa con barrios
+            initializeMap(barriosIntervenidos, 'barrio');
+        }
+
+        /**
+         * Renderiza la sección "Desarrollo Sostenible"
+         */
+        function renderDesarrollo(container) {
+            // 0. Add Description
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Se menciona en tareas de formulación de proyectos y relevamiento a plantas de tratamiento. El indicador de "Huertas" proviene de los datos de "Dir. Gral. de Desarrollo Sostenible".</p>
+                </div>
+            `;
+
+            const data = indicatorsData.filter(row => matchesArea(row, "DESARROLLO_SOSTENIBLE"));
+            const huertas = findIndicator(data, 'HUERTAS');
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Huertas Comunitarias', huertas['ACUMULADO TOTAL'], '🥕', 'kpi-icon-orange')}
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-12">
+                        <div class="chart-container">
+                            <h5>Comparativa Huertas Creadas</h5>
+                            <!-- Añadido div wrapper con altura fija -->
+                            <div class="chart-wrapper" style="position: relative; height: 350px;">
+                                <!-- Para cumplir con la CSP de GitHub Pages, reemplazamos el <canvas> por un <div>.  -->
+                                <div id="chart-huertas"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            animateCounter(getKpiId('Huertas Comunitarias'), huertas['ACUMULADO TOTAL']);
+            
+            createBarChart(
+                'chart-huertas',
+                ['2024', '2025', '2026 (Meta)'],
+                'Huertas',
+                [huertas['ACUMULADO 2024'], huertas['ACUMULADO 2025'], huertas['ACUMULADO 2026']],
+                '#ff8c00'
+            );
+        }
+
+        /**
+         * Renderiza la sección "Comunicación y Articulación"
+         */
+        function renderComunicacion(container) {
+            // 0. Add Description
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Indicadores de alto nivel gestionados directamente por la Subsecretaría, incluyendo convenios interinstitucionales y campañas de comunicación masiva.</p>
+                </div>
+            `;
+
+            const data = indicatorsData.filter(row => matchesArea(row, "SUBSECRETARIA"));
+            const convenios = findIndicator(data, 'CONVENIOS');
+            const campanas = findIndicator(data, 'CAMPAÑAS');
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Convenios Firmados', convenios['ACUMULADO TOTAL'], '🤝', 'kpi-icon-purple')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Campañas de Comunicación', campanas['ACUMULADO TOTAL'], '🎤', 'kpi-icon-blue')}
+                    </div>
+                </div>
+            `;
+            
+            animateCounter(getKpiId('Convenios Firmados'), convenios['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Campañas de Comunicación'), campanas['ACUMULADO TOTAL']);
+        }
+
+
+        // ----- NUEVAS FUNCIONES PARA ÁREAS SIN DATOS -----
+        function renderInspecciones(container) {
+            // Descripción de la Dirección
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Realiza inspecciones, inspecciones conjuntas (con la Dirección de Inspecciones Comerciales), labra actas de comprobación y actas de clausura, y ejecuta operativos de fiscalización.</p>
+                </div>
+            `;
+
+            // Filtrar datos para la Dirección de Inspecciones (usando normalización de acentos)
+            const data = indicatorsData.filter(row => matchesArea(row, "INSPECCIONES"));
+
+            // Indicadores específicos de esta área
+            const inspRealizadas   = findIndicator(data, 'INSPECCIONES REALIZADAS');
+            const inspConjuntas    = findIndicator(data, 'INSPECCIONES CONJUNTAS');
+            const actasComprobacion = findIndicator(data, 'ACTAS DE COMPROBACIÓN');
+            const actasClausura    = findIndicator(data, 'ACTAS DE CLAUSURA');
+            const operativos       = findIndicator(data, 'OPERATIVOS');
+
+            // Verificar si hay algún indicador con valor > 0
+            const hasData = [inspRealizadas, inspConjuntas, actasComprobacion, actasClausura, operativos].some(ind => ind['ACUMULADO TOTAL'] > 0);
+            if (!hasData) {
+                container.innerHTML += `
+                    <div class="alert alert-info" role="alert">
+                        <span class="emoji-icon">ℹ️</span>
+                        No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Inspecciones Realizadas',   inspRealizadas['ACUMULADO TOTAL'], '🔍', 'kpi-icon-green')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Inspecciones Conjuntas',    inspConjuntas['ACUMULADO TOTAL'], '👥', 'kpi-icon-blue')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Actas de Comprobación',     actasComprobacion['ACUMULADO TOTAL'], '📄', 'kpi-icon-orange')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Actas de Clausura',         actasClausura['ACUMULADO TOTAL'], '📑', 'kpi-icon-purple')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Operativos',                operativos['ACUMULADO TOTAL'], '🚨', 'kpi-icon-red')}
+                    </div>
+                </div>
+            `;
+
+            // Animar contadores
+            animateCounter(getKpiId('Inspecciones Realizadas'), inspRealizadas['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Inspecciones Conjuntas'), inspConjuntas['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Actas de Comprobación'), actasComprobacion['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Actas de Clausura'), actasClausura['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Operativos'), operativos['ACUMULADO TOTAL']);
+        }
+
+        function renderImpacto(container) {
+            // Descripción de la Dirección
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Es responsable de la emisión de las Resoluciones de CAAM (Certificado de Aptitud Ambiental) y de la capacitación o asesoramiento para la obtención del mismo.</p>
+                </div>
+            `;
+
+            // Filtrar datos para Impacto Ambiental
+            const data = indicatorsData.filter(row => matchesArea(row, "IMPACTO_AMBIENTAL"));
+
+            // Indicadores específicos
+            const resoluciones = findIndicator(data, 'RESOLUCIONES DE CAAM');
+            const capacitaciones = findIndicator(data, 'CAPACITACIONES');
+
+            const hasData = [resoluciones, capacitaciones].some(ind => ind['ACUMULADO TOTAL'] > 0);
+            if (!hasData) {
+                container.innerHTML += `
+                    <div class="alert alert-info" role="alert">
+                        <span class="emoji-icon">ℹ️</span>
+                        No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Resoluciones de CAAM', resoluciones['ACUMULADO TOTAL'], '📜', 'kpi-icon-green')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Capacitaciones CAAM', capacitaciones['ACUMULADO TOTAL'], '🎓', 'kpi-icon-blue')}
+                    </div>
+                </div>
+            `;
+
+            animateCounter(getKpiId('Resoluciones de CAAM'), resoluciones['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Capacitaciones CAAM'), capacitaciones['ACUMULADO TOTAL']);
+        }
+
+        function renderPatrulla(container) {
+            // Descripción
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Sus funciones incluyen operativos de fiscalización y control de microbasurales, colaboraciones especiales con otras áreas municipales, la generación de reportes diarios/denuncias, y la emisión de actas de infracción y cédulas de notificación.</p>
+                </div>
+            `;
+
+            // Filtrar datos para Patrulla Ambiental
+            const data = indicatorsData.filter(row => matchesArea(row, "PATRULLA_AMBIENTAL"));
+
+            const operativos      = findIndicator(data, 'OPERATIVOS DE FIZCALIZACIÓN');
+            const colaboraciones = findIndicator(data, 'COLABORACIONES ESPECIALES');
+            const reportes       = findIndicator(data, 'REPORTES REALIZADOS');
+            const actasInfraccion = findIndicator(data, 'ACTAS DE INFRACCIÓN');
+            const cedulas        = findIndicator(data, 'CÉDULAS DE NOTIFICACIÓN');
+
+            const hasData = [operativos, colaboraciones, reportes, actasInfraccion, cedulas].some(ind => ind['ACUMULADO TOTAL'] > 0);
+            if (!hasData) {
+                container.innerHTML += `
+                    <div class="alert alert-info" role="alert">
+                        <span class="emoji-icon">ℹ️</span>
+                        No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Operativos', operativos['ACUMULADO TOTAL'], '🚓', 'kpi-icon-green')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Colaboraciones Especiales', colaboraciones['ACUMULADO TOTAL'], '🤝', 'kpi-icon-blue')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Reportes Realizados', reportes['ACUMULADO TOTAL'], '📈', 'kpi-icon-orange')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Actas de Infracción', actasInfraccion['ACUMULADO TOTAL'], '📝', 'kpi-icon-purple')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Cédulas de Notificación', cedulas['ACUMULADO TOTAL'], '📮', 'kpi-icon-red')}
+                    </div>
+                </div>
+            `;
+
+            animateCounter(getKpiId('Operativos'), operativos['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Colaboraciones Especiales'), colaboraciones['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Reportes Realizados'), reportes['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Actas de Infracción'), actasInfraccion['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Cédulas de Notificación'), cedulas['ACUMULADO TOTAL']);
+        }
+
+        function renderProyectos(container) {
+            container.innerHTML += `
+                <div class="section-description">
+                    <p>Se encarga de la puesta a punto, el enriquecimiento y el mantenimiento de espacios verdes (plazas, platabandas, rotondas, etc.).</p>
+                </div>
+            `;
+
+            const data = indicatorsData.filter(row => matchesArea(row, "PROYECTOS_AMBIENTALES"));
+            const puesta   = findIndicator(data, 'PUESTA A PUNTO');
+            const enriquec = findIndicator(data, 'ENRIQUECIMIENTO');
+            const manteni  = findIndicator(data, 'MANTENIMIENTO');
+
+            const hasData = [puesta, enriquec, manteni].some(ind => ind['ACUMULADO TOTAL'] > 0);
+            if (!hasData) {
+                container.innerHTML += `
+                    <div class="alert alert-info" role="alert">
+                        <span class="emoji-icon">ℹ️</span>
+                        No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML += `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Puesta a Punto', puesta['ACUMULADO TOTAL'], '🌱', 'kpi-icon-green')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Enriquecimiento', enriquec['ACUMULADO TOTAL'], '🌿', 'kpi-icon-blue')}
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        ${createKpiCard('Mantenimiento', manteni['ACUMULADO TOTAL'], '🌳', 'kpi-icon-orange')}
+                    </div>
+                </div>
+            `;
+
+            animateCounter(getKpiId('Puesta a Punto'), puesta['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Enriquecimiento'), enriquec['ACUMULADO TOTAL']);
+            animateCounter(getKpiId('Mantenimiento'), manteni['ACUMULADO TOTAL']);
+        }
+
+
+        // ---------------------------------------------------------------------
+        // FUNCIONES DE COMPONENTES (Generadores de HTML)
+        // ---------------------------------------------------------------------
+
+        /**
+         * Crea el HTML para una tarjeta de KPI.
+         * @param {string} label - El texto descriptivo.
+         * @param {number} value - El valor numérico.
+         * @param {string} iconClass - Clase de FontAwesome (ej. 'fa-solid fa-users').
+         * @param {string} colorClass - Clase de color (ej. 'kpi-icon-green').
+         */
+        function createKpiCard(label, value, iconClass, colorClass) {
+            const safeValue = value || 0;
+            const kpiId = `kpi-${label.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+            
+            return `
+                <div class="kpi-card">
+                    <div class="card-body">
+                        <div class="kpi-card-icon ${colorClass}">
+                            <span class="emoji-icon">${iconClass}</span>
+                        </div>
+                        <div class="kpi-card-content">
+                            <div class="kpi-value" id="${kpiId}">0</div>
+                            <p class="kpi-label">${label}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+
+        // ---------------------------------------------------------------------
+        // FUNCIONES DE GRÁFICOS Y MAPAS
+        // ---------------------------------------------------------------------
+
+        /**
+         * Crea un gráfico de barras.
+         * @param {string} canvasId - ID del elemento <canvas>.
+         * @param {string[]} labels - Etiquetas del eje X.
+         * @param {string} dataLabel - Etiqueta para el dataset.
+         * @param {number[]} data - Array de valores.
+         * @param {string} color - Color de las barras.
+         */
+        function createBarChart(containerId, labels, dataLabel, data, color = '#02b3e4') {
+            /**
+             * Genera una gráfica de barras simple sin dependencias externas.
+             * En lugar de usar Chart.js (que está bloqueado por la CSP de GitHub
+             * Pages), esta función construye las barras con elementos <div> y
+             * aplica estilos CSS para representar la proporción de cada valor.
+             *
+             * @param {string} containerId ID del elemento contenedor donde se dibujará la gráfica.
+             * @param {string[]} labels Etiquetas de las barras (eje X).
+             * @param {string} dataLabel Etiqueta descriptiva (no utilizada en esta versión).
+             * @param {number[]} data Conjunto de valores a representar.
+             * @param {string} color Color en formato CSS para las barras.
+             */
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Limpia cualquier gráfico previo
+            container.innerHTML = '';
+
+            // Crea un contenedor para las barras
+            const barChartEl = document.createElement('div');
+            barChartEl.classList.add('simple-bar-chart');
+
+            // Obtiene el valor máximo para escalar las alturas
+            const maxValue = Math.max(...data, 1);
+
+            data.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.classList.add('bar');
+                bar.style.backgroundColor = color;
+                // Altura proporcional en porcentaje
+                const heightPercent = (value / maxValue) * 100;
+                bar.style.height = `${heightPercent}%`;
+
+                // Valor mostrado encima de la barra
+                const spanValue = document.createElement('span');
+                spanValue.textContent = value.toLocaleString('es-AR');
+                bar.appendChild(spanValue);
+
+                // Etiqueta debajo de la barra
+                const labelEl = document.createElement('div');
+                labelEl.classList.add('label');
+                labelEl.textContent = labels[index];
+                bar.appendChild(labelEl);
+
+                barChartEl.appendChild(bar);
+            });
+
+            container.appendChild(barChartEl);
+        }
+
+        /**
+         * Destruye todas las instancias de Chart.js activas.
+         */
+        function destroyCharts() {
+            Object.values(chartInstances).forEach(chart => chart.destroy());
+            chartInstances = {};
+        }
+
+        /**
+         * Inicializa una instancia de Leaflet Map.
+         * @param {Array} markersData - Array de objetos con {lat, lng, ...}.
+         * @param {string} type - 'barrio' o 'punto-limpio' para el popup.
+         */
+        function initializeMap(markersData, type) {
+            if (mapInstance) {
+                mapInstance.remove();
+                mapInstance = null;
+            }
+
+            const mapEl = document.getElementById('map');
+            if (!mapEl) return;
+
+            mapInstance = L.map('map').setView(SALTA_CENTER, 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(mapInstance);
+
+            // Iconos personalizados
+            const barrioIcon = L.icon({
+                iconUrl: 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#D90429" width="32px" height="32px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>'),
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -32]
+            });
+            
+            const puntoLimpioIcon = L.icon({
+                iconUrl: 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#009A44" width="32px" height="32px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>'),
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -32]
+            });
+
+            // Añadir marcadores
+            markersData.forEach(d => {
+                if (d.lat && d.lng) {
+                    let popupContent = '';
+                    let icon = barrioIcon;
+
+                    if (type === 'barrio') {
+                        popupContent = `<strong>${d['NOMBRE DEL BARRIO']}</strong><br>${d['TAREAS DESARROLLADAS']}`;
+                        icon = barrioIcon;
+                    } else if (type === 'punto-limpio') {
+                        popupContent = `<strong>${d['NOMBRE']}</strong><br>${d['DIRECCION']}`;
+                        icon = puntoLimpioIcon;
+                    }
+                    
+                    L.marker([d.lat, d.lng], { icon: icon })
+                        .addTo(mapInstance)
+                        .bindPopup(popupContent);
+                }
+            });
+            
+            // Ajustar el zoom a los marcadores si hay datos
+            if (markersData.length > 0) {
+                const group = new L.featureGroup(markersData.map(d => L.marker([d.lat, d.lng])));
+                mapInstance.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+        
+        /**
+         * Destruye la instancia de Leaflet Map.
+         */
+        function destroyMap() {
+            if (mapInstance) {
+                mapInstance.remove();
+                mapInstance = null;
+            }
+        }
+
+
+        // ---------------------------------------------------------------------
+        // FUNCIONES DE UTILIDAD
+        // ---------------------------------------------------------------------
+
+        /**
+         * Anima un número contador de 0 hasta el valor final.
+         * @param {string} id - ID del elemento HTML que contiene el número.
+         * @param {number} endValue - El valor final.
+         */
+        function animateCounter(id, endValue) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            let startValue = 0;
+            const duration = 1500; // 1.5 segundos
+            const stepTime = 20; // ms
+            const steps = duration / stepTime;
+            const increment = endValue / steps;
+            
+            const isFloat = endValue % 1 !== 0;
+
+            const timer = setInterval(() => {
+                startValue += increment;
+                if (startValue >= endValue) {
+                    clearInterval(timer);
+                    el.textContent = isFloat ? endValue.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : endValue.toLocaleString('es-AR');
+                } else {
+                    el.textContent = isFloat ? startValue.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : Math.ceil(startValue).toLocaleString('es-AR');
+                }
+            }, stepTime);
+        }
+
+        /**
+         * Busca un indicador en el array de datos por su nombre.
+         * @param {Array} data - Array de indicadores.
+         * @param {string} nameSubstring - Substring del nombre a buscar.
+         */
+        function findIndicator(data, nameSubstring) {
+                console.log("findIndicator buscando:", nameSubstring);
+                console.log("Dentro de data:", data);
+
+            /**
+             * Busca un indicador dentro de un conjunto de datos. La comparación ignora
+             * tildes/acentos y diferencia entre mayúsculas y minúsculas, para que
+             * "neumaton" coincida tanto con "NEUMATÓN" como con "Neumaton".
+             *
+             * @param {Array} data Array de objetos con la propiedad INDICADOR.
+             * @param {string} nameSubstring Substring a buscar dentro del nombre del indicador.
+             * @returns {Object} El primer objeto que coincide, o un objeto con valores 0.
+             */
+            // Función para normalizar textos (elimina diacríticos y convierte a minúsculas)
+            const normalize = (str) => {
+                return (str || '')
+                    .normalize('NFD') // Descompone caracteres acentuados en base + marca diacrítica
+                    .replace(/[\u0300-\u036f]/g, '') // Elimina marcas diacríticas
+                    .toLowerCase();
+            };
+            const target = normalize(nameSubstring);
+            return data.find(d => d.INDICADOR && normalize(d.INDICADOR).includes(target)) ||
+                   { "ACUMULADO TOTAL": 0, "ACUMULADO 2024": 0, "ACUMULADO 2025": 0, "ACUMULADO 2026": 0 };
+        }
+
+        /**
+         * Genera el ID de un KPI a partir de su etiqueta, siguiendo la misma
+         * transformación que se usa en createKpiCard(). Esta utilidad evita
+         * discrepancias cuando las etiquetas contienen caracteres acentuados
+         * o símbolos que se reemplazan por guiones.
+         * @param {string} label Etiqueta original del KPI.
+         * @returns {string} ID generado (prefijo kpi-).
+         */
+        function getKpiId(label) {
+            return 'kpi-' + label
+                .toLowerCase()
+                // Reemplaza cualquier caracter que no sea a-z o 0-9 por guion
+                .replace(/[^a-z0-9]/g, '-')
+                // Sustituye múltiples guiones por uno solo
+                .replace(/-+/g, '-')
+                // Elimina guiones al inicio o fin
+                .replace(/^-|-$/g, '');
+        }
+
+        /**
+         * Filtra el array global de indicadores por área/dependencia. La comparación
+         * ignora tildes y mayúsculas/minúsculas para que "Dirección de Inspecciones" coincida
+         * con "Dir. Inspecciones" u otras variantes.
+         *
+         * @param {string} areaName Nombre (o parte) del área a buscar.
+         * @returns {Array} Subconjunto de indicatorsData correspondiente al área.
+         */
+        function filterByArea(areaName) {
+            const normalize = (str) => {
+                return (str || '')
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .toLowerCase();
+            };
+            const target = normalize(areaName);
+            return indicatorsData.filter(d => normalize(d['AREA/DEPENDENCIA']).includes(target));
+        }
+        
+        /**
+         * Exporta los datos de indicadores a un archivo CSV.
+         */
+        function exportToCSV() {
+            if (!indicatorsData.length) {
+                console.error("No hay datos de indicadores para exportar.");
+                return;
+            }
+
+            const headers = Object.keys(indicatorsData[0]);
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            csvContent += headers.join(";") + "\r\n"; // Encabezados
+
+            // Filas
+            indicatorsData.forEach(row => {
+                const values = headers.map(header => {
+                    let cell = row[header] === null || row[header] === undefined ? '' : row[header];
+                    cell = String(cell).replace(/"/g, '""'); // Escapar comillas dobles
+                    if (cell.includes(';') || cell.includes(',')) {
+                        cell = `"${cell}"`; // Envolver en comillas si contiene separador
+                    }
+                    return cell;
+                });
+                csvContent += values.join(";") + "\r\n";
+            });
+
+            // Crear y descargar el archivo
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "reporte_gestion_ambiental.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // ---------------------------------------------------------------------
+        // LECTOR DE GOOGLE SHEETS (gviz)
+        // ---------------------------------------------------------------------
+
+        /**
+         * Obtiene y parsea datos de una Google Sheet pública.
+         * @param {string} sheetId - El ID de la Google Sheet.
+         * @param {string} sheetName - El nombre de la pestaña (hoja).
+         */
+        async function fetchGoogleSheetData(sheetId, sheetName) {
+            if (sheetId === 'REEMPLAZA_CON_TU_GOOGLE_SHEET_ID') {
+                throw new Error("ID de Google Sheet no configurado.");
+            }
+            
+            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+            
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Error al cargar datos de Google Sheet: ${response.statusText}`);
+            }
+
+            let text = await response.text();
+            
+            // El API gviz devuelve JSONP, no JSON. Hay que limpiarlo.
+            // Respuesta: google.visualization.Query.setResponse({...});
+            // 1. Encontrar el primer '(' y el último ')'
+            const startIndex = text.indexOf('(') + 1;
+            const endIndex = text.lastIndexOf(')');
+            
+            if (startIndex === 0 || endIndex === -1) {
+                throw new Error("Respuesta de Google Sheet inválida.");
+            }
+
+            // 2. Extraer el JSON
+            const jsonText = text.substring(startIndex, endIndex);
+            
+            // 3. Parsear el JSON
+            const data = JSON.parse(jsonText);
+            
+            if (data.status === 'error') {
+                throw new Error(`Error en API de Google Sheet: ${data.errors.map(e => e.detailed_message).join(', ')}`);
+            }
+
+            // 4. Convertir el formato de Google (cols/rows) a un array de objetos
+            return parseGoogleSheetResponse(data.table);
+        }
+        
+        /**
+         * Convierte la respuesta de gviz en un array de objetos.
+         * @param {object} table - El objeto 'table' de la respuesta gviz.
+         */
+        function parseGoogleSheetResponse(table) {
+            const headers = table.cols.map(col => col.label || col.id);
+            const rows = table.rows.map(row => {
+                const obj = {};
+                row.c.forEach((cell, i) => {
+                    const header = headers[i];
+                    let value = null;
+                    if (cell) {
+                        value = cell.f || cell.v; // 'f' es valor formateado, 'v' es valor crudo
+                    }
+                    // Intentar convertir números
+                    if (typeof value === 'string' && !isNaN(parseFloat(value.replace(',', '.')))) {
+                        obj[header] = parseFloat(value.replace(',', '.'));
+                    } else {
+                        obj[header] = value;
+                    }
+                });
+                return obj;
+            });
+            return rows;
+        }
+// ----------------------------------------------------
+// MAPPING OFICIAL DE ÁREAS (normalización unificada)
+// ----------------------------------------------------
 
 const areaMapping = {
-    EDUCACION_AMBIENTAL: [
-        'Dir. Gral. de Educación Ambiental',
-        'Dirección General de Educación Ambiental'
+    "EDUCACION": [
+        "Direccion General de Educación Ambiental",
+        "Dirección General de Educación Ambiental",
+        "Dirección Gral de Educación Ambiental"
     ],
-    RESIDUOS_URBANOS: [
-        'Dir. Gral. de Residuos Urbanos',
-        'Dirección General de Residuos Urbanos'
+
+    "DESARROLLO_SOSTENIBLE": [
+        "Dirección General de Desarrollo Sostenible",
+        "Dirección Gral de Desarrollo Sostenible",
+        "Dirección de Desarrollo Sostenible"
     ],
-    CAMBIO_CLIMATICO: [
-        'Dir. Gral. de Cambio Climático',
-        'Dirección General de Cambio Climático'
+
+    "CAMBIO_CLIMATICO": [
+        "Dirección General de Cambio Climático",
+        "Dirección Generla de Cambio climático",
+        "Direcion de Cambio Climático"
     ],
-    PATRULLA_AMBIENTAL: [
-        'Patrulla Ambiental',
-        'Dirección de Inspecciones',
-        'Dir. de Inspecciones'
+
+    "INSPECCIONES": [
+        "Dirección de Inspecciones",
+        "Direccion de Inspecciones",
+        "Dirección de Inspecciones/Direccion de Inspecciones Comerciales"
+    ],
+
+    "IMPACTO_AMBIENTAL": [
+        "Dirección de Impacto Ambiental"
+    ],
+
+    "PATRULLA_AMBIENTAL": [
+        "Direccion de Patrulla Ambiental",
+        "Dirección de Patrulla Ambiental"
+    ],
+
+    "PROYECTOS_AMBIENTALES": [
+        "Coordinación de Proyectos Ambientales"
+    ],
+
+    "SUBSECRETARIA": [
+        "Subsecretaría de Gestión Ambiental"
     ]
 };
 
-// ---------------------------------------------------------------------
-// LÓGICA PRINCIPAL (Carga y Renderizado)
-// ---------------------------------------------------------------------
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Inicializar el sistema
-    initSidebarNavigation();
-    loadAllData()
-        .then(() => {
-            // Cargar la vista por defecto (Educación Ambiental)
-            renderSection('educacion-ambiental');
-            hideLoader();
-        })
-        .catch(error => {
-            console.error("Error al cargar datos de Google Sheets. Usando mock data.", error);
-            // Si la carga falla, usar datos de ejemplo y avisar al usuario
-            indicatorsData = mockIndicadores;
-            barriosData = mockBarrios;
-            renderSection('educacion-ambiental');
-            showDataWarning();
-            hideLoader();
-        });
-});
-
 /**
- * Carga todos los datos necesarios desde Google Sheets
- */
-async function loadAllData() {
-    showLoader();
-    try {
-        // 1. Cargar datos de INDICADORES
-        const indicadoresPromise = fetchData(sheetUrl(CONFIG.SHEET_INDICADORES))
-            .then(data => {
-                // CORRECCIÓN: Saltar las primeras 9 filas (instrucciones) manualmente
-                indicatorsData = data.slice(CONFIG.OFFSET_INDICADORES);
-            });
-        
-        // 2. Cargar datos de BARRIOS INTERVENIDOS
-        const barriosPromise = fetchData(sheetUrl(CONFIG.SHEET_BARRIOS))
-            .then(data => {
-                // CORRECCIÓN: Saltar las primeras 4 filas (instrucciones) manualmente
-                const rawBarriosData = data.slice(CONFIG.OFFSET_BARRIOS);
-                barriosData = transformBarriosData(rawBarriosData);
-            });
-
-        await Promise.all([indicadoresPromise, barriosPromise]);
-    } catch (error) {
-        // El error es manejado en el .catch principal en DOMContentLoaded
-        throw error; 
-    }
-}
-
-// ---------------------------------------------------------------------
-// MANEJO DE LA INTERFAZ DE USUARIO (UI)
-// ---------------------------------------------------------------------
-
-function showLoader() {
-    document.getElementById('loader').style.display = 'flex';
-}
-
-function hideLoader() {
-    document.getElementById('loader').style.display = 'none';
-}
-
-function showDataWarning() {
-    const warning = document.createElement('div');
-    warning.className = 'alert alert-danger fixed-top mx-auto mt-3 shadow-lg';
-    warning.role = 'alert';
-    warning.style.maxWidth = '600px';
-    warning.innerHTML = `
-        <i class="bi bi-exclamation-triangle-fill"></i> 
-        <strong>Advertencia:</strong> No se pudo conectar a Google Sheets. Se están mostrando <strong>datos de ejemplo (mock data)</strong>.
-    `;
-    document.body.appendChild(warning);
-}
-
-/**
- * Inicializa la navegación lateral
- */
-function initSidebarNavigation() {
-    const navLinks = document.querySelectorAll('.nav-link-item');
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const section = e.currentTarget.getAttribute('data-section');
-            renderSection(section);
-            
-            // Actualizar estado activo
-            navLinks.forEach(l => l.classList.remove('active'));
-            e.currentTarget.classList.add('active');
-        });
-    });
-}
-
-/**
- * Renderiza la sección de contenido principal
- * @param {string} sectionKey - Clave de la sección a renderizar
- */
-function renderSection(sectionKey) {
-    const contentArea = document.getElementById('main-content-area');
-    let title = '';
-    let containerHTML = `
-        <h2 class="mb-4 display-6 section-title"></h2>
-        <div id="section-container"></div>
-    `;
-
-    contentArea.innerHTML = containerHTML;
-    const container = document.getElementById('section-container');
-    const titleElement = contentArea.querySelector('.section-title');
-
-    // Destruir mapa anterior si existe
-    if (map) {
-        map.remove();
-        map = null;
-    }
-
-    switch (sectionKey) {
-        case 'educacion-ambiental':
-            title = 'Dirección General de Educación Ambiental';
-            renderEducacionAmbiental(container);
-            break;
-        case 'residuos-urbanos':
-            title = 'Dirección General de Residuos Urbanos';
-            renderResiduosUrbanos(container);
-            break;
-        case 'cambio-climatico':
-            title = 'Dirección General de Cambio Climático';
-            renderCambioClimatico(container);
-            break;
-        case 'patrulla-ambiental':
-            title = 'Patrulla Ambiental';
-            renderPatrulla(container);
-            break;
-        case 'intervenciones-territoriales':
-            title = 'Intervenciones Territoriales (Mapa)';
-            renderIntervencionesTerritoriales(container);
-            break;
-        default:
-            title = 'Bienvenido';
-            container.innerHTML = '<p>Selecciona una sección del menú lateral para comenzar.</p>';
-            break;
-    }
-    
-    titleElement.textContent = title;
-}
-
-// ---------------------------------------------------------------------
-// MANEJO DE DATOS Y RENDERIZADO
-// ---------------------------------------------------------------------
-
-/**
- * Busca y normaliza los datos de Google Sheets (gviz)
- * @param {string} url - URL de la hoja de cálculo
- * @returns {Promise<Array<Object>>} - Promesa que resuelve con los datos
- */
-async function fetchData(url) {
-    const response = await fetch(url);
-    const text = await response.text();
-    
-    // El texto viene con un prefijo '/*O_o*/ google.visualization.Query.setResponse(' y un sufijo ')'
-    const jsonString = text.substring(
-        text.indexOf('(') + 1, 
-        text.lastIndexOf(')')
-    );
-
-    const json = JSON.parse(jsonString);
-    if (json.status !== 'ok' || !json.table || !json.table.rows) {
-        throw new Error('Formato de respuesta de Google Sheets inválido o vacío.');
-    }
-
-    const cols = json.table.cols;
-    const rows = json.table.rows;
-    const data = [];
-
-    rows.forEach(row => {
-        const item = {};
-        row.c.forEach((cell, i) => {
-            const colLabel = cols[i].label.trim().replace(/\s+/g, ' ');
-            // Los encabezados suelen tener prefijos no deseados en el modo consulta
-            // Intentamos limpiar la etiqueta para usarla como clave
-            const cleanLabel = colLabel.replace(/.*?\s(INDICADOR|AREA\/DEPENDENCIA|ACUMULADO TOTAL|ACUMULADO 2024|ACUMULADO 2025|ACUMULADO 2026|LATITUD|LONGITUD|NOMBRE DEL BARRIO|TAREAS DESARROLLADAS|ZONA|ÁREA\/DEPENDENCIA|AREA \/ DEPENDENCIA)$/i, '$1').trim();
-
-            if (cell && typeof cell.v !== 'undefined') {
-                item[cleanLabel] = cell.v;
-            } else if (cell && typeof cell.f === 'string') {
-                // Usar el valor formateado si el valor 'v' no existe (ej. texto)
-                item[cleanLabel] = cell.f;
-            } else {
-                item[cleanLabel] = '';
-            }
-        });
-        // Filtrar filas completamente vacías
-        if (Object.values(item).some(v => v !== '' && v !== null && v !== 0 && v !== '0')) {
-             data.push(item);
-        }
-    });
-
-    return data;
-}
-
-/**
- * Transforma los datos de barrios a un formato usable (incluye validación de lat/lng)
- * @param {Array<Object>} rawBarriosData - Array de datos de barrios sin filtrar offset
- */
-function transformBarriosData(rawBarriosData) {
-    // CORRECCIÓN: El script usa 'LATITUD' y 'LONGITUD' que son los nombres reales de la columna.
-    const hasLatLong = rawBarriosData.some(row => row.LATITUD && row.LONGITUD);
-
-    if (!hasLatLong) {
-        // En este punto, 'rawBarriosData' debería ser el array de datos reales (sin encabezados de instrucciones)
-        // Si no tiene coordenadas, retorna mock data o un array vacío.
-        return mockBarrios;
-    }
-
-    return rawBarriosData.map(row => {
-        // Usar los nombres de columna reales del sheet
-        const lat = parseFloat(row.LATITUD);
-        const lng = parseFloat(row.LONGITUD);
-
-        if (isNaN(lat) || isNaN(lng)) {
-            // Si las coordenadas son inválidas, se retorna un objeto no válido para filtrar más tarde
-            return null;
-        }
-
-        return {
-            nombre: row['NOMBRE DEL BARRIO'],
-            tareas: row['TAREAS DESARROLLADAS'],
-            lat: lat,
-            lng: lng
-        };
-    }).filter(row => row !== null); // Eliminar filas con lat/lng inválidos
-}
-
-/**
- * Normaliza una cadena de texto para búsqueda (minúsculas, sin tildes ni caracteres especiales)
- * @param {string} text 
- * @returns {string}
- */
-function normalize(text) {
-    if (typeof text !== 'string') return '';
-    return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-
-/**
- * Busca un indicador específico en el array de datos
- * @param {Array<Object>} data - Array de indicadores
- * @param {string} searchName - Nombre del indicador a buscar
- * @returns {Object} - El objeto indicador o un objeto vacío si no se encuentra
- */
-function findIndicator(data, searchName) {
-    const normalizedSearch = normalize(searchName);
-    const result = data.find(row => 
-        normalize(row.INDICADOR || '').includes(normalizedSearch)
-    );
-    // Si no lo encuentra, retorna un objeto con valores 0 para no romper los cálculos
-    if (!result) {
-        return { 'ACUMULADO TOTAL': 0, 'ACUMULADO 2024': 0, 'ACUMULADO 2025': 0, 'ACUMULADO 2026': 0 };
-    }
-    
-    // Asegurar que los acumulados sean números (o 0 si no existen/son inválidos)
-    return {
-        ...result,
-        'ACUMULADO TOTAL': Number(result['ACUMULADO TOTAL'] || 0),
-        'ACUMULADO 2024': Number(result['ACUMULADO 2024'] || 0),
-        'ACUMULADO 2025': Number(result['ACUMULADO 2025'] || 0),
-        'ACUMULADO 2026': Number(result['ACUMULADO 2026'] || 0),
-    };
-}
-
-/**
- * Comprueba si una fila de datos pertenece a una clave de área
- * @param {Object} row 
- * @param {string} areaKey - Clave del área (ej. 'EDUCACION_AMBIENTAL')
- * @returns {boolean}
+ * Normaliza si un registro pertenece al área seleccionada.
  */
 function matchesArea(row, areaKey) {
+    // Detecta automáticamente el nombre real de la columna
     const raw = (
         row["SUBSECRETARIA/DIRECCION GRAL/DIRECCION/AREA"] ||
         row["AREA/DEPENDENCIA"] ||
@@ -360,419 +1064,43 @@ function matchesArea(row, areaKey) {
     if (!raw) return false;
 
     return areaMapping[areaKey].some(
-        entry => normalize(entry) === normalize(raw)
+        entry => entry.toLowerCase() === raw.toLowerCase()
     );
 }
 
-// ---------------------------------------------------------------------
-// FUNCIONES DE COMPONENTES UI (KPIs, Gráficos)
-// ---------------------------------------------------------------------
-
-function formatNumber(num) {
-    if (typeof num !== 'number') return '0';
-    return Math.round(num).toLocaleString('es-AR');
-}
-
-function getKpiId(name) {
-    return `kpi-${normalize(name).replace(/\s/g, '-')}`;
-}
-
-function createKpiCard(title, value, emoji, iconClass) {
-    const kpiId = getKpiId(title);
-    return `
-        <div class="kpi-card shadow-sm p-3 bg-white rounded">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="${iconClass} rounded-circle d-flex align-items-center justify-content-center me-3">
-                    <span class="emoji-icon">${emoji}</span>
-                </div>
-                <div>
-                    <div class="text-end text-muted small">${title}</div>
-                    <div class="display-5 text-end fw-bold" id="${kpiId}">0</div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function createBarChart(title, data, labels, color, labelY) {
-    // Generación de un gráfico de barras simple usando divs/CSS para evitar Chart.js
-    const maxVal = Math.max(...data);
-
-    const barsHTML = data.map((val, index) => {
-        const height = maxVal > 0 ? (val / maxVal) * 100 : 0;
-        const barLabel = labels[index];
-        const valText = formatNumber(val);
-
-        return `
-            <div class="bar-item" data-bs-toggle="tooltip" data-bs-placement="top" title="${barLabel}: ${valText}">
-                <div class="bar" style="height: ${height}%; background-color: ${color};"></div>
-                <div class="bar-label">${barLabel.split(' ')[0]}</div>
-                <span class="bar-value">${valText}</span>
-            </div>
-        `;
-    }).join('');
-
-    return `
-        <div class="chart-container shadow-sm p-3 bg-white rounded h-100">
-            <h5 class="chart-title">${title}</h5>
-            <div class="bar-chart">
-                ${barsHTML}
-            </div>
-            <div class="chart-y-label text-muted small">${labelY}</div>
-        </div>
-    `;
-}
-
-function animateCounter(elementId, targetValue) {
-    const element = document.getElementById(elementId);
-    if (!element) return;
-    
-    // Si el valor es grande, no animar para evitar sobrecarga
-    if (targetValue > 10000) {
-        element.textContent = formatNumber(targetValue);
-        return;
-    }
-
-    const duration = 1500; // milisegundos
-    const start = 0;
-    let startTime = null;
-
-    function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const progress = timestamp - startTime;
-        const current = Math.min(targetValue, start + (targetValue * (progress / duration)));
-        element.textContent = formatNumber(current);
-        
-        if (progress < duration) {
-            window.requestAnimationFrame(step);
+// Parser CSV simple (comillas, comas y saltos de línea)
+function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cell = '';
+    let inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const next = text[i+1];
+        if (inQuotes) {
+            if (ch === '"' && next === '"') {
+                cell += '"'; i++; // comilla escapada
+            } else if (ch === '"') {
+                inQuotes = false;
+            } else {
+                cell += ch;
+            }
         } else {
-            element.textContent = formatNumber(targetValue);
+            if (ch === '"') {
+                inQuotes = true;
+            } else if (ch === ',') {
+                row.push(cell); cell = '';
+            } else if (ch === '\n') {
+                row.push(cell); rows.push(row); row = []; cell = '';
+            } else if (ch === '\r') {
+                // ignore CR
+            } else {
+                cell += ch;
+            }
         }
     }
-
-    window.requestAnimationFrame(step);
-}
-
-// ---------------------------------------------------------------------
-// RENDERIZADO POR SECCIÓN
-// ---------------------------------------------------------------------
-
-function renderEducacionAmbiental(container) {
-    // Descripción
-    container.innerHTML += `
-        <div class="section-description">
-            <p>Se encarga de concientizar a la comunidad sobre la importancia del cuidado ambiental y la sostenibilidad, a través de talleres, eventos masivos y la implementación de programas educativos permanentes.</p>
-        </div>
-    `;
-
-    // Filtrar datos para Educación Ambiental
-    const data = indicatorsData.filter(row => matchesArea(row, "EDUCACION_AMBIENTAL"));
-
-    const talleres = findIndicator(data, 'TALLERES DE EDUCACIÓN AMBIENTAL');
-    const promesaLealtad = findIndicator(data, 'PROMESA DE LEALTAD AL AMBIENTE');
-
-    const hasData = [talleres, promesaLealtad].some(ind => ind['ACUMULADO TOTAL'] > 0);
-    if (!hasData) {
-        container.innerHTML += `
-            <div class="alert alert-info" role="alert">
-                <span class="emoji-icon">ℹ️</span>
-                No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
-            </div>
-        `;
-        return;
-    }
-
-    // KPIs
-    container.innerHTML += `
-        <div class="row g-4 mb-4">
-            <div class="col-md-6">
-                ${createKpiCard('Participantes en Talleres', talleres['ACUMULADO TOTAL'], '🧑‍🎓', 'kpi-icon-green')}
-            </div>
-            <div class="col-md-6">
-                ${createKpiCard('Participantes en Promesa', promesaLealtad['ACUMULADO TOTAL'], '🤝', 'kpi-icon-blue')}
-            </div>
-        </div>
-    `;
-
-    // Gráfico de Proyección
-    const labels = ['Total', '2024', '2025', '2026'];
-    const tallerData = [
-        talleres['ACUMULADO TOTAL'], 
-        talleres['ACUMULADO 2024'], 
-        talleres['ACUMULADO 2025'], 
-        talleres['ACUMULADO 2026']
-    ];
-    
-    container.innerHTML += `
-        <div class="row">
-            <div class="col-12">
-                ${createBarChart('Proyección de Participantes en Talleres', tallerData, labels, 'var(--color-gestion)', 'Cantidad de Personas')}
-            </div>
-        </div>
-    `;
-
-    // Animaciones
-    animateCounter(getKpiId('Participantes en Talleres'), talleres['ACUMULADO TOTAL']);
-    animateCounter(getKpiId('Participantes en Promesa'), promesaLealtad['ACUMULADO TOTAL']);
-
-    // Inicializar tooltips
-    setTimeout(() => {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-    }, 100);
-}
-
-function renderResiduosUrbanos(container) {
-    // Descripción
-    container.innerHTML += `
-        <div class="section-description">
-            <p>Encargada de la recolección, disposición y tratamiento de residuos urbanos, promoviendo la reducción, reutilización y el reciclaje (3R), así como la gestión de puntos limpios y jornadas de limpieza.</p>
-        </div>
-    `;
-
-    // Filtrar datos para Residuos Urbanos
-    const data = indicatorsData.filter(row => matchesArea(row, "RESIDUOS_URBANOS"));
-    
-    const jornadasLimpieza = findIndicator(data, 'JORNADAS DE LIMPIEZA / RECOLECCIÓN');
-    const puntosLimpios = findIndicator(data, 'PUNTOS LIMPIOS INSTALADOS');
-    const reciclado = findIndicator(data, 'RECICLADO DE MATERIALES');
-
-    const hasData = [jornadasLimpieza, puntosLimpios, reciclado].some(ind => ind['ACUMULADO TOTAL'] > 0);
-    if (!hasData) {
-        container.innerHTML += `
-            <div class="alert alert-info" role="alert">
-                <span class="emoji-icon">ℹ️</span>
-                No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
-            </div>
-        `;
-        return;
-    }
-
-    // KPIs
-    container.innerHTML += `
-        <div class="row g-4 mb-4">
-            <div class="col-md-6 col-lg-4">
-                ${createKpiCard('Jornadas de Limpieza', jornadasLimpieza['ACUMULADO TOTAL'], '🧹', 'kpi-icon-green')}
-            </div>
-            <div class="col-md-6 col-lg-4">
-                ${createKpiCard('Puntos Limpios', puntosLimpios['ACUMULADO TOTAL'], '♻️', 'kpi-icon-blue')}
-            </div>
-            <div class="col-lg-4">
-                ${createKpiCard('Material Reciclado (Kg)', reciclado['ACUMULADO TOTAL'], '📦', 'kpi-icon-orange')}
-            </div>
-        </div>
-    `;
-
-    // Gráfico de Proyección
-    const labels = ['Total', '2024', '2025', '2026'];
-    const recicladoData = [
-        reciclado['ACUMULADO TOTAL'], 
-        reciclado['ACUMULADO 2024'], 
-        reciclado['ACUMULADO 2025'], 
-        reciclado['ACUMULADO 2026']
-    ];
-    
-    container.innerHTML += `
-        <div class="row">
-            <div class="col-12">
-                ${createBarChart('Proyección de Material Reciclado', recicladoData, labels, 'var(--color-secundario)', 'Kilogramos')}
-            </div>
-        </div>
-    `;
-
-    // Animaciones
-    animateCounter(getKpiId('Jornadas de Limpieza'), jornadasLimpieza['ACUMULADO TOTAL']);
-    animateCounter(getKpiId('Puntos Limpios'), puntosLimpios['ACUMULADO TOTAL']);
-    animateCounter(getKpiId('Material Reciclado (Kg)'), reciclado['ACUMULADO TOTAL']);
-    
-    // Inicializar tooltips
-    setTimeout(() => {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-    }, 100);
-}
-
-function renderCambioClimatico(container) {
-    // Descripción
-    container.innerHTML += `
-        <div class="section-description">
-            <p>Coordina acciones para mitigar los efectos del cambio climático, monitorea la calidad del aire y promueve la implementación de proyectos de energías renovables en el ámbito municipal.</p>
-        </div>
-    `;
-
-    // Filtrar datos para Cambio Climático
-    const data = indicatorsData.filter(row => matchesArea(row, "CAMBIO_CLIMATICO"));
-    
-    const calidadAire = findIndicator(data, 'MEDICIONES DE CALIDAD DEL AIRE');
-    const proyectosRenovables = findIndicator(data, 'PROYECTOS DE ENERGÍAS RENOVABLES');
-
-    const hasData = [calidadAire, proyectosRenovables].some(ind => ind['ACUMULADO TOTAL'] > 0);
-    if (!hasData) {
-        container.innerHTML += `
-            <div class="alert alert-info" role="alert">
-                <span class="emoji-icon">ℹ️</span>
-                No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
-            </div>
-        `;
-        return;
-    }
-
-    // KPIs
-    container.innerHTML += `
-        <div class="row g-4 mb-4">
-            <div class="col-md-6">
-                ${createKpiCard('Mediciones de Calidad de Aire', calidadAire['ACUMULADO TOTAL'], '💨', 'kpi-icon-purple')}
-            </div>
-            <div class="col-md-6">
-                ${createKpiCard('Proyectos Renovables', proyectosRenovables['ACUMULADO TOTAL'], '☀️', 'kpi-icon-red')}
-            </div>
-        </div>
-    `;
-
-    // Gráfico de Proyección
-    const labels = ['Total', '2024', '2025', '2026'];
-    const proyectosData = [
-        proyectosRenovables['ACUMULADO TOTAL'], 
-        proyectosRenovables['ACUMULADO 2024'], 
-        proyectosRenovables['ACUMULADO 2025'], 
-        proyectosRenovables['ACUMULADO 2026']
-    ];
-    
-    container.innerHTML += `
-        <div class="row">
-            <div class="col-12">
-                ${createBarChart('Proyección de Proyectos Renovables', proyectosData, labels, 'var(--color-primario)', 'Cantidad de Proyectos')}
-            </div>
-        </div>
-    `;
-
-    // Animaciones
-    animateCounter(getKpiId('Mediciones de Calidad de Aire'), calidadAire['ACUMULADO TOTAL']);
-    animateCounter(getKpiId('Proyectos Renovables'), proyectosRenovables['ACUMULADO TOTAL']);
-
-    // Inicializar tooltips
-    setTimeout(() => {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-    }, 100);
-}
-
-function renderPatrulla(container) {
-    // Descripción
-    container.innerHTML += `
-        <div class="section-description">
-            <p>Sus funciones incluyen operativos de fiscalización y control de microbasurales, colaboraciones especiales con otras áreas municipales, la generación de reportes diarios/denuncias, y la emisión de actas de infracción y cédulas de notificación.</p>
-        </div>
-    `;
-
-    // Filtrar datos para Patrulla Ambiental
-    const data = indicatorsData.filter(row => matchesArea(row, "PATRULLA_AMBIENTAL"));
-
-    // CORRECCIÓN: Ajuste de nombres de indicadores para coincidir con el Sheet
-    const operativos      = findIndicator(data, 'OPERATIVOS DE FISCALIZACIÓN'); // Corregido FIZCALIZACIÓN -> FISCALIZACIÓN
-    const colaboraciones = findIndicator(data, 'COLABORACIONES ESPECIALES');
-    const reportes       = findIndicator(data, 'REPORTES DIARIOS'); // Buscamos por "REPORTES DIARIOS"
-    const actasInfraccion = findIndicator(data, 'ACTAS DE INFRACCIÓN');
-    const cedulas        = findIndicator(data, 'CÉDULAS DE NOTIFICACIÓN');
-
-
-    const hasData = [operativos, colaboraciones, reportes, actasInfraccion, cedulas].some(ind => ind['ACUMULADO TOTAL'] > 0);
-    if (!hasData) {
-        container.innerHTML += `
-            <div class="alert alert-info" role="alert">
-                <span class="emoji-icon">ℹ️</span>
-                No hay indicadores numéricos (KPIs) disponibles en la hoja de datos para esta Dirección.
-            </div>
-        `;
-        return;
-    }
-
-    container.innerHTML += `
-        <div class="row g-4 mb-4">
-            <div class="col-md-6 col-lg-4">
-                ${createKpiCard('Operativos', operativos['ACUMULADO TOTAL'], '🚓', 'kpi-icon-green')}
-            </div>
-            <div class="col-md-6 col-lg-4">
-                ${createKpiCard('Colaboraciones Especiales', colaboraciones['ACUMULADO TOTAL'], '🤝', 'kpi-icon-blue')}
-            </div>
-            <div class="col-md-6 col-lg-4">
-                ${createKpiCard('Reportes Diarios / Denuncias', reportes['ACUMULADO TOTAL'], '📈', 'kpi-icon-orange')}
-            </div>
-            <div class="col-md-6 col-lg-4">
-                ${createKpiCard('Actas de Infracción', actasInfraccion['ACUMULADO TOTAL'], '📝', 'kpi-icon-purple')}
-            </div>
-            <div class="col-md-6 col-lg-4">
-                ${createKpiCard('Cédulas de Notificación', cedulas['ACUMULADO TOTAL'], '📮', 'kpi-icon-red')}
-            </div>
-        </div>
-    `;
-
-    animateCounter(getKpiId('Operativos'), operativos['ACUMULADO TOTAL']);
-    animateCounter(getKpiId('Colaboraciones Especiales'), colaboraciones['ACUMULADO TOTAL']);
-    animateCounter(getKpiId('Reportes Diarios / Denuncias'), reportes['ACUMULADO TOTAL']);
-    animateCounter(getKpiId('Actas de Infracción'), actasInfraccion['ACUMULADO TOTAL']);
-    animateCounter(getKpiId('Cédulas de Notificación'), cedulas['ACUMULADO TOTAL']);
-}
-
-
-function renderIntervencionesTerritoriales(container) {
-    // Descripción
-    container.innerHTML += `
-        <div class="section-description">
-            <p>Visualización de los barrios de Salta donde se han realizado intervenciones ambientales, incluyendo descacharrado, educación sanitaria o operativos de fiscalización. Haz clic en los marcadores para ver los detalles.</p>
-        </div>
-    `;
-
-    // Contenedor del mapa y Leyenda
-    container.innerHTML += `
-        <div id="map-container" class="shadow-sm bg-white rounded">
-            <div id="map"></div>
-            <div id="map-legend">
-                <h5>Barrios Intervenidos</h5>
-                <p>Marcadores: Intervenciones puntuales</p>
-                <p class="text-muted small">Fuente: Hoja "BARRIOS INTERVENIDOS"</p>
-            </div>
-        </div>
-    `;
-
-    if (barriosData.length === 0 || (barriosData.length === 1 && barriosData[0].nombre === 'Norte Grande')) {
-        // Muestra advertencia si solo hay mock data o datos vacíos
-        container.querySelector('#map-container').innerHTML = `
-            <div class="alert alert-info" role="alert" style="margin: 20px;">
-                <span class="emoji-icon">ℹ️</span>
-                No hay datos de barrios disponibles para el mapa (o las coordenadas son inválidas).
-            </div>
-        `;
-        return;
-    }
-
-    // Inicializar el mapa
-    // Coordenadas aproximadas del centro de Salta
-    const initialLat = barriosData.length > 0 ? barriosData[0].lat : -24.7821;
-    const initialLng = barriosData.length > 0 ? barriosData[0].lng : -65.4116;
-
-    map = L.map('map').setView([initialLat, initialLng], 12);
-
-    // Añadir capa de tiles (OpenStreetMap)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Añadir marcadores
-    barriosData.forEach(barrio => {
-        const popupContent = `
-            <strong>${barrio.nombre}</strong><br>
-            Tareas: ${barrio.tareas}
-        `;
-        L.marker([barrio.lat, barrio.lng])
-            .bindPopup(popupContent)
-            .addTo(map);
-    });
+    row.push(cell); rows.push(row);
+    // Limpia filas vacías al final
+    while (rows.length && rows[rows.length-1].length === 1 && rows[rows.length-1][0] === '') rows.pop();
+    return rows;
 }
