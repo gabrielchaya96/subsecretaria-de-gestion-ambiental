@@ -1052,7 +1052,10 @@ const areaMapping = {
  * Normaliza si un registro pertenece al área seleccionada.
  */
 function matchesArea(row, areaKey) {
-    const raw = row["AREA/DEPENDENCIA"]?.trim();
+    const raw = row["SUBSECRETARIA/DIRECCION GRAL/DIRECCION/AREA"]?.trim()
+        || row["AREA/DEPENDENCIA"]?.trim()
+        || "";
+
     if (!raw) return false;
 
     return areaMapping[areaKey].some(
