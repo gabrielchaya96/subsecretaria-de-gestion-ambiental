@@ -310,7 +310,7 @@
             `;
 
             const data = indicatorsData.filter(row => matchesArea(row, "CAMBIO_CLIMATICO"));
-            const medicionesAire = findIndicator(data, 'CALIDAD DEL AIRE');
+            const medicionesAire = findIndicator(data, 'MEDICIONES DE CALIDAD');
             const descacharrado = findIndicator(data, 'DESCACHARRADO');
             
             // Filtrar barrios intervenidos para descacharrado
