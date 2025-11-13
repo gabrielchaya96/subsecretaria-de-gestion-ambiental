@@ -196,7 +196,7 @@
             `;
 
             // 1. Filtrar datos
-            const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Educación Ambiental');
+            const data = indicatorsData.filter(row => matchesArea(row, "EDUCACION"));
             const talleres = findIndicator(data, 'TALLERES');
             const promesa = findIndicator(data, 'PROMESA');
 
@@ -256,7 +256,7 @@
                 </div>
             `;
 
-            const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Economía Circular');
+            const data = indicatorsData.filter(row => matchesArea(row, "DESARROLLO_SOSTENIBLE"));
             const neumaticos = findIndicator(data, 'NEUMATÓN');
             const raee = findIndicator(data, 'RAEETÓN');
             const puntosLimpios = findIndicator(data, 'PUNTOS LIMPIOS');
@@ -304,7 +304,7 @@
                 </div>
             `;
 
-            const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Cambio Climático');
+            const data = indicatorsData.filter(row => matchesArea(row, "CAMBIO_CLIMATICO"));
             const medicionesAire = findIndicator(data, 'CALIDAD DEL AIRE');
             const descacharrado = findIndicator(data, 'DESCACHARRADO');
             
@@ -350,7 +350,7 @@
                 </div>
             `;
 
-            const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Dir. Gral. de Desarrollo Sostenible');
+            const data = indicatorsData.filter(row => matchesArea(row, "DESARROLLO_SOSTENIBLE"));
             const huertas = findIndicator(data, 'HUERTAS');
 
             container.innerHTML += `
@@ -395,7 +395,7 @@
                 </div>
             `;
 
-            const data = indicatorsData.filter(d => d['AREA/DEPENDENCIA'] === 'Subsecretaría de Gestión Ambiental');
+            const data = indicatorsData.filter(row => matchesArea(row, "SUBSECRETARIA"));
             const convenios = findIndicator(data, 'CONVENIOS');
             const campanas = findIndicator(data, 'CAMPAÑAS');
 
@@ -425,7 +425,7 @@
             `;
 
             // Filtrar datos para la Dirección de Inspecciones (usando normalización de acentos)
-            const data = filterByArea('Dirección de Inspecciones');
+            const data = indicatorsData.filter(row => matchesArea(row, "INSPECCIONES"));
 
             // Indicadores específicos de esta área
             const inspRealizadas   = findIndicator(data, 'INSPECCIONES REALIZADAS');
@@ -483,7 +483,7 @@
             `;
 
             // Filtrar datos para Impacto Ambiental
-            const data = filterByArea('Dirección de Impacto Ambiental');
+            const data = indicatorsData.filter(row => matchesArea(row, "IMPACTO_AMBIENTAL"));
 
             // Indicadores específicos
             const resoluciones = findIndicator(data, 'RESOLUCIONES DE CAAM');
@@ -524,7 +524,7 @@
             `;
 
             // Filtrar datos para Patrulla Ambiental
-            const data = filterByArea('Patrulla Ambiental');
+            const data = indicatorsData.filter(row => matchesArea(row, "PATRULLA_AMBIENTAL"));
 
             const operativos      = findIndicator(data, 'OPERATIVOS DE FIZCALIZACIÓN');
             const colaboraciones = findIndicator(data, 'COLABORACIONES ESPECIALES');
@@ -577,7 +577,7 @@
                 </div>
             `;
 
-            const data = filterByArea('Proyectos Ambientales');
+            const data = indicatorsData.filter(row => matchesArea(row, "PROYECTOS_AMBIENTALES"));
             const puesta   = findIndicator(data, 'PUESTA A PUNTO');
             const enriquec = findIndicator(data, 'ENRIQUECIMIENTO');
             const manteni  = findIndicator(data, 'MANTENIMIENTO');
