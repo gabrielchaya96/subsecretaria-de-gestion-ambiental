@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subsecretaría de Gestión Ambiental – Ing. María Emilse Arias</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    body {font-family: 'Poppins', sans-serif;}
+    .tab {display: none;}
+    .active-tab {display: block; animation: fadeIn 0.6s ease;}
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    .nav-container {display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem;}
+    .nav-button {background-color:#1E40AF; color:white; font-weight:600; padding:0.6rem 1.2rem; border-radius:2rem; box-shadow:0 2px 6px rgba(0,0,0,0.15); transition:all 0.3s;}
+    .nav-button:hover {transform:translateY(-2px) scale(1.03); filter:brightness(1.1);}
+    header {background-color:#1E3A8A;}  
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <header class="text-white py-8 shadow-lg text-center sticky top-0 z-20">
+    <h1 class="text-4xl font-bold tracking-wide">Subsecretaría de Gestión Ambiental</h1>
+    <p class="text-lg mt-1">Ing. María Emilse Arias – Municipalidad de Salta</p>
+    <nav class="mt-6 px-4">
+      <div class="nav-container">
+        <button class="tab-btn nav-button" data-tab="inicio">Inicio</button>
+        <button class="tab-btn nav-button" data-tab="educacion">Educación Ambiental</button>
+        <button class="tab-btn nav-button" data-tab="desarrollo">Desarrollo Sostenible</button>
+        <button class="tab-btn nav-button" data-tab="cambio">Cambio Climático</button>
+        <button class="tab-btn nav-button" data-tab="inspecciones">Inspecciones</button>
+        <button class="tab-btn nav-button" data-tab="impacto">Impacto Ambiental / CAAM</button>
+        <button class="tab-btn nav-button" data-tab="patrulla">Patrulla Ambiental</button>
+        <button class="tab-btn nav-button" data-tab="proyectos">Proyectos Ambientales</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Sección de Inicio -->
+  <section id="inicio" class="tab active-tab p-10 space-y-10">
+    <div class="text-center max-w-3xl mx-auto">
+      <h2 class="text-3xl font-semibold mb-3 text-blue-800">Gestión Ambiental Integral</h2>
+      <p class="text-gray-600">Un panorama general de las acciones de todas las áreas de la Subsecretaría, con indicadores actualizados y visuales claros de su progreso y alcance.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 transform transition hover:scale-105">
+        <h3 class="text-xl font-semibold mb-2">Educación Ambiental</h3>
+        <p class="text-4xl font-bold text-blue-700">3.600+</p>
+        <p class="text-gray-500">Participantes en programas educativos</p>
+      </div>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 transform transition hover:scale-105">
+        <h3 class="text-xl font-semibold mb-2">Desarrollo Sostenible</h3>
+        <p class="text-4xl font-bold text-blue-700">1.000+</p>
+        <p class="text-gray-500">Proyectos y acciones ejecutadas</p>
+      </div>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 transform transition hover:scale-105">
+        <h3 class="text-xl font-semibold mb-2">Cambio Climático</h3>
+        <p class="text-4xl font-bold text-blue-700">85+</p>
+        <p class="text-gray-500">Barrios alcanzados en operativos</p>
+      </div>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 transform transition hover:scale-105">
+        <h3 class="text-xl font-semibold mb-2">Impacto Ambiental</h3>
+        <p class="text-4xl font-bold text-blue-700">2.091</p>
+        <p class="text-gray-500">Certificados CAAM emitidos</p>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto mt-12 bg-white p-6 rounded-3xl shadow">
+      <h2 class="text-2xl font-semibold text-center mb-4 text-blue-700">Resumen General de Actividades</h2>
+      <canvas id="chartGeneral" height="120"></canvas>
+    </div>
+  </section>
+
+  <!-- Secciones por área -->
+  <section id="educacion" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Educación Ambiental</h2><div id="educacion-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+  <section id="desarrollo" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Desarrollo Sostenible</h2><div id="desarrollo-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+  <section id="cambio" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Cambio Climático</h2><div id="cambio-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+  <section id="inspecciones" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Inspecciones</h2><div id="inspecciones-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+  <section id="impacto" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Impacto Ambiental / CAAM</h2><div id="impacto-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+  <section id="patrulla" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Patrulla Ambiental</h2><div id="patrulla-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+  <section id="proyectos" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Coordinación de Proyectos Ambientales</h2><div id="proyectos-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+
+  <footer class="bg-gray-900 text-gray-300 py-8 text-center mt-20">
+    <p class="text-sm">© 2025 Subsecretaría de Gestión Ambiental – Municipalidad de Salta</p>
+    <p class="text-xs mt-1">Datos actualizados mensualmente. Fuente: indicadores.csv</p>
+  </footer>
+
+  <script>
+    // Navegación de pestañas
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active-tab'));
+        document.getElementById(btn.dataset.tab).classList.add('active-tab');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // Chart general
+    const ctx = document.getElementById('chartGeneral').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Educación Ambiental', 'Desarrollo Sostenible', 'Cambio Climático', 'Impacto Ambiental', 'Inspecciones', 'Patrulla Ambiental'],
+        datasets: [{
+          label: 'Indicadores Globales',
+          data: [3600, 1000, 85, 2091, 3446, 62],
+          backgroundColor: '#1E40AF'
+        }]
+      },
+      options: {
+        responsive:true,
+        plugins:{ legend:{ display:false }},
+        scales:{ y:{ beginAtZero:true, grid:{color:'rgba(0,0,0,0.05)'}}, x:{grid:{display:false}} }
+      }
+    });
+
+    // Cargar CSV
+    Papa.parse('data/indicadores.csv', {
+      download:true, header:true,
+      complete: res => {
+        const data = res.data;
+        const map = {
+          'educacion': ['Educación Ambiental'],
+          'desarrollo': ['Desarrollo Sostenible'],
+          'cambio': ['Cambio Climático'],
+          'inspecciones': ['Inspecciones'],
+          'impacto': ['Impacto Ambiental','CAAM'],
+          'patrulla': ['Patrulla Ambiental'],
+          'proyectos': ['Proyectos Ambientales']
+        };
+        Object.keys(map).forEach(k => {
+          const div = document.getElementById(k+'-data');
+          const filtered = data.filter(r => map[k].some(area => (r['AREA/DEPENDENCIA']||'').toLowerCase().includes(area.toLowerCase())));
+          filtered.forEach(r => {
+            const card = document.createElement('div');
+            card.className = 'bg-white p-5 rounded-3xl shadow hover:shadow-lg transition transform hover:scale-105';
+            card.innerHTML = `<h3 class='font-semibold text-blue-700 text-lg mb-1'>${r['INDICADOR']}</h3><p class='text-gray-700 text-sm mb-1'>${r['TAREA_/ACCION']||''}</p><p class='text-gray-600 text-sm'>Acumulado 2024: <strong>${r['ACUMULADO_2024']||'-'}</strong></p>`;
+            div.appendChild(card);
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
