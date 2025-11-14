@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subsecretaría de Gestión Ambiental – Gestión Integral</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {font-family: 'Poppins', sans-serif; background-color: #f8fafc;}
+    header {background-color:#1E3A8A;}
+  </style>
+</head>
+<body class="text-gray-800">
+  <header class="text-white py-6 shadow-lg text-center">
+    <h1 class="text-3xl font-bold">Subsecretaría de Gestión Ambiental</h1>
+    <p class="text-sm mt-1">Gestión Integral – Ing. María Emilse Arias</p>
+    <a href="../index.html" class="mt-4 inline-block bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm">← Volver al inicio</a>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-8 space-y-10">
+    <!-- Introducción institucional -->
+    <section class="text-center">
+      <h2 class="text-2xl font-semibold text-blue-800 mb-3">Gestión Integral y Coordinación Estratégica</h2>
+      <p class="text-gray-600 max-w-3xl mx-auto">La Subsecretaría de Gestión Ambiental lidera la articulación y planificación estratégica de todas las direcciones dependientes, promoviendo la sostenibilidad urbana, la reducción del impacto ambiental y la mejora de la calidad de vida de los ciudadanos de Salta. Se encarga del seguimiento de indicadores, la planificación intersectorial y la evaluación de resultados en políticas ambientales locales.</p>
+    </section>
+
+    <!-- Indicadores clave -->
+    <section>
+      <h3 class="text-xl font-semibold text-blue-700 mb-4">Indicadores Generales 2024–2025</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Direcciones Coordinadas</h4>
+          <p class="text-4xl font-bold text-blue-800">7</p>
+          <p class="text-gray-500 text-sm">Áreas operativas y técnicas bajo gestión directa</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Indicadores Monitoreados</h4>
+          <p class="text-4xl font-bold text-blue-800">120+</p>
+          <p class="text-gray-500 text-sm">Métricas ambientales relevadas mensualmente</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Proyectos Coordinados</h4>
+          <p class="text-4xl font-bold text-blue-800">30</p>
+          <p class="text-gray-500 text-sm">Programas ambientales ejecutados entre áreas</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Inversiones Ambientales</h4>
+          <p class="text-4xl font-bold text-blue-800">$52M</p>
+          <p class="text-gray-500 text-sm">Fondos gestionados para infraestructura verde</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Programas Interinstitucionales</h4>
+          <p class="text-4xl font-bold text-blue-800">12</p>
+          <p class="text-gray-500 text-sm">Iniciativas articuladas con organismos externos</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Personal Coordinado</h4>
+          <p class="text-4xl font-bold text-blue-800">180</p>
+          <p class="text-gray-500 text-sm">Agentes, técnicos y coordinadores de campo</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gráfico de evolución -->
+    <section class="bg-white rounded-3xl shadow p-6">
+      <h3 class="text-xl font-semibold text-blue-700 mb-4 text-center">Evolución de la Gestión Ambiental</h3>
+      <canvas id="chartGestion"></canvas>
+    </section>
+
+    <!-- Detalle de gestión -->
+    <section>
+      <h3 class="text-xl font-semibold text-blue-700 mb-4">Detalle de Gestión y Coordinación</h3>
+      <div class="bg-white rounded-3xl shadow p-6 space-y-6">
+        <div>
+          <h4 class="text-lg font-semibold text-blue-800">Planificación y Monitoreo Estratégico</h4>
+          <p class="text-gray-700 text-sm mb-1">Supervisión del cumplimiento de metas de todas las direcciones dependientes, con seguimiento mensual de indicadores operativos e informes de avance.</p>
+          <p class="text-gray-600 text-sm">📊 120 indicadores evaluados y sistematizados en la plataforma de gestión.</p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-blue-800">Gestión de Recursos y Articulación Institucional</h4>
+          <p class="text-gray-700 text-sm mb-1">Administración de recursos económicos y logísticos en conjunto con la Secretaría de Gobierno y la Secretaría de Hacienda, priorizando eficiencia y transparencia.</p>
+          <p class="text-gray-600 text-sm">💰 $52 millones destinados a infraestructura ambiental y equipamiento operativo.</p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-blue-800">Evaluación de Impacto y Resultados</h4>
+          <p class="text-gray-700 text-sm mb-1">Análisis de datos, elaboración de informes técnicos y presentación de resultados ante autoridades municipales y organismos de cooperación.</p>
+          <p class="text-gray-600 text-sm">📈 Resultados publicados trimestralmente en el tablero de gestión ambiental.</p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-blue-800">Innovación y Tecnología Ambiental</h4>
+          <p class="text-gray-700 text-sm mb-1">Desarrollo de herramientas digitales para el monitoreo de indicadores y digitalización de expedientes ambientales.</p>
+          <p class="text-gray-600 text-sm">💡 Incorporación de dashboards y automatización de reportes.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-gray-900 text-gray-300 py-6 text-center mt-16">
+    <p class="text-sm">© 2025 Subsecretaría de Gestión Ambiental – Municipalidad de Salta</p>
+    <p class="text-xs">Datos actualizados mensualmente. Fuente: Subsecretaría de Gestión Ambiental</p>
+  </footer>
+
+  <script>
+    const ctx = document.getElementById('chartGestion').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        datasets: [
+          {
+            label: 'Proyectos Coordinados',
+            data: [3,5,7,9,12,15,18,20,22,25,27,30],
+            borderColor: '#1E3A8A',
+            backgroundColor: 'rgba(30,58,138,0.2)',
+            tension: 0.3,
+            fill: true,
+            borderWidth: 3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

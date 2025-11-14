@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patrulla Ambiental – Subsecretaría de Gestión Ambiental</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {font-family: 'Poppins', sans-serif; background-color: #f8fafc;}
+    header {background-color:#1E3A8A;}
+  </style>
+</head>
+<body class="text-gray-800">
+  <header class="text-white py-6 shadow-lg text-center">
+    <h1 class="text-3xl font-bold">Dirección de Patrulla Ambiental</h1>
+    <p class="text-sm mt-1">Subsecretaría de Gestión Ambiental – Ing. María Emilse Arias</p>
+    <a href="../index.html" class="mt-4 inline-block bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm">← Volver al inicio</a>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-8 space-y-10">
+    <!-- Introducción institucional -->
+    <section class="text-center">
+      <h2 class="text-2xl font-semibold text-blue-800 mb-3">Control, Prevención y Respuesta Ambiental</h2>
+      <p class="text-gray-600 max-w-3xl mx-auto">La Dirección de Patrulla Ambiental realiza acciones de fiscalización, prevención y respuesta ante situaciones de riesgo ambiental en la ciudad. Coordina operativos de control de vertidos, fiscalización de transportes de residuos, atención de denuncias vecinales y rescate de fauna urbana.</p>
+    </section>
+
+    <!-- Indicadores clave -->
+    <section>
+      <h3 class="text-xl font-semibold text-blue-700 mb-4">Indicadores Clave 2024–2025</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Operativos Ambientales</h4>
+          <p class="text-4xl font-bold text-blue-800">1.245</p>
+          <p class="text-gray-500 text-sm">Intervenciones de control ambiental urbano</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Denuncias Atendidas</h4>
+          <p class="text-4xl font-bold text-blue-800">980</p>
+          <p class="text-gray-500 text-sm">Casos recibidos y resueltos por el equipo</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Controles de Vertidos</h4>
+          <p class="text-4xl font-bold text-blue-800">315</p>
+          <p class="text-gray-500 text-sm">Operativos por derrames o efluentes contaminantes</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Rescates de Fauna</h4>
+          <p class="text-4xl font-bold text-blue-800">210</p>
+          <p class="text-gray-500 text-sm">Animales recuperados y trasladados a centros de rescate</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Controles de Transporte de Residuos</h4>
+          <p class="text-4xl font-bold text-blue-800">480</p>
+          <p class="text-gray-500 text-sm">Fiscalizaciones a camiones y transportistas</p>
+        </div>
+        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
+          <h4 class="font-semibold mb-1">Relevamientos Territoriales</h4>
+          <p class="text-4xl font-bold text-blue-800">75</p>
+          <p class="text-gray-500 text-sm">Operativos preventivos en zonas críticas</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gráfico de evolución -->
+    <section class="bg-white rounded-3xl shadow p-6">
+      <h3 class="text-xl font-semibold text-blue-700 mb-4 text-center">Evolución de Operativos Ambientales</h3>
+      <canvas id="chartPatrulla"></canvas>
+    </section>
+
+    <!-- Detalle de actividades -->
+    <section>
+      <h3 class="text-xl font-semibold text-blue-700 mb-4">Detalle de Actividades y Programas</h3>
+      <div class="bg-white rounded-3xl shadow p-6 space-y-6">
+        <div>
+          <h4 class="text-lg font-semibold text-blue-800">Operativos de Control Ambiental</h4>
+          <p class="text-gray-700 text-sm mb-1">Intervenciones planificadas para verificar el cumplimiento de normativas ambientales y prevenir la contaminación en la vía pública y predios industriales.</p>
+          <p class="text-gray-600 text-sm">🚓 1.245 operativos realizados durante 2024–2025.</p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-blue-800">Atención de Denuncias Ciudadanas</h4>
+          <p class="text-gray-700 text-sm mb-1">Gestión de reportes vecinales sobre vertidos, quema de residuos, contaminación sonora y ambiental.</p>
+          <p class="text-gray-600 text-sm">📞 980 denuncias atendidas y resueltas.</p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-blue-800">Control de Vertidos y Efluentes</h4>
+          <p class="text-gray-700 text-sm mb-1">Fiscalización en zonas con riesgo de contaminación hídrica o de suelo, con intervención de laboratorio y monitoreo técnico.</p>
+          <p class="text-gray-600 text-sm">💧 315 controles efectuados.</p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-blue-800">Rescate de Fauna Urbana</h4>
+          <p class="text-gray-700 text-sm mb-1">Coordinación con organismos provinciales para rescatar, rehabilitar y reubicar animales silvestres encontrados en áreas urbanas.</p>
+          <p class="text-gray-600 text-sm">🦜 210 rescates realizados en conjunto con la Secretaría de Ambiente Provincial.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-gray-900 text-gray-300 py-6 text-center mt-16">
+    <p class="text-sm">© 2025 Subsecretaría de Gestión Ambiental – Municipalidad de Salta</p>
+    <p class="text-xs">Datos actualizados mensualmente. Fuente: Dirección de Patrulla Ambiental</p>
+  </footer>
+
+  <script>
+    const ctx = document.getElementById('chartPatrulla').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        datasets: [{
+          label: 'Operativos Ambientales',
+          data: [80,100,110,120,140,130,150,160,170,175,180,190],
+          borderColor: '#1E3A8A',
+          backgroundColor: 'rgba(30,58,138,0.2)',
+          tension: 0.3,
+          fill: true,
+          borderWidth: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
