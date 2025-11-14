@@ -3,144 +3,141 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Subsecretaría de Gestión Ambiental – Ing. María Emilse Arias</title>
+  <title>Subsecretaría de Gestión Ambiental – Municipalidad de Salta</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
     body {font-family: 'Poppins', sans-serif;}
-    .tab {display: none;}
-    .active-tab {display: block; animation: fadeIn 0.6s ease;}
-    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-    .nav-container {display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem;}
-    .nav-button {background-color:#1E40AF; color:white; font-weight:600; padding:0.6rem 1.2rem; border-radius:2rem; box-shadow:0 2px 6px rgba(0,0,0,0.15); transition:all 0.3s;}
-    .nav-button:hover {transform:translateY(-2px) scale(1.03); filter:brightness(1.1);}
-    header {background-color:#1E3A8A;}  
+    header {background-color:#1E3A8A;}
+    .card {transition:all 0.3s ease;}
+    .card:hover {transform:translateY(-5px) scale(1.02);}
   </style>
 </head>
+
 <body class="bg-gray-100 text-gray-800">
   <header class="text-white py-8 shadow-lg text-center sticky top-0 z-20">
     <h1 class="text-4xl font-bold tracking-wide">Subsecretaría de Gestión Ambiental</h1>
     <p class="text-lg mt-1">Ing. María Emilse Arias – Municipalidad de Salta</p>
-    <nav class="mt-6 px-4">
-  <div class="flex flex-wrap justify-center gap-3">
-    <a href="index.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Inicio</a>
-    <a href="areas/educacion.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Educación Ambiental</a>
-    <a href="areas/desarrollo.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Desarrollo Sostenible</a>
-    <a href="areas/cambio.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Cambio Climático</a>
-    <a href="areas/inspecciones.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Inspecciones</a>
-    <a href="areas/impacto.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Impacto Ambiental / CAAM</a>
-    <a href="areas/patrulla.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Patrulla Ambiental</a>
-    <a href="areas/proyectos.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Proyectos Ambientales</a>
-    <a href="areas/gestion.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Gestión Ambiental</a>
-  </div>
-</nav>
 
+    <nav class="mt-6 px-4">
+      <div class="flex flex-wrap justify-center gap-3">
+        <a href="index.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Inicio</a>
+        <a href="areas/educacion.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Educación Ambiental</a>
+        <a href="areas/desarrollo.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Desarrollo Sostenible</a>
+        <a href="areas/cambio.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Cambio Climático</a>
+        <a href="areas/inspecciones.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Inspecciones</a>
+        <a href="areas/impacto.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Impacto Ambiental / CAAM</a>
+        <a href="areas/patrulla.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Patrulla Ambiental</a>
+        <a href="areas/proyectos.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Proyectos Ambientales</a>
+        <a href="areas/gestion.html" class="bg-blue-700 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Gestión Ambiental</a>
+      </div>
+    </nav>
   </header>
 
-  <!-- Sección de Inicio -->
-  <section id="inicio" class="tab active-tab p-10 space-y-10">
-    <div class="text-center max-w-3xl mx-auto">
-      <h2 class="text-3xl font-semibold mb-3 text-blue-800">Gestión Ambiental Integral</h2>
-      <p class="text-gray-600">Un panorama general de las acciones de todas las áreas de la Subsecretaría, con indicadores actualizados y visuales claros de su progreso y alcance.</p>
-    </div>
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="p-10 max-w-7xl mx-auto">
+    <section class="text-center mb-12">
+      <h2 class="text-3xl font-semibold text-blue-800 mb-2">Gestión Integral de la Subsecretaría</h2>
+      <p class="text-gray-600">Resultados consolidados de las direcciones dependientes de la Subsecretaría de Gestión Ambiental.</p>
+    </section>
 
+    <!-- Tarjetas de resumen por área -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 transform transition hover:scale-105">
-        <h3 class="text-xl font-semibold mb-2">Educación Ambiental</h3>
-        <p class="text-4xl font-bold text-blue-700">3.600+</p>
-        <p class="text-gray-500">Participantes en programas educativos</p>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 card">
+        <h3 class="text-xl font-semibold mb-2 text-blue-900">Educación Ambiental</h3>
+        <p class="text-4xl font-bold text-blue-800">3.600+</p>
+        <p class="text-gray-500 text-sm">Participantes en programas educativos</p>
       </div>
-      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 transform transition hover:scale-105">
-        <h3 class="text-xl font-semibold mb-2">Desarrollo Sostenible</h3>
-        <p class="text-4xl font-bold text-blue-700">1.000+</p>
-        <p class="text-gray-500">Proyectos y acciones ejecutadas</p>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 card">
+        <h3 class="text-xl font-semibold mb-2 text-blue-900">Desarrollo Sostenible</h3>
+        <p class="text-4xl font-bold text-blue-800">80+</p>
+        <p class="text-gray-500 text-sm">Acciones y proyectos ejecutados</p>
       </div>
-      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 transform transition hover:scale-105">
-        <h3 class="text-xl font-semibold mb-2">Cambio Climático</h3>
-        <p class="text-4xl font-bold text-blue-700">85+</p>
-        <p class="text-gray-500">Barrios alcanzados en operativos</p>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 card">
+        <h3 class="text-xl font-semibold mb-2 text-blue-900">Cambio Climático</h3>
+        <p class="text-4xl font-bold text-blue-800">85+</p>
+        <p class="text-gray-500 text-sm">Barrios alcanzados con operativos</p>
       </div>
-      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 transform transition hover:scale-105">
-        <h3 class="text-xl font-semibold mb-2">Impacto Ambiental</h3>
-        <p class="text-4xl font-bold text-blue-700">2.091</p>
-        <p class="text-gray-500">Certificados CAAM emitidos</p>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 card">
+        <h3 class="text-xl font-semibold mb-2 text-blue-900">Impacto Ambiental / CAAM</h3>
+        <p class="text-4xl font-bold text-blue-800">2.091</p>
+        <p class="text-gray-500 text-sm">Certificados ambientales emitidos</p>
+      </div>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 card">
+        <h3 class="text-xl font-semibold mb-2 text-blue-900">Inspecciones</h3>
+        <p class="text-4xl font-bold text-blue-800">4.000+</p>
+        <p class="text-gray-500 text-sm">Inspecciones realizadas</p>
+      </div>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 card">
+        <h3 class="text-xl font-semibold mb-2 text-blue-900">Patrulla Ambiental</h3>
+        <p class="text-4xl font-bold text-blue-800">850</p>
+        <p class="text-gray-500 text-sm">Operativos y rescates ejecutados</p>
+      </div>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 card">
+        <h3 class="text-xl font-semibold mb-2 text-blue-900">Proyectos Ambientales</h3>
+        <p class="text-4xl font-bold text-blue-800">22</p>
+        <p class="text-gray-500 text-sm">Proyectos ejecutados y 8 en curso</p>
+      </div>
+      <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-700 card">
+        <h3 class="text-xl font-semibold mb-2 text-blue-900">Gestión Ambiental</h3>
+        <p class="text-4xl font-bold text-blue-800">7</p>
+        <p class="text-gray-500 text-sm">Direcciones coordinadas activamente</p>
       </div>
     </div>
 
-    <div class="max-w-6xl mx-auto mt-12 bg-white p-6 rounded-3xl shadow">
-      <h2 class="text-2xl font-semibold text-center mb-4 text-blue-700">Resumen General de Actividades</h2>
-      <canvas id="chartGeneral" height="120"></canvas>
-    </div>
-  </section>
-
-  <!-- Secciones por área -->
-  <section id="educacion" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Educación Ambiental</h2><div id="educacion-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
-  <section id="desarrollo" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Desarrollo Sostenible</h2><div id="desarrollo-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
-  <section id="cambio" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Cambio Climático</h2><div id="cambio-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
-  <section id="inspecciones" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Inspecciones</h2><div id="inspecciones-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
-  <section id="impacto" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Impacto Ambiental / CAAM</h2><div id="impacto-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
-  <section id="patrulla" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Patrulla Ambiental</h2><div id="patrulla-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
-  <section id="proyectos" class="tab p-10"><h2 class="text-3xl font-semibold mb-6 text-blue-800">Coordinación de Proyectos Ambientales</h2><div id="proyectos-data" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div></section>
+    <!-- Gráfico general -->
+    <section class="mt-16 bg-white p-8 rounded-3xl shadow-lg">
+      <h2 class="text-2xl font-semibold text-blue-800 text-center mb-1">Comparativo de Producción Anual por Dirección – 2024</h2>
+      <p class="text-center text-gray-500 text-sm mb-6 max-w-3xl mx-auto">
+        Este gráfico muestra el volumen total de acciones, beneficiarios o documentos gestionados por cada dirección dependiente durante el año 2024. 
+        Su propósito es comparar el impacto y magnitud del trabajo de cada área dentro de la Subsecretaría de Gestión Ambiental.
+      </p>
+      <canvas id="chartGlobal" height="120"></canvas>
+    </section>
+  </main>
 
   <footer class="bg-gray-900 text-gray-300 py-8 text-center mt-20">
     <p class="text-sm">© 2025 Subsecretaría de Gestión Ambiental – Municipalidad de Salta</p>
-    <p class="text-xs mt-1">Datos actualizados mensualmente. Fuente: indicadores.csv</p>
+    <p class="text-xs mt-1">Actualización mensual</p>
   </footer>
 
   <script>
-    // Navegación de pestañas
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active-tab'));
-        document.getElementById(btn.dataset.tab).classList.add('active-tab');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    });
-
-    // Chart general
-    const ctx = document.getElementById('chartGeneral').getContext('2d');
+    // Gráfico global comparativo
+    const ctx = document.getElementById('chartGlobal').getContext('2d');
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Educación Ambiental', 'Desarrollo Sostenible', 'Cambio Climático', 'Impacto Ambiental', 'Inspecciones', 'Patrulla Ambiental'],
+        labels: [
+          'Educación Ambiental',
+          'Desarrollo Sostenible',
+          'Cambio Climático',
+          'Impacto Ambiental',
+          'Inspecciones',
+          'Patrulla Ambiental',
+          'Proyectos Ambientales',
+          'Gestión Ambiental'
+        ],
         datasets: [{
-          label: 'Indicadores Globales',
-          data: [3600, 1000, 85, 2091, 3446, 62],
-          backgroundColor: '#1E40AF'
+          label: 'Indicadores Anuales 2024',
+          data: [3600, 80, 85, 2091, 4000, 850, 22, 7],
+          backgroundColor: 'rgba(30,58,138,0.8)',
+          borderRadius: 8
         }]
       },
       options: {
         responsive:true,
-        plugins:{ legend:{ display:false }},
-        scales:{ y:{ beginAtZero:true, grid:{color:'rgba(0,0,0,0.05)'}}, x:{grid:{display:false}} }
-      }
-    });
-
-    // Cargar CSV
-    Papa.parse('data/indicadores.csv', {
-      download:true, header:true,
-      complete: res => {
-        const data = res.data;
-        const map = {
-          'educacion': ['Educación Ambiental'],
-          'desarrollo': ['Desarrollo Sostenible'],
-          'cambio': ['Cambio Climático'],
-          'inspecciones': ['Inspecciones'],
-          'impacto': ['Impacto Ambiental','CAAM'],
-          'patrulla': ['Patrulla Ambiental'],
-          'proyectos': ['Proyectos Ambientales']
-        };
-        Object.keys(map).forEach(k => {
-          const div = document.getElementById(k+'-data');
-          const filtered = data.filter(r => map[k].some(area => (r['AREA/DEPENDENCIA']||'').toLowerCase().includes(area.toLowerCase())));
-          filtered.forEach(r => {
-            const card = document.createElement('div');
-            card.className = 'bg-white p-5 rounded-3xl shadow hover:shadow-lg transition transform hover:scale-105';
-            card.innerHTML = `<h3 class='font-semibold text-blue-700 text-lg mb-1'>${r['INDICADOR']}</h3><p class='text-gray-700 text-sm mb-1'>${r['TAREA_/ACCION']||''}</p><p class='text-gray-600 text-sm'>Acumulado 2024: <strong>${r['ACUMULADO_2024']||'-'}</strong></p>`;
-            div.appendChild(card);
-          });
-        });
+        plugins:{ 
+          legend:{ display:false },
+          tooltip:{
+            callbacks:{
+              label: ctx => `Valor: ${ctx.formattedValue}`
+            }
+          }
+        },
+        scales:{ 
+          y:{ beginAtZero:true, grid:{color:'rgba(0,0,0,0.05)'}, title:{display:true, text:'Cantidad / Acciones'} },
+          x:{ grid:{display:false}, title:{display:true, text:'Direcciones de la Subsecretaría'} }
+        }
       }
     });
   </script>
