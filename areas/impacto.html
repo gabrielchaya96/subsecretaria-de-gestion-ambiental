@@ -1,128 +1,106 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang='es'>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Impacto Ambiental / CAAM – Subsecretaría de Gestión Ambiental</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {font-family: 'Poppins', sans-serif; background-color: #f8fafc;}
-    header {background-color:#1E3A8A;}
-  </style>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<link href='https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css' rel='stylesheet'>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<style>body{font-family:Poppins,sans-serif;background:#f8fafc;}</style>
 </head>
-<body class="text-gray-800">
-  <header class="text-white py-6 shadow-lg text-center">
-    <h1 class="text-3xl font-bold">Dirección de Impacto Ambiental / CAAM</h1>
-    <p class="text-sm mt-1">Subsecretaría de Gestión Ambiental – Ing. María Emilse Arias</p>
-    <a href="../index.html" class="mt-4 inline-block bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm">← Volver al inicio</a>
-  </header>
+<body class='text-gray-800 p-6'>
+<header class='text-white py-10 shadow-lg text-center w-full' style='background:#1E3A8A;'>
+<h1 class='text-3xl font-bold'>Dirección de Impacto Ambiental</h1>
+<p class='text-sm mt-1'>Subsecretaría de Gestión Ambiental – Municipalidad de Salta</p>
+<a href='../index.html' class='mt-4 inline-block bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm'>← Volver al inicio</a>
+</header>
+<main class='max-w-5xl mx-auto space-y-10 mt-6'>
+<section class='text-center'>
+<h2 class='text-2xl font-semibold text-blue-800 mb-3'>Gestión de Impacto Ambiental</h2>
+<p class='text-gray-600 max-w-3xl mx-auto'>La dirección analiza, evalúa y gestiona procesos de Aptitud Ambiental y asesoramiento técnico.</p>
+</section>
+<section>
+<h3 class='text-xl font-semibold text-blue-700 mb-4'>Indicadores Clave 2024–2025</h3>
+<div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center'>
+<div class='bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700'>
+<h4 class='font-semibold mb-1'>Resoluciones CAAM</h4>
+<p class='text-4xl font-bold text-blue-800'>903</p>
+<p class='text-gray-500 text-sm'>Certificados de Aptitud Ambiental</p>
+</div>
+<div class='bg-white p-6 rounded-3xl shadow border-t-8 border-green-600'>
+<h4 class='font-semibold mb-1'>Capacitaciones CAAM</h4>
+<p class='text-4xl font-bold text-green-700'>2</p>
+<p class='text-gray-500 text-sm'>Asesoramiento técnico</p>
+</div>
+</div>
+</section>
+<section class='bg-white rounded-3xl shadow p-6'>
+<h3 class='text-xl font-semibold text-blue-700 mb-4 text-center'>Evolución de Indicadores</h3>
+<div class='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+  <div>
+    <h4 class='text-md font-semibold text-blue-800 mb-2 text-center'>Resoluciones CAAM</h4>
+    <canvas id='chartResoluciones'></canvas>
+  </div>
+  <div>
+    <h4 class='text-md font-semibold text-green-700 mb-2 text-center'>Capacitaciones CAAM</h4>
+    <canvas id='chartCapacitaciones'></canvas>
+  </div>
+</div>
+</section>
+<script>
+const ctx1=document.getElementById('chartResoluciones').getContext('2d');
+new Chart(ctx1,{
+ type:'line',
+ data:{labels:['2023','2024','2025'],datasets:[{
+   label:'Resoluciones',
+   data:[1188,487,903],
+   borderColor:'#1E3A8A',
+   backgroundColor:'rgba(30,58,138,0.15)',
+   borderWidth:3,
+   fill:true,
+   tension:0.4
+ }]},
+ options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+});
 
-  <main class="max-w-6xl mx-auto p-8 space-y-10">
-    <!-- Introducción institucional -->
-    <section class="text-center">
-      <h2 class="text-2xl font-semibold text-blue-800 mb-3">Gestión de Impacto Ambiental y Control de Actividades</h2>
-      <p class="text-gray-600 max-w-3xl mx-auto">La Dirección de Impacto Ambiental evalúa, regula y controla las actividades económicas y de infraestructura que puedan generar impacto sobre el ambiente. A través del Certificado de Aptitud Ambiental Municipal (CAAM), garantiza la aplicación de políticas sostenibles, prevención de riesgos y promoción del cumplimiento normativo.</p>
-    </section>
-
-    <!-- Indicadores clave -->
-    <section>
-      <h3 class="text-xl font-semibold text-blue-700 mb-4">Indicadores Clave 2024–2025</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Certificados CAAM Emitidos</h4>
-          <p class="text-4xl font-bold text-blue-800">2.091</p>
-          <p class="text-gray-500 text-sm">Trámites aprobados y certificados ambientales otorgados</p>
-        </div>
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Expedientes Evaluados</h4>
-          <p class="text-4xl font-bold text-blue-800">3.670</p>
-          <p class="text-gray-500 text-sm">Evaluaciones técnicas y ambientales procesadas</p>
-        </div>
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Informes Técnicos Emitidos</h4>
-          <p class="text-4xl font-bold text-blue-800">415</p>
-          <p class="text-gray-500 text-sm">Dictámenes de evaluación ambiental</p>
-        </div>
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Inspecciones por CAAM</h4>
-          <p class="text-4xl font-bold text-blue-800">138</p>
-          <p class="text-gray-500 text-sm">Verificaciones en campo para control de cumplimiento</p>
-        </div>
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Capacitaciones Técnicas</h4>
-          <p class="text-4xl font-bold text-blue-800">62</p>
-          <p class="text-gray-500 text-sm">Profesionales formados en normativas ambientales</p>
-        </div>
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Expedientes en Trámite</h4>
-          <p class="text-4xl font-bold text-blue-800">740</p>
-          <p class="text-gray-500 text-sm">Procesos activos de evaluación ambiental</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Gráfico de evolución -->
-    <section class="bg-white rounded-3xl shadow p-6">
-      <h3 class="text-xl font-semibold text-blue-700 mb-4 text-center">Evolución de Certificaciones CAAM Emitidas</h3>
-      <canvas id="chartImpacto"></canvas>
-    </section>
-
-    <!-- Detalle de actividades -->
-    <section>
-      <h3 class="text-xl font-semibold text-blue-700 mb-4">Detalle de Actividades y Procesos</h3>
-      <div class="bg-white rounded-3xl shadow p-6 space-y-6">
-        <div>
-          <h4 class="text-lg font-semibold text-blue-800">Evaluación de Impacto Ambiental (EIA)</h4>
-          <p class="text-gray-700 text-sm mb-1">Procesamiento técnico de proyectos que requieren dictamen ambiental previo, garantizando la compatibilidad de las actividades con el entorno urbano y ambiental.</p>
-          <p class="text-gray-600 text-sm">📄 Más de 3.600 expedientes evaluados en 2024–2025.</p>
-        </div>
-        <div>
-          <h4 class="text-lg font-semibold text-blue-800">Certificado de Aptitud Ambiental Municipal (CAAM)</h4>
-          <p class="text-gray-700 text-sm mb-1">Otorgamiento del CAAM a establecimientos que cumplen los requisitos legales y técnicos establecidos por la normativa municipal vigente.</p>
-          <p class="text-gray-600 text-sm">✅ 2.091 certificados emitidos en el período 2024–2025.</p>
-        </div>
-        <div>
-          <h4 class="text-lg font-semibold text-blue-800">Capacitaciones Técnicas a Profesionales</h4>
-          <p class="text-gray-700 text-sm mb-1">Cursos y talleres dirigidos a consultores ambientales, empresas y técnicos municipales sobre procedimientos de evaluación y gestión ambiental.</p>
-          <p class="text-gray-600 text-sm">👩‍💼 62 profesionales capacitados.</p>
-        </div>
-        <div>
-          <h4 class="text-lg font-semibold text-blue-800">Inspecciones Técnicas y Seguimiento</h4>
-          <p class="text-gray-700 text-sm mb-1">Verificaciones en campo para constatar condiciones operativas, medidas de mitigación y cumplimiento de las normas ambientales.</p>
-          <p class="text-gray-600 text-sm">🔎 138 inspecciones realizadas en 2024–2025.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="bg-gray-900 text-gray-300 py-6 text-center mt-16">
-    <p class="text-sm">© 2025 Subsecretaría de Gestión Ambiental – Municipalidad de Salta</p>
-    <p class="text-xs">Datos actualizados mensualmente. Fuente: Dirección de Impacto Ambiental / CAAM</p>
-  </footer>
-
-  <script>
-    const ctx = document.getElementById('chartImpacto').getContext('2d');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-        datasets: [{
-          label: 'Certificados CAAM Emitidos',
-          data: [150,160,170,190,210,230,240,250,260,270,280,290],
-          backgroundColor: 'rgba(30,58,138,0.8)',
-          borderRadius: 6
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: {
-          y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
-          x: { grid: { display: false } }
-        }
-      }
-    });
-  </script>
+const ctx2=document.getElementById('chartCapacitaciones').getContext('2d');
+new Chart(ctx2,{
+ type:'line',
+ data:{labels:['2023','2024','2025'],datasets:[{
+   label:'Capacitaciones',
+   data:[3000,1000,2],
+   borderColor:'#059669',
+   backgroundColor:'rgba(5,150,105,0.15)',
+   borderWidth:3,
+   fill:true,
+   tension:0.4
+ }]},
+ options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+});
+</script>
+<section>
+<h3 class='text-xl font-semibold text-blue-700 mb-4'>Programas y Acciones</h3>
+<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+<div class='bg-white rounded-3xl shadow p-6'>
+<h4 class='text-lg font-semibold text-blue-800 mb-2'>Certificado de Aptitud Ambiental</h4>
+<p class='text-gray-700 text-sm mb-3'>Evaluación técnica de proyectos, industrias y actividades que requieren Aptitud Ambiental.</p>
+<p class='text-gray-600 text-sm'>📄 903 resoluciones emitidas.</p>
+</div>
+<div class='bg-white rounded-3xl shadow p-6'>
+<h4 class='text-lg font-semibold text-blue-800 mb-2'>Capacitaciones y Asesoramiento</h4>
+<p class='text-gray-700 text-sm mb-3'>Asistencia técnica para profesionales y entidades vinculadas al proceso CAAM.</p>
+<p class='text-gray-600 text-sm'>🎓 2 instancias registradas.</p>
+</div>
+</div>
+</section>
+</main>
+<footer class='bg-gray-900 text-gray-300 py-4 text-center mt-10'>© 2025 Subsecretaría de Gestión Ambiental</footer>
+<script>
+const ctx=document.getElementById('chartImpacto').getContext('2d');
+new Chart(ctx,{
+type:'bar',
+data:{labels:['Resoluciones CAAM','Capacitaciones CAAM'],datasets:[{label:'Valores',data:[903,2],backgroundColor:['#1E3A8A','#059669']} ]},
+options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+});
+</script>
 </body>
 </html>
