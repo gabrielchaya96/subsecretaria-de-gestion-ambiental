@@ -1,142 +1,92 @@
-<!DOCTYPE html>
-<html lang="es">
+<iframe srcdoc="<!DOCTYPE html>
+<html lang='es'>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cambio Climático – Subsecretaría de Gestión Ambiental</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {font-family: 'Poppins', sans-serif; background-color: #f8fafc;}
-    header {background-color:#1E3A8A;}
-  </style>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<link href='https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css' rel='stylesheet'>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<style>body{font-family:Poppins,sans-serif;background:#f8fafc;}</style>
 </head>
-<body class="text-gray-800">
-  <header class="text-white py-6 shadow-lg text-center">
-    <h1 class="text-3xl font-bold">Dirección General de Cambio Climático</h1>
-    <p class="text-sm mt-1">Subsecretaría de Gestión Ambiental – Ing. María Emilse Arias</p>
-    <a href="../index.html" class="mt-4 inline-block bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm">← Volver al inicio</a>
-  </header>
-
-  <main class="max-w-6xl mx-auto p-8 space-y-10">
-    <!-- Introducción institucional -->
-    <section class="text-center">
-      <h2 class="text-2xl font-semibold text-blue-800 mb-3">Acción Climática y Adaptación Territorial</h2>
-      <p class="text-gray-600 max-w-3xl mx-auto">La Dirección General de Cambio Climático coordina acciones estratégicas de mitigación y adaptación frente al cambio climático, promoviendo políticas públicas sostenibles, programas de forestación, capacitación ambiental y gestión territorial. Su objetivo es fortalecer la resiliencia urbana y reducir la huella de carbono de la Ciudad de Salta.</p>
-    </section>
-
-    <!-- Indicadores clave -->
-    <section>
-      <h3 class="text-xl font-semibold text-blue-700 mb-4">Indicadores Clave 2024–2025</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Capacitaciones Ambientales</h4>
-          <p class="text-4xl font-bold text-blue-800">62</p>
-          <p class="text-gray-500 text-sm">Profesionales capacitados en gestión climática</p>
-        </div>
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Barrios Intervenidos</h4>
-          <p class="text-4xl font-bold text-blue-800">85+</p>
-          <p class="text-gray-500 text-sm">Zonas alcanzadas con operativos y programas</p>
-        </div>
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Árboles Plantados</h4>
-          <p class="text-4xl font-bold text-blue-800">3.500</p>
-          <p class="text-gray-500 text-sm">Plantaciones urbanas y periurbanas</p>
-        </div>
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Operativos de Descacharrado</h4>
-          <p class="text-4xl font-bold text-blue-800">1126 t</p>
-          <p class="text-gray-500 text-sm">Toneladas retiradas de chatarra y residuos voluminosos</p>
-        </div>
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Acciones de Mitigación</h4>
-          <p class="text-4xl font-bold text-blue-800">+20</p>
-          <p class="text-gray-500 text-sm">Proyectos locales de mitigación y adaptación</p>
-        </div>
-        <div class="bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700">
-          <h4 class="font-semibold mb-1">Plan Local de Acción Climática</h4>
-          <p class="text-4xl font-bold text-blue-800">1</p>
-          <p class="text-gray-500 text-sm">En proceso de implementación 2024–2025</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Gráfico de evolución -->
-    <section class="bg-white rounded-3xl shadow p-6">
-      <h3 class="text-xl font-semibold text-blue-700 mb-4 text-center">Evolución de Acciones Climáticas y Forestación</h3>
-      <canvas id="chartCambio"></canvas>
-    </section>
-
-    <!-- Detalle de actividades -->
-    <section>
-      <h3 class="text-xl font-semibold text-blue-700 mb-4">Detalle de Programas y Acciones</h3>
-      <div class="bg-white rounded-3xl shadow p-6 space-y-6">
-        <div>
-          <h4 class="text-lg font-semibold text-blue-800">Programa de Forestación Urbana</h4>
-          <p class="text-gray-700 text-sm mb-1">Plan de forestación con especies nativas y adaptadas al clima local. Se ejecutaron campañas masivas en barrios y espacios públicos de la ciudad, promoviendo la biodiversidad y la mitigación del calor urbano.</p>
-          <p class="text-gray-600 text-sm">🌳 Más de 3.500 árboles plantados entre 2024 y 2025.</p>
-        </div>
-        <div>
-          <h4 class="text-lg font-semibold text-blue-800">Operativos de Descacharrado</h4>
-          <p class="text-gray-700 text-sm mb-1">Intervenciones conjuntas con áreas municipales para retirar residuos voluminosos y chatarra, reduciendo criaderos de mosquitos y focos de contaminación.</p>
-          <p class="text-gray-600 text-sm">🚛 Se retiraron 1.126 toneladas en operativos barriales.</p>
-        </div>
-        <div>
-          <h4 class="text-lg font-semibold text-blue-800">Capacitaciones y Sensibilización Climática</h4>
-          <p class="text-gray-700 text-sm mb-1">Formación de técnicos, funcionarios y docentes en mitigación, gestión de riesgo y cambio climático.</p>
-          <p class="text-gray-600 text-sm">👩‍🏫 62 profesionales capacitados en temáticas ambientales.</p>
-        </div>
-        <div>
-          <h4 class="text-lg font-semibold text-blue-800">Plan Local de Acción Climática (PLAC)</h4>
-          <p class="text-gray-700 text-sm mb-1">Desarrollo del PLAC para la Ciudad de Salta con asistencia técnica y cooperación internacional, alineado a los compromisos del Acuerdo de París.</p>
-          <p class="text-gray-600 text-sm">📄 En implementación 2024–2025, con enfoque en resiliencia urbana.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="bg-gray-900 text-gray-300 py-6 text-center mt-16">
-    <p class="text-sm">© 2025 Subsecretaría de Gestión Ambiental – Municipalidad de Salta</p>
-    <p class="text-xs">Datos actualizados mensualmente. Fuente: Dirección General de Cambio Climático</p>
-  </footer>
-
-  <script>
-    const ctx = document.getElementById('chartCambio').getContext('2d');
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-        datasets: [
-          {
-            label: 'Árboles plantados',
-            data: [200,250,280,350,400,420,450,500,520,540,580,600],
-            borderColor: '#1E3A8A',
-            backgroundColor: 'rgba(30,58,138,0.2)',
-            tension: 0.3,
-            fill: true,
-            borderWidth: 3
-          },
-          {
-            label: 'Toneladas de descacharrado',
-            data: [80,85,90,100,120,110,105,115,130,140,150,155],
-            borderColor: '#3B82F6',
-            backgroundColor: 'rgba(59,130,246,0.2)',
-            tension: 0.3,
-            fill: true,
-            borderWidth: 2
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { position: 'bottom' } },
-        scales: {
-          y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
-          x: { grid: { display: false } }
-        }
-      }
-    });
-  </script>
+<body class='text-gray-800 p-6'>
+<header class='text-white py-6 shadow-lg text-center' style='background:#1E3A8A;'>
+<h1 class='text-3xl font-bold'>Dirección General de Cambio Climático</h1>
+<p class='text-sm mt-1'>Subsecretaría de Gestión Ambiental – Ing. María Emilse Arias</p>
+</header>
+<main class='max-w-5xl mx-auto space-y-10 mt-6'>
+<section class='text-center'>
+<h2 class='text-2xl font-semibold text-blue-800 mb-3'>Acción Climática y Gestión de Impacto Ambiental</h2>
+<p class='text-gray-600 max-w-3xl mx-auto'>La dirección ejecuta acciones de monitoreo de aire, ruido y diagnóstico territorial.</p>
+</section>
+<section>
+<h3 class='text-xl font-semibold text-blue-700 mb-4'>Indicadores Clave 2024–2025</h3>
+<div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center'>
+<div class='bg-white p-6 rounded-3xl shadow border-t-8 border-blue-700'>
+<h4 class='font-semibold mb-1'>Puntos de Monitoreo</h4>
+<p class='text-4xl font-bold text-blue-800'>54</p>
+<p class='text-gray-500 text-sm'>Puntos acumulados</p>
+</div>
+<div class='bg-white p-6 rounded-3xl shadow border-t-8 border-green-600'>
+<h4 class='font-semibold mb-1'>Acciones de Agua</h4>
+<p class='text-4xl font-bold text-green-700'>27</p>
+<p class='text-gray-500 text-sm'>Relevamientos realizados</p>
+</div>
+<div class='bg-white p-6 rounded-3xl shadow border-t-8 border-yellow-600'>
+<h4 class='font-semibold mb-1'>Capacitaciones</h4>
+<p class='text-4xl font-bold text-yellow-700'>12</p>
+<p class='text-gray-500 text-sm'>Instancias formativas</p>
+</div>
+</div>
+</section>
+<section class='bg-white rounded-3xl shadow p-6'>
+<h3 class='text-xl font-semibold text-blue-700 mb-4 text-center'>Evolución de Indicadores Ambientales</h3>
+<canvas id='chartCambio'></canvas>
+</section>
+<section>
+<h3 class='text-xl font-semibold text-blue-700 mb-4'>Programas y Acciones</h3>
+<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+<div class='bg-white rounded-3xl shadow p-6'>
+<h4 class='text-lg font-semibold text-blue-800 mb-2'>Mapeo de Aire y Ruido</h4>
+<p class='text-gray-700 text-sm mb-3'>Monitoreo de material particulado, CO₂, temperatura, humedad y ruido urbano en puntos estratégicos.</p>
+<p class='text-gray-600 text-sm'>🌐 15 puntos relevados.</p>
+</div>
+<div class='bg-white rounded-3xl shadow p-6'>
+<h4 class='text-lg font-semibold text-blue-800 mb-2'>Relevamiento de Agua</h4>
+<p class='text-gray-700 text-sm mb-3'>Toma de muestras en ríos Arias y Arenales en coordinación con organismos provinciales.</p>
+<p class='text-gray-600 text-sm'>💧 27 acciones registradas.</p>
+</div>
+<div class='bg-white rounded-3xl shadow p-6'>
+<h4 class='text-lg font-semibold text-blue-800 mb-2'>Mesa Nacional de Economía Circular</h4>
+<p class='text-gray-700 text-sm mb-3'>Participación en mesas técnicas, revisión normativa y elaboración de informes de impacto ambiental.</p>
+<p class='text-gray-600 text-sm'>📄 22 instancias realizadas.</p>
+</div>
+<div class='bg-white rounded-3xl shadow p-6'>
+<h4 class='text-lg font-semibold text-blue-800 mb-2'>Biobardas</h4>
+<p class='text-gray-700 text-sm mb-3'>Implementación de biobarreras para mitigación de sólidos y cuidado de cauces hídricos.</p>
+<p class='text-gray-600 text-sm'>🌱 5 instaladas.</p>
+</div>
+<div class='bg-white rounded-3xl shadow p-6'>
+<h4 class='text-lg font-semibold text-blue-800 mb-2'>Capacitaciones</h4>
+<p class='text-gray-700 text-sm mb-3'>Instancias formativas dirigidas a instituciones, estudiantes y personal técnico.</p>
+<p class='text-gray-600 text-sm'>🎓 12 capacitaciones realizadas.</p>
+</div>
+<div class='bg-white rounded-3xl shadow p-6'>
+<h4 class='text-lg font-semibold text-blue-800 mb-2'>Visitas Guiadas en Ecoparque</h4>
+<p class='text-gray-700 text-sm mb-3'>Recorridos educativos en infraestructura ambiental, promoviendo conciencia ecológica.</p>
+<p class='text-gray-600 text-sm'>👥 1362 visitantes.</p>
+</div>
+</div>
+</section>
+</main>
+<footer class='bg-gray-900 text-gray-300 py-4 text-center mt-10'>© 2025 Subsecretaría de Gestión Ambiental</footer>
+<script>
+const ctx=document.getElementById('chartCambio').getContext('2d');
+new Chart(ctx,{
+type:'line',
+data:{labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct'],datasets:[
+{label:'Mapeo Aire/Ruido',data:[1,1,2,3,4,4,5,6,7,8],borderColor:'#1E3A8A',backgroundColor:'rgba(30,58,138,0.2)',borderWidth:3,fill:true,tension:0.4},
+{label:'Relevamiento Agua',data:[2,3,3,4,5,6,10,15,20,27],borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.2)',borderWidth:3,fill:true,tension:0.4}
+]},
+options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true}}}});
+</script>
 </body>
-</html>
+</html>" style="width:100%;height:900px;border:none;"></iframe>
